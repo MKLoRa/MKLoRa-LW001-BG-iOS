@@ -1,0 +1,6 @@
+framework module MKLoRaWAN_BG {
+  umbrella header "MKLoRaWAN-BG-umbrella.h"
+
+  export *
+  module * { export * }
+}

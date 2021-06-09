@@ -1,0 +1,50 @@
+{
+  "name": "MKLoRaWAN-BG",
+  "version": "1.0.0",
+  "summary": "A short description of MKLoRaWAN-BG.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/aadyx2007@163.com/MKLoRaWAN-BG",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "aadyx2007@163.com": "aadyx2007@163.com"
+  },
+  "source": {
+    "git": "https://github.com/aadyx2007@163.com/MKLoRaWAN-BG.git",
+    "tag": "1.0.0"
+  },
+  "platforms": {
+    "ios": "12.0"
+  },
+  "source_files": "MKLoRaWAN-BG/Classes/**/*",
+  "resource_bundles": {
+    "MKLoRaWAN-BG": [
+      "MKLoRaWAN-BG/Assets/*.png"
+    ]
+  },
+  "dependencies": {
+    "MKBaseBleModule": [
+
+    ],
+    "MKBaseModuleLibrary": [
+
+    ],
+    "MKCustomUIModule": [
+
+    ],
+    "HHTransition": [
+
+    ],
+    "MLInputDodger": [
+
+    ],
+    "iOSDFULibrary": [
+
+    ],
+    "CTMediator": [
+
+    ]
+  }
+}
