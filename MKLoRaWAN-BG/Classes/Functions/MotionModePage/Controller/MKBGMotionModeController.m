@@ -24,6 +24,8 @@
 
 #import "MKBGNormalAdopter.h"
 
+#import "MKBGMotionModeModel.h"
+
 @interface MKBGMotionModeController ()<UITableViewDelegate,
 UITableViewDataSource,
 MKTextFieldCellDelegate,
@@ -54,6 +56,8 @@ MKTextButtonCellDelegate>
 
 @property (nonatomic, strong)NSMutableArray *sectionHeaderList;
 
+@property (nonatomic, strong)MKBGMotionModeModel *dataModel;
+
 @end
 
 @implementation MKBGMotionModeController
@@ -71,12 +75,22 @@ MKTextButtonCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [self loadSectionDatas];
+    [self readDataFromDevice];
 }
 
 #pragma mark - super method
 - (void)rightButtonMethod {
-    
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel configDataWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
 }
 
 #pragma mark - UITableViewDelegate
@@ -203,30 +217,35 @@ MKTextButtonCellDelegate>
         //Number Of Fix On Start
         MKTextFieldCellModel *cellModel = self.section1List[0];
         cellModel.textFieldValue = value;
+        self.dataModel.numberOfFixOnStart = value;
         return;
     }
     if (index == 1) {
         //Report Interval In Trip
         MKTextFieldCellModel *cellModel = self.section4List[0];
         cellModel.textFieldValue = value;
+        self.dataModel.reportIntervalInTrip = value;
         return;
     }
     if (index == 2) {
         //Trip End Timeout
         MKTextFieldCellModel *cellModel = self.section7List[0];
         cellModel.textFieldValue = value;
+        self.dataModel.tripEndTimeout = value;
         return;
     }
     if (index == 3) {
         //Number Of Fix On End
         MKTextFieldCellModel *cellModel = self.section7List[1];
         cellModel.textFieldValue = value;
+        self.dataModel.numberOfFixOnEnd = value;
         return;
     }
-    if (index == 2) {
+    if (index == 4) {
         //Report Interval On End
         MKTextFieldCellModel *cellModel = self.section7List[2];
         cellModel.textFieldValue = value;
+        self.dataModel.reportIntervalOnEnd = value;
         return;
     }
 }
@@ -240,36 +259,42 @@ MKTextButtonCellDelegate>
         //Fix On Start
         MKTextSwitchCellModel *cellModel = self.section0List[0];
         cellModel.isOn = isOn;
+        self.dataModel.fixOnStart = isOn;
         return;
     }
     if (index == 1) {
         //Fix In Trip
         MKTextSwitchCellModel *cellModel = self.section3List[0];
         cellModel.isOn = isOn;
+        self.dataModel.fixInTrip = isOn;
         return;
     }
     if (index == 2) {
         //Fix On End
         MKTextSwitchCellModel *cellModel = self.section6List[0];
         cellModel.isOn = isOn;
+        self.dataModel.fixOnEnd = isOn;
         return;
     }
     if (index == 3) {
         //Notify Event On Start
         MKTextSwitchCellModel *cellModel = self.section9List[0];
         cellModel.isOn = isOn;
+        self.dataModel.notifyEventOnStart = isOn;
         return;
     }
     if (index == 4) {
         //Notify Event In Trip
         MKTextSwitchCellModel *cellModel = self.section9List[1];
         cellModel.isOn = isOn;
+        self.dataModel.notifyEventInTrip = isOn;
         return;
     }
     if (index == 5) {
         //Notify Event On End
         MKTextSwitchCellModel *cellModel = self.section9List[2];
         cellModel.isOn = isOn;
+        self.dataModel.notifyEventOnEnd = isOn;
         return;
     }
 }
@@ -286,20 +311,38 @@ MKTextButtonCellDelegate>
         //Pos-Strategy On Start
         MKTextButtonCellModel *cellModel = self.section2List[0];
         cellModel.dataListIndex = dataListIndex;
+        self.dataModel.posStrategyOnStart = dataListIndex;
         return;
     }
     if (index == 1) {
         //Pos-Strategy In Trip
         MKTextButtonCellModel *cellModel = self.section5List[0];
         cellModel.dataListIndex = dataListIndex;
+        self.dataModel.posStrategyInTrip = dataListIndex;
         return;
     }
     if (index == 2) {
         //Pos-Strategy On End
         MKTextButtonCellModel *cellModel = self.section8List[0];
         cellModel.dataListIndex = dataListIndex;
+        self.dataModel.posStrategyOnEnd = dataListIndex;
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readDataWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self loadSectionDatas];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
 }
 
 #pragma mark - loadSections
@@ -322,6 +365,7 @@ MKTextButtonCellDelegate>
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 0;
     cellModel.msg = @"Fix On Start";
+    cellModel.isOn = self.dataModel.fixOnStart;
     [self.section0List addObject:cellModel];
 }
 
@@ -332,6 +376,7 @@ MKTextButtonCellDelegate>
     cellModel.textPlaceholder = @"1~255";
     cellModel.textFieldType = mk_realNumberOnly;
     cellModel.maxLength = 3;
+    cellModel.textFieldValue = self.dataModel.numberOfFixOnStart;
     [self.section1List addObject:cellModel];
 }
 
@@ -340,7 +385,7 @@ MKTextButtonCellDelegate>
     cellModel.index = 0;
     cellModel.msg = @"Pos-Strategy On Start";
     cellModel.dataList = @[@"WIFI",@"BLE",@"GPS",@"WIFI+GPS",@"BLE+GPS",@"WIFI+BLE",@"WIFI+BLE+GPS"];
-    cellModel.dataListIndex = 2;
+    cellModel.dataListIndex = self.dataModel.posStrategyOnStart;
     [self.section2List addObject:cellModel];
 }
 
@@ -348,6 +393,7 @@ MKTextButtonCellDelegate>
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 1;
     cellModel.msg = @"Fix In Trip";
+    cellModel.isOn = self.dataModel.fixInTrip;
     [self.section3List addObject:cellModel];
 }
 
@@ -358,6 +404,7 @@ MKTextButtonCellDelegate>
     cellModel.textPlaceholder = @"10~86400";
     cellModel.textFieldType = mk_realNumberOnly;
     cellModel.maxLength = 5;
+    cellModel.textFieldValue = self.dataModel.reportIntervalInTrip;
     [self.section4List addObject:cellModel];
 }
 
@@ -366,7 +413,7 @@ MKTextButtonCellDelegate>
     cellModel.index = 1;
     cellModel.msg = @"Pos-Strategy In Trip";
     cellModel.dataList = @[@"WIFI",@"BLE",@"GPS",@"WIFI+GPS",@"BLE+GPS",@"WIFI+BLE",@"WIFI+BLE+GPS"];
-    cellModel.dataListIndex = 1;
+    cellModel.dataListIndex = self.dataModel.posStrategyInTrip;
     [self.section5List addObject:cellModel];
 }
 
@@ -374,6 +421,7 @@ MKTextButtonCellDelegate>
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 2;
     cellModel.msg = @"Fix On End";
+    cellModel.isOn = self.dataModel.fixOnEnd;
     [self.section6List addObject:cellModel];
 }
 
@@ -385,6 +433,7 @@ MKTextButtonCellDelegate>
     cellModel1.textFieldType = mk_realNumberOnly;
     cellModel1.maxLength = 3;
     cellModel1.unit = @"x10s";
+    cellModel1.textFieldValue = self.dataModel.tripEndTimeout;
     [self.section7List addObject:cellModel1];
     
     MKTextFieldCellModel *cellModel2 = [[MKTextFieldCellModel alloc] init];
@@ -394,6 +443,7 @@ MKTextButtonCellDelegate>
     cellModel2.textFieldType = mk_realNumberOnly;
     cellModel2.maxLength = 3;
     cellModel2.unit = @"";
+    cellModel2.textFieldValue = self.dataModel.numberOfFixOnEnd;
     [self.section7List addObject:cellModel2];
     
     MKTextFieldCellModel *cellModel3 = [[MKTextFieldCellModel alloc] init];
@@ -403,6 +453,7 @@ MKTextButtonCellDelegate>
     cellModel3.textFieldType = mk_realNumberOnly;
     cellModel3.maxLength = 3;
     cellModel3.unit = @"s";
+    cellModel3.textFieldValue = self.dataModel.reportIntervalOnEnd;
     [self.section7List addObject:cellModel3];
 }
 
@@ -411,7 +462,7 @@ MKTextButtonCellDelegate>
     cellModel.index = 2;
     cellModel.msg = @"Pos-Strategy On End";
     cellModel.dataList = @[@"WIFI",@"BLE",@"GPS",@"WIFI+GPS",@"BLE+GPS",@"WIFI+BLE",@"WIFI+BLE+GPS"];
-    cellModel.dataListIndex = 2;
+    cellModel.dataListIndex = self.dataModel.posStrategyOnEnd;
     [self.section8List addObject:cellModel];
 }
 
@@ -419,16 +470,19 @@ MKTextButtonCellDelegate>
     MKTextSwitchCellModel *cellModel1 = [[MKTextSwitchCellModel alloc] init];
     cellModel1.index = 3;
     cellModel1.msg = @"Notify Event On Start";
+    cellModel1.isOn = self.dataModel.notifyEventOnStart;
     [self.section9List addObject:cellModel1];
     
     MKTextSwitchCellModel *cellModel2 = [[MKTextSwitchCellModel alloc] init];
     cellModel2.index = 4;
     cellModel2.msg = @"Notify Event In Trip";
+    cellModel2.isOn = self.dataModel.notifyEventInTrip;
     [self.section9List addObject:cellModel2];
     
     MKTextSwitchCellModel *cellModel3 = [[MKTextSwitchCellModel alloc] init];
     cellModel3.index = 5;
     cellModel3.msg = @"Notify Event On End";
+    cellModel3.isOn = self.dataModel.notifyEventOnEnd;
     [self.section9List addObject:cellModel3];
 }
 
@@ -531,6 +585,13 @@ MKTextButtonCellDelegate>
         [_sectionHeaderList addObjectsFromArray:[MKBGNormalAdopter loadSectionHeaderListWithNumber:10]];
     }
     return _sectionHeaderList;
+}
+
+- (MKBGMotionModeModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKBGMotionModeModel alloc] init];
+    }
+    return _dataModel;
 }
 
 @end

@@ -17,6 +17,9 @@
 #import "MKHudManager.h"
 #import "MKTextButtonCell.h"
 
+#import "MKBGInterface.h"
+#import "MKBGInterface+MKBGConfig.h"
+
 @interface MKBGDownlinkController ()<UITableViewDelegate,
 UITableViewDataSource,
 MKTextButtonCellDelegate>
@@ -37,6 +40,7 @@ MKTextButtonCellDelegate>
     [super viewDidLoad];
     [self loadSubViews];
     [self loadSectionDatas];
+    [self readDataFromDevice];
 }
 
 #pragma mark - UITableViewDataSource
@@ -61,10 +65,34 @@ MKTextButtonCellDelegate>
                                 value:(NSString *)value {
     if (index == 0) {
         //Positioning Strategy
-        MKTextButtonCellModel *cellModel = self.section0List[0];
-        cellModel.dataListIndex = dataListIndex;
+        [self configDownlinkForPositioningStrategy:dataListIndex];
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_readDownlinkForPositioningStrategyWithSucBlock:^(id  _Nonnull returnData) {
+        [[MKHudManager share] hide];
+        [self updateCellValues:[returnData[@"result"][@"strategy"] integerValue]];
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configDownlinkForPositioningStrategy:(NSInteger)strategy {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configDownlinkForPositioningStrategy:strategy sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextButtonCellModel *cellModel = self.section0List[0];
+        cellModel.dataListIndex = strategy;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView reloadData];
+    }];
 }
 
 #pragma mark - loadSectionDatas
@@ -77,8 +105,40 @@ MKTextButtonCellDelegate>
     cellModel.index = 0;
     cellModel.msg = @"Positioning Strategy";
     cellModel.dataList = @[@"WIFI",@"BLE",@"GPS",@"WIFI+GPS",@"BLE+GPS",@"WIFI+BLE",@"WIFI+BLE+GPS"];
-    cellModel.dataListIndex = 2;
     [self.section0List addObject:cellModel];
+}
+
+#pragma mark - private method
+- (void)updateCellValues:(NSInteger)strategy {
+    MKTextButtonCellModel *cellModel = self.section0List[0];
+    cellModel.dataListIndex = [self getPositioningStrategy:strategy];
+    
+    [self.tableView reloadData];
+}
+
+- (NSInteger)getPositioningStrategy:(NSInteger)deviceValue {
+    if (deviceValue == 1) {
+        return 0;
+    }
+    if (deviceValue == 2) {
+        return 1;
+    }
+    if (deviceValue == 3) {
+        return 5;
+    }
+    if (deviceValue == 4) {
+        return 2;
+    }
+    if (deviceValue == 5) {
+        return 3;
+    }
+    if (deviceValue == 6) {
+        return 4;
+    }
+    if (deviceValue == 7) {
+        return 6;
+    }
+    return 0;
 }
 
 #pragma mark - UI

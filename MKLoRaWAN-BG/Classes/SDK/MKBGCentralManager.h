@@ -11,21 +11,9 @@
 #import <MKBaseBleModule/MKBLEBaseDataProtocol.h>
 
 #import "MKBGOperationID.h"
+#import "MKBGSDKNormalDefines.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef NS_ENUM(NSInteger, mk_bg_centralConnectStatus) {
-    mk_bg_centralConnectStatusUnknow,                                           //未知状态
-    mk_bg_centralConnectStatusConnecting,                                       //正在连接
-    mk_bg_centralConnectStatusConnected,                                        //连接成功
-    mk_bg_centralConnectStatusConnectedFailed,                                  //连接失败
-    mk_bg_centralConnectStatusDisconnect,
-};
-
-typedef NS_ENUM(NSInteger, mk_bg_centralManagerStatus) {
-    mk_bg_centralManagerStatusUnable,                           //不可用
-    mk_bg_centralManagerStatusEnable,                           //可用状态
-};
 
 //Notification of device connection status changes.
 extern NSString *const mk_bg_peripheralConnectStateChangedNotification;
@@ -42,21 +30,6 @@ extern NSString *const mk_bg_receiveStorageDataNotification;
 extern NSString *const mk_bg_deviceDisconnectTypeNotification;
 
 @class CBCentralManager,CBPeripheral;
-@protocol mk_bg_centralManagerScanDelegate <NSObject>
-
-/// Scan to new device.
-/// @param deviceModel device
-- (void)mk_bg_receiveDevice:(NSDictionary *)deviceModel;
-
-@optional
-
-/// Starts scanning equipment.
-- (void)mk_bg_startScan;
-
-/// Stops scanning equipment.
-- (void)mk_bg_stopScan;
-
-@end
 
 @interface MKBGCentralManager : NSObject<MKBLEBaseCentralManagerProtocol>
 

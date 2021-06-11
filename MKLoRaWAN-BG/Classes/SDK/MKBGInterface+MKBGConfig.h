@@ -10,89 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, mk_bg_deviceMode) {
-    mk_bg_deviceMode_offMode,             //Off mode
-    mk_bg_deviceMode_standbyMode,         //Standby mode
-    mk_bg_deviceMode_periodicMode,        //Periodic mode
-    mk_bg_deviceMode_timingMode,          //Timing mode
-    mk_bg_deviceMode_motionMode,          //Motion Mode
-};
-
-typedef NS_ENUM(NSInteger, mk_bg_BLELogicalRelationship) {
-    mk_bg_BLELogicalRelationshipOR,
-    mk_bg_BLELogicalRelationshipAND
-};
-
-typedef NS_ENUM(NSInteger, mk_bg_filterRules) {
-    mk_bg_filterRules_off,
-    mk_bg_filterRules_forward,          //Filter data forward
-    mk_bg_filterRules_reverse,          //Filter data in reverse
-};
-
-typedef NS_ENUM(NSInteger, mk_bg_filterByPHYMode) {
-    mk_bg_filterByPHYMode_1MPHY,
-    mk_bg_filterByPHYMode_2MPHY,
-    mk_bg_filterByPHYMode_codedPHY,
-};
-
-typedef NS_ENUM(NSInteger, mk_bg_gpsFixMode) {
-    mk_bg_gpsFixMode_2d,
-    mk_bg_gpsFixMode_3d,
-    mk_bg_gpsFixMode_auto,
-};
-
-typedef NS_ENUM(NSInteger, mk_bg_gpsMode) {
-    mk_bg_gpsMode_portable,
-    mk_bg_gpsMode_stationary,
-    mk_bg_gpsMode_pedestrian,
-    mk_bg_gpsMode_automotive,
-    mk_bg_gpsMode_atSea,
-    mk_bg_gpsMode_airborneLessThan1g,
-    mk_bg_gpsMode_airborneLessThan2g,
-    mk_bg_gpsMode_airborneLessThan4g,
-    mk_bg_gpsMode_wrist,
-    mk_bg_gpsMode_bike,
-};
-
-typedef NS_ENUM(NSInteger, mk_bg_loraWanRegion) {
-    mk_bg_loraWanRegionAS923,
-    mk_bg_loraWanRegionAU915,
-    mk_bg_loraWanRegionCN470,
-    mk_bg_loraWanRegionCN779,
-    mk_bg_loraWanRegionEU433,
-    mk_bg_loraWanRegionEU868,
-    mk_bg_loraWanRegionKR920,
-    mk_bg_loraWanRegionIN865,
-    mk_bg_loraWanRegionUS915,
-    mk_bg_loraWanRegionRU864,
-};
-
-typedef NS_ENUM(NSInteger, mk_bg_loraWanModem) {
-    mk_bg_loraWanModemABP,
-    mk_bg_loraWanModemOTAA,
-};
-
-typedef NS_ENUM(NSInteger, mk_bg_loraWanMessageType) {
-    mk_bg_loraWanUnconfirmMessage,          //Non-acknowledgement frame.
-    mk_bg_loraWanConfirmMessage,            //Confirm the frame.
-};
-
-@protocol mk_bg_BLEFilterRawDataProtocol <NSObject>
-
-/// The currently filtered data type, refer to the definition of different Bluetooth data types by the International Bluetooth Organization, 1 byte of hexadecimal data
-@property (nonatomic, copy)NSString *dataType;
-
-/// Data location to start filtering.
-@property (nonatomic, assign)NSInteger minIndex;
-
-/// Data location to end filtering.
-@property (nonatomic, assign)NSInteger maxIndex;
-
-/// The currently filtered content. The data length should be maxIndex-minIndex, if maxIndex=0&&minIndex==0, the item length is not checked whether it meets the requirements.MAX length:29 Bytes
-@property (nonatomic, copy)NSString *rawData;
-
-@end
-
 @interface MKBGInterface (MKBGConfig)
 
 /// Restart the device.
@@ -154,6 +71,122 @@ typedef NS_ENUM(NSInteger, mk_bg_loraWanMessageType) {
 + (void)bg_configOfflineFix:(BOOL)isOn
                    sucBlock:(void (^)(void))sucBlock
                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+#pragma mark ****************************************模式相关参数************************************************
+
+/// Configure Periodic Mode positioning strategy.
+/// @param strategy strategy
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configPeriodicModePositioningStrategy:(mk_bg_positioningStrategy)strategy
+                                        sucBlock:(void (^)(void))sucBlock
+                                     failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Periodic Mode reporting interval.
+/// @param interval 30s~86400s
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configPeriodicModeReportInterval:(long long)interval
+                                   sucBlock:(void (^)(void))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Timing Mode positioning strategy.
+/// @param strategy strategy
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configTimingModePositioningStrategy:(mk_bg_positioningStrategy)strategy
+                                      sucBlock:(void (^)(void))sucBlock
+                                   failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Timing Mode Reporting Time Point.
+/// @param dataList up to 10 groups of filters.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configTimingModeReportingTimePoint:(NSArray <mk_bg_timingModeReportingTimePointProtocol>*)dataList
+                                     sucBlock:(void (^)(void))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Motion Mode Events.
+/// @param protocol protocol
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMotionModeEvents:(id <mk_bg_motionModeEventsProtocol>)protocol
+                         sucBlock:(void (^)(void))sucBlock
+                      failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Motion Mode Number Of Fix On Start.
+/// @param number 1~255
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMotionModeNumberOfFixOnStart:(NSInteger)number
+                                     sucBlock:(void (^)(void))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Motion Mode Pos-Strategy On Start.
+/// @param strategy strategy
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMotionModePosStrategyOnStart:(mk_bg_positioningStrategy)strategy
+                                     sucBlock:(void (^)(void))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Motion Mode Report Interval In Trip.
+/// @param interval 10s~86400s
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMotionModeReportIntervalInTrip:(long long)interval
+                                       sucBlock:(void (^)(void))sucBlock
+                                    failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Motion Mode Pos-Strategy In Trip.
+/// @param strategy strategy
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMotionModePosStrategyInTrip:(mk_bg_positioningStrategy)strategy
+                                    sucBlock:(void (^)(void))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Motion Mode Trip End Timeout.
+/// @param time 3~180(Unit:10s)
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMotionModeTripEndTimeout:(NSInteger)time
+                                 sucBlock:(void (^)(void))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Motion Mode Number Of Fix On End.
+/// @param number 1~255
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMotionModeNumberOfFixOnEnd:(NSInteger)number
+                                   sucBlock:(void (^)(void))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Motion Mode Report Interval On End.
+/// @param interval 10s~300s
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMotionModeReportIntervalOnEnd:(NSInteger)interval
+                                      sucBlock:(void (^)(void))sucBlock
+                                   failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Motion Mode Pos-Strategy On End.
+/// @param strategy strategy
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMotionModePosStrategyOnEnd:(mk_bg_positioningStrategy)strategy
+                                   sucBlock:(void (^)(void))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Downlink  For Position Pos-Strategy.
+/// @param strategy strategy
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configDownlinkForPositioningStrategy:(mk_bg_positioningStrategy)strategy
+                                       sucBlock:(void (^)(void))sucBlock
+                                    failedBlock:(void (^)(NSError *error))failedBlock;
+
+#pragma mark ****************************************定位参数************************************************
 
 /// Configure the WIFI positioning timeout.
 /// @param interval 1~5.   unit : 2s.

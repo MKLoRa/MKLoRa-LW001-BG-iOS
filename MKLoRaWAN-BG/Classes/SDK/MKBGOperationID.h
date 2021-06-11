@@ -21,6 +21,23 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadDeviceHeartbeatIntervalOperation,   //读取设备心跳间隔
     mk_bg_taskReadOfflineFixStatusOperation,          //读取设备离线定位状态
     
+    
+#pragma mark - 模式相关参数
+    mk_bg_taskReadPeriodicModePositioningStrategyOperation,         //读取定期模式定位策略
+    mk_bg_taskReadPeriodicModeReportIntervalOperation,              //读取定期模式上报间隔
+    mk_bg_taskReadTimingModePositioningStrategyOperation,           //读取定时模式定位策略
+    mk_bg_taskReadTimingModeReportingTimePointOperation,            //读取定时模式时间点
+    mk_bg_taskReadMotionModeEventsOperation,                        //读取运动模式事件
+    mk_bg_taskReadMotionModeNumberOfFixOnStartOperation,            //读取运动开始定位上报次数
+    mk_bg_taskReadMotionModePosStrategyOnStartOperation,            //读取运动开始定位策略
+    mk_bg_taskReadMotionModeReportIntervalInTripOperation,          //读取运动中定位间隔
+    mk_bg_taskReadMotionModePosStrategyInTripOperation,             //读取运动中定位策略
+    mk_bg_taskReadMotionModeTripEndTimeoutOperation,                //读取运动结束判断时间
+    mk_bg_taskReadMotionModeNumberOfFixOnEndOperation,              //读取运动结束定位次数
+    mk_bg_taskReadMotionModeReportIntervalOnEndOperation,           //读取运动结束定位间隔
+    mk_bg_taskReadMotionModePosStrategyOnEndOperation,              //读取运动结束定位策略
+    mk_bg_taskReadDownlinkForPositioningStrategyOperation,          //读取下行请求定位策略
+    
 #pragma mark - 定位参数
     mk_bg_taskReadWifiPositioningTimeoutOperation,    //读取WIFI定位超时时间
     mk_bg_taskReadWifiNumberOfBSSIDOperation,         //读取WIFI定位成功BSSID数量
@@ -118,6 +135,25 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigWorkModeOperation,                  //配置工作模式
     mk_bg_taskConfigHeartbeatIntervalOperation,         //配置设备心跳间隔
     mk_bg_taskConfigOfflineFixStatusOperation,          //配置离线定位功能
+    
+#pragma mark - 配置模式相关参数
+    mk_bg_taskConfigPeriodicModePositioningStrategyOperation,       //配置定期模式定位策略
+    mk_bg_taskConfigPeriodicModeReportIntervalOperation,            //配置定期模式上报间隔
+    mk_bg_taskConfigTimingModePositioningStrategyOperation,         //配置定时模式定位策略
+    mk_bg_taskConfigTimingModeReportingTimePointOperation,          //配置定时模式时间点
+    mk_bg_taskConfigMotionModeEventsOperation,                      //配置运动模式事件
+    mk_bg_taskConfigMotionModeNumberOfFixOnStartOperation,          //配置运动开始定位上报次数
+    mk_bg_taskConfigMotionModePosStrategyOnStartOperation,          //配置运动开始定位策略
+    mk_bg_taskConfigMotionModeReportIntervalInTripOperation,        //配置运动中定位间隔
+    mk_bg_taskConfigMotionModePosStrategyInTripOperation,           //配置运动中定位策略
+    mk_bg_taskConfigMotionModeTripEndTimeoutOperation,              //配置运动结束判断时间
+    mk_bg_taskConfigMotionModeNumberOfFixOnEndOperation,            //配置运动结束定位次数
+    mk_bg_taskConfigMotionModeReportIntervalOnEndOperation,         //配置运动结束定位间隔
+    mk_bg_taskConfigMotionModePosStrategyOnEndOperation,            //配置运动结束定位策略
+    mk_bg_taskConfigDownlinkForPositioningStrategyOperation,        //配置下行请求定位策略
+    
+    
+#pragma mark - 配置定位参数
     mk_bg_taskConfigWifiPositioningTimeoutOperation,    //配置WIFI定位超时时间
     mk_bg_taskConfigWifiNumberOfBSSIDOperation,         //配置WIFI定位成功BSSID数量
     mk_bg_taskConfigBLEPositioningTimeoutOperation,     //配置WIFI定位超时时间

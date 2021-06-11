@@ -8,12 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+#import "MKBGSDKNormalDefines.h"
 
-typedef NS_ENUM(NSInteger, mk_bg_filterRulesType) {
-    mk_bg_filterRulesClassAType,
-    mk_bg_filterRulesClassBType,
-};
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MKBGInterface : NSObject
 
@@ -86,6 +83,189 @@ typedef NS_ENUM(NSInteger, mk_bg_filterRulesType) {
 /// @param failedBlock Failure callback
 + (void)bg_readOfflineFixStatusWithSucBlock:(void (^)(id returnData))sucBlock
                                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+#pragma mark ****************************************模式相关参数************************************************
+
+/// Read Periodic Mode positioning strategy.
+/*
+ @{
+ @"strategy":@(1)
+ }
+ 
+ 1:Wifi
+ 2:BLE
+ 3:BLE+Wifi
+ 4:GPS
+ 5:GPS+Wifi
+ 6:GPS+BLE
+ 7:GPS+BLE+Wifi
+ 
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readPeriodicModePositioningStrategyWithSucBlock:(void (^)(id returnData))sucBlock
+                                               failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read Periodic Mode reporting interval.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readPeriodicModeReportIntervalWithSucBlock:(void (^)(id returnData))sucBlock
+                                          failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read Timing Mode positioning strategy.
+/*
+ @{
+ @"strategy":@(1)
+ }
+ 
+ 1:Wifi
+ 2:BLE
+ 3:BLE+Wifi
+ 4:GPS
+ 5:GPS+Wifi
+ 6:GPS+BLE
+ 7:GPS+BLE+Wifi
+ 
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readTimingModePositioningStrategyWithSucBlock:(void (^)(id returnData))sucBlock
+                                             failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read Timing Mode Reporting Time Point.
+/*
+ @[@{
+ @"hour":@(0),
+ @"minuteGear":@(0)
+ },
+ @{
+ @"hour":@(0),
+ @"minuteGear":@(1)
+ }]
+ 
+ hour:0~23,
+ minuteGear:  0:00, 1:15, 2:30, 3:45
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readTimingModeReportingTimePointWithSucBlock:(void (^)(id returnData))sucBlock
+                                            failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Motion Mode Events.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMotionModeEventsWithSucBlock:(void (^)(id returnData))sucBlock
+                                failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Motion Mode Number Of Fix On Start.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMotionModeNumberOfFixOnStartWithSucBlock:(void (^)(id returnData))sucBlock
+                                            failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Motion Mode Pos-Strategy On Start.
+/*
+ @{
+ @"strategy":@(1)
+ }
+ 
+ 1:Wifi
+ 2:BLE
+ 3:BLE+Wifi
+ 4:GPS
+ 5:GPS+Wifi
+ 6:GPS+BLE
+ 7:GPS+BLE+Wifi
+ 
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMotionModePosStrategyOnStartWithSucBlock:(void (^)(id returnData))sucBlock
+                                            failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Motion Mode Report Interval In Trip.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMotionModeReportIntervalInTripWithSucBlock:(void (^)(id returnData))sucBlock
+                                              failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Motion Mode Pos-Strategy In Trip.
+/*
+ @{
+ @"strategy":@(1)
+ }
+ 
+ 1:Wifi
+ 2:BLE
+ 3:BLE+Wifi
+ 4:GPS
+ 5:GPS+Wifi
+ 6:GPS+BLE
+ 7:GPS+BLE+Wifi
+ 
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMotionModePosStrategyInTripWithSucBlock:(void (^)(id returnData))sucBlock
+                                           failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Motion Mode Trip End Timeout.(Unit:10s)
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMotionModeTripEndTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                        failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Motion Mode Number Of Fix On End.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMotionModeNumberOfFixOnEndWithSucBlock:(void (^)(id returnData))sucBlock
+                                          failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Motion Mode Report Interval On End.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMotionModeReportIntervalOnEndWithSucBlock:(void (^)(id returnData))sucBlock
+                                             failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Motion Mode Pos-Strategy On End.
+/*
+ @{
+ @"strategy":@(1)
+ }
+ 
+ 1:Wifi
+ 2:BLE
+ 3:BLE+Wifi
+ 4:GPS
+ 5:GPS+Wifi
+ 6:GPS+BLE
+ 7:GPS+BLE+Wifi
+ 
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMotionModePosStrategyOnEndWithSucBlock:(void (^)(id returnData))sucBlock
+                                          failedBlock:(void (^)(NSError * error))failedBlock;
+
+/// Read Downlink  For Position Pos-Strategy.
+/*
+ @{
+ @"strategy":@(1)
+ }
+ 
+ 1:Wifi
+ 2:BLE
+ 3:BLE+Wifi
+ 4:GPS
+ 5:GPS+Wifi
+ 6:GPS+BLE
+ 7:GPS+BLE+Wifi
+ 
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readDownlinkForPositioningStrategyWithSucBlock:(void (^)(id returnData))sucBlock
+                                              failedBlock:(void (^)(NSError * error))failedBlock;
 
 #pragma mark ****************************************定位参数************************************************
 

@@ -15,6 +15,7 @@
 #import "MKBGOperationID.h"
 #import "MKBGOperation.h"
 #import "CBPeripheral+MKBGAdd.h"
+#import "MKBGSDKDataAdopter.h"
 
 #define centralManager [MKBGCentralManager shared]
 
@@ -86,7 +87,7 @@
 + (void)bg_configWorkMode:(mk_bg_deviceMode)deviceMode
                  sucBlock:(void (^)(void))sucBlock
               failedBlock:(void (^)(NSError *error))failedBlock {
-    NSString *mode = [self fetchDeviceModeValue:deviceMode];
+    NSString *mode = [MKBGSDKDataAdopter fetchDeviceModeValue:deviceMode];
     NSString *commandString = [@"ed010601" stringByAppendingString:mode];
     [self configDataWithTaskID:mk_bg_taskConfigWorkModeOperation
                           data:commandString
@@ -134,6 +135,200 @@
                    failedBlock:failedBlock];
     
 }
+
+#pragma mark ****************************************模式相关参数************************************************
+
++ (void)bg_configPeriodicModePositioningStrategy:(mk_bg_positioningStrategy)strategy
+                                        sucBlock:(void (^)(void))sucBlock
+                                     failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *strategyString = [MKBGSDKDataAdopter fetchPositioningStrategyCommand:strategy];
+    NSString *commandString = [@"ed012001" stringByAppendingString:strategyString];
+    [self configDataWithTaskID:mk_bg_taskConfigPeriodicModePositioningStrategyOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configPeriodicModeReportInterval:(long long)interval
+                                   sucBlock:(void (^)(void))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock {
+    if (interval < 30 || interval > 86400) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:4];
+    NSString *commandString = [@"ed012104" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigPeriodicModeReportIntervalOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configTimingModePositioningStrategy:(mk_bg_positioningStrategy)strategy
+                                      sucBlock:(void (^)(void))sucBlock
+                                   failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *strategyString = [MKBGSDKDataAdopter fetchPositioningStrategyCommand:strategy];
+    NSString *commandString = [@"ed012201" stringByAppendingString:strategyString];
+    [self configDataWithTaskID:mk_bg_taskConfigTimingModePositioningStrategyOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configTimingModeReportingTimePoint:(NSArray <mk_bg_timingModeReportingTimePointProtocol>*)dataList
+                                     sucBlock:(void (^)(void))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *dataString = [MKBGSDKDataAdopter fetchTimingModeReportingTimePoint:dataList];
+    if (!MKValidStr(dataString)) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *commandString = [@"ed0123" stringByAppendingString:dataString];
+    [self configDataWithTaskID:mk_bg_taskConfigTimingModeReportingTimePointOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMotionModeEvents:(id <mk_bg_motionModeEventsProtocol>)protocol
+                         sucBlock:(void (^)(void))sucBlock
+                      failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *notifyEventOnStartValue = (protocol.notifyEventOnStart ? @"1" : @"0");
+    NSString *fixOnStartValue = (protocol.fixOnStart ? @"1" : @"0");
+    NSString *notifyEventInTripValue = (protocol.notifyEventInTrip ? @"1" : @"0");
+    NSString *fixInTripValue = (protocol.fixInTrip ? @"1" : @"0");
+    NSString *notifyEventOnEndValue = (protocol.notifyEventOnEnd ? @"1" : @"0");
+    NSString *fixOnEndValue = (protocol.fixOnEnd ? @"1" : @"0");
+    NSString *resultValue = [NSString stringWithFormat:@"%@%@%@%@%@%@%@",@"00",fixOnEndValue,notifyEventOnEndValue,fixInTripValue,notifyEventInTripValue,fixOnStartValue,notifyEventOnStartValue];
+    NSString *cmdValue = [MKBGSDKDataAdopter getHexByBinary:resultValue];
+    NSString *commandString = [@"ed012401" stringByAppendingString:cmdValue];
+    [self configDataWithTaskID:mk_bg_taskConfigMotionModeEventsOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMotionModeNumberOfFixOnStart:(NSInteger)number
+                                     sucBlock:(void (^)(void))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock {
+    if (number < 1 || number > 255) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:number byteLen:1];
+    NSString *commandString = [@"ed012501" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigMotionModeNumberOfFixOnStartOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMotionModePosStrategyOnStart:(mk_bg_positioningStrategy)strategy
+                                     sucBlock:(void (^)(void))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *strategyString = [MKBGSDKDataAdopter fetchPositioningStrategyCommand:strategy];
+    NSString *commandString = [@"ed012601" stringByAppendingString:strategyString];
+    [self configDataWithTaskID:mk_bg_taskConfigMotionModePosStrategyOnStartOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMotionModeReportIntervalInTrip:(long long)interval
+                                       sucBlock:(void (^)(void))sucBlock
+                                    failedBlock:(void (^)(NSError *error))failedBlock {
+    if (interval < 10 || interval > 86400) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:4];
+    NSString *commandString = [@"ed012704" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigMotionModeReportIntervalInTripOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMotionModePosStrategyInTrip:(mk_bg_positioningStrategy)strategy
+                                    sucBlock:(void (^)(void))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *strategyString = [MKBGSDKDataAdopter fetchPositioningStrategyCommand:strategy];
+    NSString *commandString = [@"ed012801" stringByAppendingString:strategyString];
+    [self configDataWithTaskID:mk_bg_taskConfigMotionModePosStrategyInTripOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMotionModeTripEndTimeout:(NSInteger)time
+                                 sucBlock:(void (^)(void))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock {
+    if (time < 3 || time > 180) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:time byteLen:1];
+    NSString *commandString = [@"ed012901" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigMotionModeTripEndTimeoutOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMotionModeNumberOfFixOnEnd:(NSInteger)number
+                                   sucBlock:(void (^)(void))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock {
+    if (number < 1 || number > 255) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:number byteLen:1];
+    NSString *commandString = [@"ed012a01" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigMotionModeNumberOfFixOnEndOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMotionModeReportIntervalOnEnd:(NSInteger)interval
+                                      sucBlock:(void (^)(void))sucBlock
+                                   failedBlock:(void (^)(NSError *error))failedBlock {
+    if (interval < 10 || interval > 300) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:2];
+    NSString *commandString = [@"ed012b02" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigMotionModeReportIntervalOnEndOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMotionModePosStrategyOnEnd:(mk_bg_positioningStrategy)strategy
+                                   sucBlock:(void (^)(void))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *strategyString = [MKBGSDKDataAdopter fetchPositioningStrategyCommand:strategy];
+    NSString *commandString = [@"ed012c01" stringByAppendingString:strategyString];
+    [self configDataWithTaskID:mk_bg_taskConfigMotionModePosStrategyOnEndOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configDownlinkForPositioningStrategy:(mk_bg_positioningStrategy)strategy
+                                       sucBlock:(void (^)(void))sucBlock
+                                    failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *strategyString = [MKBGSDKDataAdopter fetchPositioningStrategyCommand:strategy];
+    NSString *commandString = [@"ed012d01" stringByAppendingString:strategyString];
+    [self configDataWithTaskID:mk_bg_taskConfigDownlinkForPositioningStrategyOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
+
+#pragma mark ****************************************定位参数************************************************
 
 + (void)bg_configWifiPositioningTimeout:(NSInteger)interval
                                sucBlock:(void (^)(void))sucBlock
@@ -424,7 +619,7 @@
     }
     NSString *contentData = @"";
     for (id <mk_bg_BLEFilterRawDataProtocol>protocol in rawDataList) {
-        if (![self isConfirmRawFilterProtocol:protocol]) {
+        if (![MKBGSDKDataAdopter isConfirmRawFilterProtocol:protocol]) {
             [self operationParamsErrorBlock:failedBlock];
             return;
         }
@@ -666,7 +861,7 @@
 + (void)bg_configGpsFixMode:(mk_bg_gpsFixMode)mode
                    sucBlock:(void (^)(void))sucBlock
                 failedBlock:(void (^)(NSError *error))failedBlock {
-    NSString *type = [self fetchGpsFixModeValue:mode];
+    NSString *type = [MKBGSDKDataAdopter fetchGpsFixModeValue:mode];
     NSString *commandString = [@"ed014d01" stringByAppendingString:type];
     [self configDataWithTaskID:mk_bg_taskConfigGpsFixModeOperation
                           data:commandString
@@ -677,7 +872,7 @@
 + (void)bg_configGpsMode:(mk_bg_gpsMode)mode
                 sucBlock:(void (^)(void))sucBlock
              failedBlock:(void (^)(NSError *error))failedBlock {
-    NSString *type = [self fetchGpsModeValue:mode];
+    NSString *type = [MKBGSDKDataAdopter fetchGpsModeValue:mode];
     NSString *commandString = [@"ed014e01" stringByAppendingString:type];
     [self configDataWithTaskID:mk_bg_taskConfigGpsModeOperation
                           data:commandString
@@ -784,7 +979,7 @@
 + (void)bg_configRegion:(mk_bg_loraWanRegion)region
                sucBlock:(void (^)(void))sucBlock
             failedBlock:(void (^)(NSError *error))failedBlock {
-    NSString *commandString = [NSString stringWithFormat:@"%@%@",@"ed016001",[self lorawanRegionString:region]];
+    NSString *commandString = [NSString stringWithFormat:@"%@%@",@"ed016001",[MKBGSDKDataAdopter lorawanRegionString:region]];
     [self configDataWithTaskID:mk_bg_taskConfigRegionOperation
                           data:commandString
                       sucBlock:sucBlock
@@ -1040,129 +1235,6 @@
             block(error);
         }
     });
-}
-
-#pragma mark -
-+ (NSString *)fetchDeviceModeValue:(mk_bg_deviceMode)deviceMode {
-    switch (deviceMode) {
-        case mk_bg_deviceMode_offMode:
-            return @"00";
-        case mk_bg_deviceMode_standbyMode:
-            return @"01";
-        case mk_bg_deviceMode_periodicMode:
-            return @"02";
-        case mk_bg_deviceMode_timingMode:
-            return @"03";
-        case mk_bg_deviceMode_motionMode:
-            return @"04";
-    }
-}
-
-+ (NSString *)fetchGpsFixModeValue:(mk_bg_gpsFixMode)mode {
-    switch (mode) {
-        case mk_bg_gpsFixMode_2d:
-            return @"00";
-        case mk_bg_gpsFixMode_3d:
-            return @"01";
-        case mk_bg_gpsFixMode_auto:
-            return @"02";
-    }
-}
-
-+ (NSString *)fetchGpsModeValue:(mk_bg_gpsMode)mode {
-    switch (mode) {
-        case mk_bg_gpsMode_portable:
-            return @"00";
-        case mk_bg_gpsMode_stationary:
-            return @"01";
-        case mk_bg_gpsMode_pedestrian:
-            return @"02";
-        case mk_bg_gpsMode_automotive:
-            return @"03";
-        case mk_bg_gpsMode_atSea:
-            return @"04";
-        case mk_bg_gpsMode_airborneLessThan1g:
-            return @"05";
-        case mk_bg_gpsMode_airborneLessThan2g:
-            return @"06";
-        case mk_bg_gpsMode_airborneLessThan4g:
-            return @"07";
-        case mk_bg_gpsMode_wrist:
-            return @"08";
-        case mk_bg_gpsMode_bike:
-            return @"09";
-    }
-}
-
-+ (NSString *)lorawanRegionString:(mk_bg_loraWanRegion)region {
-    switch (region) {
-        case mk_bg_loraWanRegionAS923:
-            return @"00";
-        case mk_bg_loraWanRegionAU915:
-            return @"01";
-        case mk_bg_loraWanRegionCN470:
-            return @"02";
-        case mk_bg_loraWanRegionCN779:
-            return @"03";
-        case mk_bg_loraWanRegionEU433:
-            return @"04";
-        case mk_bg_loraWanRegionEU868:
-            return @"05";
-        case mk_bg_loraWanRegionKR920:
-            return @"06";
-        case mk_bg_loraWanRegionIN865:
-            return @"07";
-        case mk_bg_loraWanRegionUS915:
-            return @"08";
-        case mk_bg_loraWanRegionRU864:
-            return @"09";
-    }
-}
-
-+ (BOOL)isConfirmRawFilterProtocol:(id <mk_bg_BLEFilterRawDataProtocol>)protocol {
-    if (![protocol conformsToProtocol:@protocol(mk_bg_BLEFilterRawDataProtocol)]) {
-        return NO;
-    }
-    if (!MKValidStr(protocol.dataType) || protocol.dataType.length != 2 || ![MKBLEBaseSDKAdopter checkHexCharacter:protocol.dataType]) {
-        return NO;
-    }
-    NSArray *typeList = [self dataTypeList];
-    if (![typeList containsObject:[protocol.dataType uppercaseString]]) {
-        return NO;
-    }
-    if (protocol.minIndex == 0 && protocol.maxIndex == 0) {
-        if (!MKValidStr(protocol.rawData) || protocol.rawData.length > 58 || ![MKBLEBaseSDKAdopter checkHexCharacter:protocol.rawData] || (protocol.rawData.length % 2 != 0)) {
-            return NO;
-        }
-        return YES;
-    }
-    if (protocol.minIndex < 0 || protocol.minIndex > 29 || protocol.maxIndex < 0 || protocol.maxIndex > 29) {
-        return NO;
-    }
-    
-    if (protocol.maxIndex < protocol.minIndex) {
-        return NO;
-    }
-    if (!MKValidStr(protocol.rawData) || protocol.rawData.length > 58 || ![MKBLEBaseSDKAdopter checkHexCharacter:protocol.rawData]) {
-        return NO;
-    }
-    NSInteger totalLen = (protocol.maxIndex - protocol.minIndex + 1) * 2;
-    if (protocol.rawData.length != totalLen) {
-        return NO;
-    }
-    return YES;
-}
-
-+ (NSArray *)dataTypeList {
-    return @[@"01",@"02",@"03",@"04",@"05",
-             @"06",@"07",@"08",@"09",@"0A",
-             @"0D",@"0E",@"0F",@"10",@"11",
-             @"12",@"14",@"15",@"16",@"17",
-             @"18",@"19",@"1A",@"1B",@"1C",
-             @"1D",@"1E",@"1F",@"20",@"21",
-             @"22",@"23",@"24",@"25",@"26",
-             @"27",@"28",@"29",@"2A",@"2B",
-             @"2C",@"2D",@"3D",@"FF"];
 }
 
 @end

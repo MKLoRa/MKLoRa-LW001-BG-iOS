@@ -150,8 +150,6 @@ mk_textSwitchCellDelegate>
     } failedBlock:^(NSError * _Nonnull error) {
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        MKTextSwitchCellModel *cellModel = self.section1List[0];
-        cellModel.isOn = !isOn;
         [self.tableView mk_reloadSection:1 withRowAnimation:UITableViewRowAnimationNone];
     }];
 }

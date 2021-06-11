@@ -12,6 +12,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MKBGPeriodicModeModel : NSObject
 
+/*
+ 0:Wifi
+ 1:BLE
+ 2:GPS
+ 3:GPS+Wifi
+ 4:GPS+BLE
+ 5:BLE+Wifi
+ 6:GPS+BLE+Wifi
+ */
+@property (nonatomic, assign)NSInteger strategy;
+
+@property (nonatomic, copy)NSString *interval;
+
+- (void)readDataWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
+
+- (void)configDataWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

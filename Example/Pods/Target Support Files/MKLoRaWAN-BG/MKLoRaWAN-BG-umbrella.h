@@ -35,7 +35,6 @@
 #import "MKBGDeviceController.h"
 #import "MKBGDevicePageModel.h"
 #import "MKBGDownlinkController.h"
-#import "MKBGDownlinkDataModel.h"
 #import "MKBGFilterConditionController.h"
 #import "MKBGFilterConditionModel.h"
 #import "MKBGFilterByPHYCell.h"
@@ -80,6 +79,8 @@
 #import "MKBGOperationID.h"
 #import "MKBGPeripheral.h"
 #import "MKBGSDK.h"
+#import "MKBGSDKDataAdopter.h"
+#import "MKBGSDKNormalDefines.h"
 #import "MKBGTaskAdopter.h"
 #import "Target_LoRaWANBG_Module.h"
 

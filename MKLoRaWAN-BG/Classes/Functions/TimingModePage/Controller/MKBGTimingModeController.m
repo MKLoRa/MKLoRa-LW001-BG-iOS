@@ -19,6 +19,10 @@
 #import "MKTextButtonCell.h"
 #import "MKPickerView.h"
 
+#import "MKBGInterface+MKBGConfig.h"
+
+#import "MKBGTimingModeModel.h"
+
 #import "MKBGReportTimePointCell.h"
 #import "MKBGTimingModeAddCell.h"
 
@@ -36,6 +40,8 @@ MKBGReportTimePointCellDelegate>
 
 @property (nonatomic, strong)NSMutableArray *section2List;
 
+@property (nonatomic, strong)MKBGTimingModeModel *dataModel;
+
 @end
 
 @implementation MKBGTimingModeController
@@ -47,12 +53,12 @@ MKBGReportTimePointCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [self loadSectionDatas];
+    [self readDataFromDevice];
 }
 
 #pragma mark - super method
 - (void)rightButtonMethod {
-    
+    [self saveReportingTimePointToDevice];
 }
 
 #pragma mark - UITableViewDelegate
@@ -111,8 +117,7 @@ MKBGReportTimePointCellDelegate>
                                 value:(NSString *)value {
     if (index == 0) {
         //Positioning Strategy
-        MKTextButtonCellModel *cellModel = self.section0List[0];
-        cellModel.dataListIndex = dataListIndex;
+        [self configPositioningStrategy:dataListIndex];
         return;
     }
 }
@@ -182,6 +187,54 @@ MKBGReportTimePointCellDelegate>
     [self cellCanSelected];
 }
 
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readDataWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self loadSectionDatas];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configPositioningStrategy:(NSInteger)strategy {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configTimingModePositioningStrategy:strategy sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextButtonCellModel *cellModel = self.section0List[0];
+        cellModel.dataListIndex = strategy;
+        self.dataModel.strategy = strategy;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+
+- (void)saveReportingTimePointToDevice {
+    NSMutableArray *tempList = [NSMutableArray array];
+    for (NSInteger i = 0; i < self.section2List.count; i ++) {
+        MKBGReportTimePointCellModel *cellModel = self.section2List[i];
+        MKBGTimingModeTimePointModel *pointModel = [[MKBGTimingModeTimePointModel alloc] init];
+        pointModel.hour = cellModel.hourIndex;
+        pointModel.minuteGear = cellModel.timeSpaceIndex;
+        [tempList addObject:pointModel];
+    }
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configTimingModeReportingTimePoint:tempList sucBlock:^{
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
 #pragma mark - private method
 /**
  当有cell右侧的删除按钮出现时，不能触发点击事件
@@ -245,7 +298,7 @@ MKBGReportTimePointCellDelegate>
     cellModel.index = 0;
     cellModel.msg = @"Positioning Strategy";
     cellModel.dataList = @[@"WIFI",@"BLE",@"GPS",@"WIFI+GPS",@"BLE+GPS",@"WIFI+BLE",@"WIFI+BLE+GPS"];
-    cellModel.dataListIndex = 2;
+    cellModel.dataListIndex = self.dataModel.strategy;
     [self.section0List addObject:cellModel];
 }
 
@@ -256,7 +309,15 @@ MKBGReportTimePointCellDelegate>
 }
 
 - (void)loadSection2Datas {
-    
+    for (NSInteger i = 0; i < self.dataModel.pointList.count; i ++) {
+        MKBGTimingModeTimePointModel *tempModel = self.dataModel.pointList[i];
+        MKBGReportTimePointCellModel *cellModel = [[MKBGReportTimePointCellModel alloc] init];
+        cellModel.index = i;
+        cellModel.msg = [NSString stringWithFormat:@"Time Point %ld",(long)(i + 1)];
+        cellModel.hourIndex = tempModel.hour;
+        cellModel.timeSpaceIndex = tempModel.minuteGear;
+        [self.section2List addObject:cellModel];
+    }
 }
 
 #pragma mark - UI
@@ -302,6 +363,13 @@ MKBGReportTimePointCellDelegate>
         _section2List = [NSMutableArray array];
     }
     return _section2List;
+}
+
+- (MKBGTimingModeModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKBGTimingModeModel alloc] init];
+    }
+    return _dataModel;
 }
 
 @end

@@ -155,7 +155,7 @@ mk_textSwitchCellDelegate>
 
 #pragma mark - UI
 - (void)loadSubViews {
-    self.defaultTitle = @"Auxoliary Operation";
+    self.defaultTitle = @"Auxiliary Operation";
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);

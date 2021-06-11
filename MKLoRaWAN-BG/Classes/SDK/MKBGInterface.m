@@ -110,6 +110,120 @@
                  failedBlock:failedBlock];
 }
 
+#pragma mark ****************************************模式相关参数************************************************
+
++ (void)bg_readPeriodicModePositioningStrategyWithSucBlock:(void (^)(id returnData))sucBlock
+                                               failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadPeriodicModePositioningStrategyOperation
+                     cmdFlag:@"20"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readPeriodicModeReportIntervalWithSucBlock:(void (^)(id returnData))sucBlock
+                                          failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadPeriodicModeReportIntervalOperation
+                     cmdFlag:@"21"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readTimingModePositioningStrategyWithSucBlock:(void (^)(id returnData))sucBlock
+                                             failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadTimingModePositioningStrategyOperation
+                     cmdFlag:@"22"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readTimingModeReportingTimePointWithSucBlock:(void (^)(id returnData))sucBlock
+                                            failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadTimingModeReportingTimePointOperation
+                     cmdFlag:@"23"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMotionModeEventsWithSucBlock:(void (^)(id returnData))sucBlock
+                                failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMotionModeEventsOperation
+                     cmdFlag:@"24"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMotionModeNumberOfFixOnStartWithSucBlock:(void (^)(id returnData))sucBlock
+                                            failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMotionModeNumberOfFixOnStartOperation
+                     cmdFlag:@"25"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMotionModePosStrategyOnStartWithSucBlock:(void (^)(id returnData))sucBlock
+                                            failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMotionModePosStrategyOnStartOperation
+                     cmdFlag:@"26"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMotionModeReportIntervalInTripWithSucBlock:(void (^)(id returnData))sucBlock
+                                              failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMotionModeReportIntervalInTripOperation
+                     cmdFlag:@"27"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMotionModePosStrategyInTripWithSucBlock:(void (^)(id returnData))sucBlock
+                                           failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMotionModePosStrategyInTripOperation
+                     cmdFlag:@"28"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMotionModeTripEndTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                        failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMotionModeTripEndTimeoutOperation
+                     cmdFlag:@"29"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMotionModeNumberOfFixOnEndWithSucBlock:(void (^)(id returnData))sucBlock
+                                          failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMotionModeNumberOfFixOnEndOperation
+                     cmdFlag:@"2a"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMotionModeReportIntervalOnEndWithSucBlock:(void (^)(id returnData))sucBlock
+                                             failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMotionModeReportIntervalOnEndOperation
+                     cmdFlag:@"2b"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMotionModePosStrategyOnEndWithSucBlock:(void (^)(id returnData))sucBlock
+                                          failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMotionModePosStrategyOnEndOperation
+                     cmdFlag:@"2c"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readDownlinkForPositioningStrategyWithSucBlock:(void (^)(id returnData))sucBlock
+                                              failedBlock:(void (^)(NSError * error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadDownlinkForPositioningStrategyOperation
+                     cmdFlag:@"2d"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
 #pragma mark ****************************************定位参数************************************************
 
 + (void)bg_readWifiPositioningTimeoutWithSucBlock:(void (^)(id returnData))sucBlock

@@ -15,10 +15,15 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
+#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextButtonCell.h"
 #import "MKTextFieldCell.h"
+
+#import "MKBGInterface+MKBGConfig.h"
+
+#import "MKBGPeriodicModeModel.h"
 
 @interface MKBGPeriodicModeController ()<UITableViewDelegate,
 UITableViewDataSource,
@@ -30,6 +35,8 @@ MKTextFieldCellDelegate>
 @property (nonatomic, strong)NSMutableArray *section0List;
 
 @property (nonatomic, strong)NSMutableArray *section1List;
+
+@property (nonatomic, strong)MKBGPeriodicModeModel *dataModel;
 
 @end
 
@@ -48,12 +55,12 @@ MKTextFieldCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [self loadSectionDatas];
+    [self readDataFromDevice];
 }
 
 #pragma mark - super method
 - (void)rightButtonMethod {
-    
+    [self saveParamsToDevice];
 }
 
 #pragma mark - UITableViewDelegate
@@ -96,8 +103,7 @@ MKTextFieldCellDelegate>
                                 value:(NSString *)value {
     if (index == 0) {
         //Positioning Strategy
-        MKTextButtonCellModel *cellModel = self.section0List[0];
-        cellModel.dataListIndex = dataListIndex;
+        [self configPositioningStrategy:dataListIndex];
         return;
     }
 }
@@ -111,8 +117,52 @@ MKTextFieldCellDelegate>
         //Report Interval
         MKTextFieldCellModel *cellModel = self.section1List[0];
         cellModel.textFieldValue = value;
+        self.dataModel.interval = value;
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readDataWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self loadSectionDatas];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)saveParamsToDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel configDataWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configPositioningStrategy:(NSInteger)strategy {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configPeriodicModePositioningStrategy:strategy sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextButtonCellModel *cellModel = self.section0List[0];
+        cellModel.dataListIndex = strategy;
+        self.dataModel.strategy = strategy;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
+    }];
 }
 
 #pragma mark - loadSections
@@ -128,7 +178,7 @@ MKTextFieldCellDelegate>
     cellModel.index = 0;
     cellModel.msg = @"Positioning Strategy";
     cellModel.dataList = @[@"WIFI",@"BLE",@"GPS",@"WIFI+GPS",@"BLE+GPS",@"WIFI+BLE",@"WIFI+BLE+GPS"];
-    cellModel.dataListIndex = 2;
+    cellModel.dataListIndex = self.dataModel.strategy;
     [self.section0List addObject:cellModel];
 }
 
@@ -140,6 +190,7 @@ MKTextFieldCellDelegate>
     cellModel.textFieldType = mk_realNumberOnly;
     cellModel.maxLength = 5;
     cellModel.unit = @"S";
+    cellModel.textFieldValue = self.dataModel.interval;
     [self.section1List addObject:cellModel];
 }
 
@@ -178,6 +229,13 @@ MKTextFieldCellDelegate>
         _section1List = [NSMutableArray array];
     }
     return _section1List;
+}
+
+- (MKBGPeriodicModeModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKBGPeriodicModeModel alloc] init];
+    }
+    return _dataModel;
 }
 
 @end

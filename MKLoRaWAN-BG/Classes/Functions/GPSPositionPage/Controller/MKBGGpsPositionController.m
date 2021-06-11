@@ -335,9 +335,6 @@ MKTextButtonCellDelegate>
     } failedBlock:^(NSError * _Nonnull error) {
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        MKTextSwitchCellModel *cellModel = self.section2List[0];
-        cellModel.isOn = !isOn;
-        self.dataModel.autonomousAiding = !isOn;
         [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
     }];
 }
@@ -352,9 +349,6 @@ MKTextButtonCellDelegate>
     } failedBlock:^(NSError * _Nonnull error) {
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        MKTextSwitchCellModel *cellModel = self.section7List[0];
-        cellModel.isOn = !isOn;
-        self.dataModel.extremeMode = !isOn;
         [self.tableView mk_reloadSection:7 withRowAnimation:UITableViewRowAnimationNone];
     }];
 }

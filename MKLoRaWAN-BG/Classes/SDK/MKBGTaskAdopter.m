@@ -14,6 +14,7 @@
 #import "MKBLEBaseSDKDefines.h"
 
 #import "MKBGOperationID.h"
+#import "MKBGSDKDataAdopter.h"
 
 @implementation MKBGTaskAdopter
 
@@ -132,6 +133,116 @@
             @"isOn":@(isOn),
         };
         operationID = mk_bg_taskReadOfflineFixStatusOperation;
+    }else if ([cmd isEqualToString:@"20"]) {
+        //读取定期模式定位策略
+        NSString *strategy = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"strategy":strategy,
+        };
+        operationID = mk_bg_taskReadPeriodicModePositioningStrategyOperation;
+    }else if ([cmd isEqualToString:@"21"]) {
+        //读取定期模式上报间隔
+        NSString *interval = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"interval":interval,
+        };
+        operationID = mk_bg_taskReadPeriodicModeReportIntervalOperation;
+    }else if ([cmd isEqualToString:@"22"]) {
+        //读取定时模式定位策略
+        NSString *strategy = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"strategy":strategy,
+        };
+        operationID = mk_bg_taskReadTimingModePositioningStrategyOperation;
+    }else if ([cmd isEqualToString:@"23"]) {
+        //读取定时模式时间点
+        NSArray *list = [MKBGSDKDataAdopter parseTimingModeReportingTimePoint:content];
+        
+        resultDic = @{
+            @"pointList":list,
+        };
+        operationID = mk_bg_taskReadTimingModeReportingTimePointOperation;
+    }else if ([cmd isEqualToString:@"24"]) {
+        //读取运动模式事件
+        NSString *binaryHex = [MKBLEBaseSDKAdopter binaryByhex:[content substringWithRange:NSMakeRange(0, content.length)]];
+        
+        BOOL notifyEventOnStart = [[binaryHex substringWithRange:NSMakeRange(7, 1)] isEqualToString:@"1"];
+        BOOL fixOnStart = [[binaryHex substringWithRange:NSMakeRange(6, 1)] isEqualToString:@"1"];
+        BOOL notifyEventInTrip = [[binaryHex substringWithRange:NSMakeRange(5, 1)] isEqualToString:@"1"];
+        BOOL fixInTrip = [[binaryHex substringWithRange:NSMakeRange(4, 1)] isEqualToString:@"1"];
+        BOOL notifyEventOnEnd = [[binaryHex substringWithRange:NSMakeRange(3, 1)] isEqualToString:@"1"];
+        BOOL fixOnEnd = [[binaryHex substringWithRange:NSMakeRange(2, 1)] isEqualToString:@"1"];
+        resultDic = @{
+            @"notifyEventOnStart":@(notifyEventOnStart),
+            @"fixOnStart":@(fixOnStart),
+            @"notifyEventInTrip":@(notifyEventInTrip),
+            @"fixInTrip":@(fixInTrip),
+            @"notifyEventOnEnd":@(notifyEventOnEnd),
+            @"fixOnEnd":@(fixOnEnd)
+        };
+        operationID = mk_bg_taskReadMotionModeEventsOperation;
+    }else if ([cmd isEqualToString:@"25"]) {
+        //读取运动开始定位上报次数
+        NSString *number = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"number":number,
+        };
+        operationID = mk_bg_taskReadMotionModeNumberOfFixOnStartOperation;
+    }else if ([cmd isEqualToString:@"26"]) {
+        //读取运动开始定位策略
+        NSString *strategy = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"strategy":strategy,
+        };
+        operationID = mk_bg_taskReadMotionModePosStrategyOnStartOperation;
+    }else if ([cmd isEqualToString:@"27"]) {
+        //读取运动中定位间隔
+        NSString *interval = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"interval":interval,
+        };
+        operationID = mk_bg_taskReadMotionModeReportIntervalInTripOperation;
+    }else if ([cmd isEqualToString:@"28"]) {
+        //读取运动中定位策略
+        NSString *strategy = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"strategy":strategy,
+        };
+        operationID = mk_bg_taskReadMotionModePosStrategyInTripOperation;
+    }else if ([cmd isEqualToString:@"29"]) {
+        //读取运动结束判断时间
+        NSString *time = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"time":time,
+        };
+        operationID = mk_bg_taskReadMotionModeTripEndTimeoutOperation;
+    }else if ([cmd isEqualToString:@"2a"]) {
+        //读取运动结束判断时间
+        NSString *number = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"number":number,
+        };
+        operationID = mk_bg_taskReadMotionModeNumberOfFixOnEndOperation;
+    }else if ([cmd isEqualToString:@"2b"]) {
+        //读取运动结束定位间隔
+        resultDic = @{
+            @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
+        };
+        operationID = mk_bg_taskReadMotionModeReportIntervalOnEndOperation;
+    }else if ([cmd isEqualToString:@"2c"]) {
+        //读取运动结束定位策略
+        NSString *strategy = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"strategy":strategy,
+        };
+        operationID = mk_bg_taskReadMotionModePosStrategyOnEndOperation;
+    }else if ([cmd isEqualToString:@"2d"]) {
+        //读取下行请求定位策略
+        NSString *strategy = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"strategy":strategy,
+        };
+        operationID = mk_bg_taskReadDownlinkForPositioningStrategyOperation;
     }else if ([cmd isEqualToString:@"30"]) {
         //读取WIFI定位超时时间
         resultDic = @{
@@ -732,6 +843,48 @@
     }else if ([cmd isEqualToString:@"0b"]) {
         //设置离线定位功能
         operationID = mk_bg_taskConfigOfflineFixStatusOperation;
+    }else if ([cmd isEqualToString:@"20"]) {
+        //设置定期模式定位策略
+        operationID = mk_bg_taskConfigPeriodicModePositioningStrategyOperation;
+    }else if ([cmd isEqualToString:@"21"]) {
+        //设置定期模式上报间隔
+        operationID = mk_bg_taskConfigPeriodicModeReportIntervalOperation;
+    }else if ([cmd isEqualToString:@"22"]) {
+        //设置定时模式定位策略
+        operationID = mk_bg_taskConfigTimingModePositioningStrategyOperation;
+    }else if ([cmd isEqualToString:@"23"]) {
+        //设置定时模式时间点
+        operationID = mk_bg_taskConfigTimingModeReportingTimePointOperation;
+    }else if ([cmd isEqualToString:@"24"]) {
+        //设置运动模式事件
+        operationID = mk_bg_taskConfigMotionModeEventsOperation;
+    }else if ([cmd isEqualToString:@"25"]) {
+        //设置运动开始定位上报次数
+        operationID = mk_bg_taskConfigMotionModeNumberOfFixOnStartOperation;
+    }else if ([cmd isEqualToString:@"26"]) {
+        //设置运动开始定位策略
+        operationID = mk_bg_taskConfigMotionModePosStrategyOnStartOperation;
+    }else if ([cmd isEqualToString:@"27"]) {
+        //设置运动中定位间隔
+        operationID = mk_bg_taskConfigMotionModeReportIntervalInTripOperation;
+    }else if ([cmd isEqualToString:@"28"]) {
+        //设置运动中定位策略
+        operationID = mk_bg_taskConfigMotionModePosStrategyInTripOperation;
+    }else if ([cmd isEqualToString:@"29"]) {
+        //设置运动结束判断时间
+        operationID = mk_bg_taskConfigMotionModeTripEndTimeoutOperation;
+    }else if ([cmd isEqualToString:@"2a"]) {
+        //设置运动结束定位次数
+        operationID = mk_bg_taskConfigMotionModeNumberOfFixOnEndOperation;
+    }else if ([cmd isEqualToString:@"2b"]) {
+        //设置运动结束定位间隔
+        operationID = mk_bg_taskConfigMotionModeReportIntervalOnEndOperation;
+    }else if ([cmd isEqualToString:@"2c"]) {
+        //设置运动结束定位策略
+        operationID = mk_bg_taskConfigMotionModePosStrategyOnEndOperation;
+    }else if ([cmd isEqualToString:@"2d"]) {
+        //设置下行请求定位策略
+        operationID = mk_bg_taskConfigDownlinkForPositioningStrategyOperation;
     }else if ([cmd isEqualToString:@"30"]) {
         //设置WIFI定位超时时间
         operationID = mk_bg_taskConfigWifiPositioningTimeoutOperation;
