@@ -15,11 +15,14 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
+#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
 #import "MKTextSwitchCell.h"
 #import "MKNormalTextCell.h"
+
+#import "MKBGInterface+MKBGConfig.h"
 
 #import "MKBGBleSettingsDataModel.h"
 
@@ -56,6 +59,7 @@ mk_textSwitchCellDelegate>
     [super viewDidAppear:animated];
     self.view.shiftHeightAsDodgeViewForMLInputDodger = 50.0f;
     [self.view registerAsDodgeViewForMLInputDodgerWithOriginalY:self.view.frame.origin.y];
+    [self readDataFromDevice];
 }
 
 - (void)viewDidLoad {
@@ -66,7 +70,16 @@ mk_textSwitchCellDelegate>
 
 #pragma mark - super method
 - (void)rightButtonMethod {
-    
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel configDataWithSucBlock:^{
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
 }
 
 #pragma mark - UITableViewDelegate
@@ -162,19 +175,66 @@ mk_textSwitchCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Beacon  Mode
-        MKTextSwitchCellModel *cellModel = self.section1List[0];
-        cellModel.isOn = isOn;
-        self.dataModel.beaconModeIsOn = isOn;
-        [self.tableView reloadData];
+        [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+        [MKBGInterface bg_configBeaconModeStatus:isOn sucBlock:^{
+            [[MKHudManager share] hide];
+            MKTextSwitchCellModel *cellModel = self.section1List[0];
+            cellModel.isOn = isOn;
+            self.dataModel.beaconModeIsOn = isOn;
+            [self.tableView reloadData];
+        } failedBlock:^(NSError * _Nonnull error) {
+            [[MKHudManager share] hide];
+            [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+            [self.tableView reloadData];
+        }];
         return;
     }
     if (index == 1) {
         //Connectable
-        MKTextSwitchCellModel *cellModel = self.section2List[0];
-        cellModel.isOn = isOn;
-        self.dataModel.connectable = isOn;
+        [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+        [MKBGInterface bg_configDeviceConnectable:isOn sucBlock:^{
+            [[MKHudManager share] hide];
+            MKTextSwitchCellModel *cellModel = self.section2List[0];
+            cellModel.isOn = isOn;
+            self.dataModel.connectable = isOn;
+        } failedBlock:^(NSError * _Nonnull error) {
+            [[MKHudManager share] hide];
+            [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+            [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
+        }];
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readWithSucBlock:^{
+        [[MKHudManager share] hide];
+        [self updateCellModels];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+#pragma mark - updateCellModels
+- (void)updateCellModels {
+    MKTextSwitchCellModel *beaconModeModel = self.section1List[0];
+    beaconModeModel.isOn = self.dataModel.beaconModeIsOn;
+    
+    MKTextSwitchCellModel *connectableModel = self.section2List[0];
+    connectableModel.isOn = self.dataModel.connectable;
+    
+    MKTextFieldCellModel *intervalModel = self.section3List[0];
+    intervalModel.textFieldValue = self.dataModel.advInterval;
+    
+    MKTextFieldCellModel *timeoutModel = self.section4List[0];
+    timeoutModel.textFieldValue = self.dataModel.broadcastTimeout;
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - loadSectionDatas
@@ -199,7 +259,6 @@ mk_textSwitchCellDelegate>
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 0;
     cellModel.msg = @"Beacon Mode";
-    cellModel.isOn = self.dataModel.beaconModeIsOn;
     [self.section1List addObject:cellModel];
 }
 
@@ -207,7 +266,6 @@ mk_textSwitchCellDelegate>
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 1;
     cellModel.msg = @"Connectable";
-    cellModel.isOn = self.dataModel.connectable;
     [self.section2List addObject:cellModel];
 }
 
@@ -217,7 +275,6 @@ mk_textSwitchCellDelegate>
     cellModel.msg = @"ADV Interval";
     cellModel.textPlaceholder = @"1~100";
     cellModel.textFieldType = mk_realNumberOnly;
-    cellModel.textFieldValue = self.dataModel.advInterval;
     cellModel.maxLength = 3;
     cellModel.unit = @"x 100ms";
     [self.section3List addObject:cellModel];
@@ -229,7 +286,6 @@ mk_textSwitchCellDelegate>
     cellModel.msg = @"Broadcast Timeout";
     cellModel.textPlaceholder = @"1~60";
     cellModel.textFieldType = mk_realNumberOnly;
-    cellModel.textFieldValue = self.dataModel.broadcastTimeout;
     cellModel.maxLength = 2;
     cellModel.unit = @"Mins";
     [self.section4List addObject:cellModel];

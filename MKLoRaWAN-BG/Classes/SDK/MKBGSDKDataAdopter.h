@@ -62,6 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param content 原始数据
 + (NSArray <NSDictionary *>*)parseTimingModeReportingTimePoint:(NSString *)content;
 
++ (NSString *)fetchTxPower:(mk_bg_txPower)txPower;
+
 @end
 
 NS_ASSUME_NONNULL_END

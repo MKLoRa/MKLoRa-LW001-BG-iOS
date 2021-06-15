@@ -80,6 +80,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configDataWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
 
+- (void)configMotionModeEvents:(MKBGMotionModeEventsModel *)eventsModel
+                      sucBlock:(void (^)(void))sucBlock
+                   failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

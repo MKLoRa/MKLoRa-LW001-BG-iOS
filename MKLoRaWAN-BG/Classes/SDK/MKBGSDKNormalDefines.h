@@ -100,6 +100,23 @@ typedef NS_ENUM(NSInteger, mk_bg_loraWanMessageType) {
     mk_bg_loraWanConfirmMessage,            //Confirm the frame.
 };
 
+typedef NS_ENUM(NSInteger, mk_bg_txPower) {
+    mk_bg_txPowerNeg40dBm,   //RadioTxPower:-40dBm
+    mk_bg_txPowerNeg20dBm,   //-20dBm
+    mk_bg_txPowerNeg16dBm,   //-16dBm
+    mk_bg_txPowerNeg12dBm,   //-12dBm
+    mk_bg_txPowerNeg8dBm,    //-8dBm
+    mk_bg_txPowerNeg4dBm,    //-4dBm
+    mk_bg_txPower0dBm,       //0dBm
+    mk_bg_txPower2dBm,       //2dBm
+    mk_bg_txPower3dBm,       //3dBm
+    mk_bg_txPower4dBm,       //4dBm
+    mk_bg_txPower5dBm,       //5dBm
+    mk_bg_txPower6dBm,       //6dBm
+    mk_bg_txPower7dBm,       //7dBm
+    mk_bg_txPower8dBm,       //8dBm
+};
+
 #pragma mark - Protocol
 
 @protocol mk_bg_BLEFilterRawDataProtocol <NSObject>

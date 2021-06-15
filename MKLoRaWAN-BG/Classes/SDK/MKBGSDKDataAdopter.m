@@ -247,6 +247,39 @@
     return tempList;
 }
 
++ (NSString *)fetchTxPower:(mk_bg_txPower)txPower {
+    switch (txPower) {
+        case mk_bg_txPower8dBm:
+            return @"08";
+        case mk_bg_txPower7dBm:
+            return @"07";
+        case mk_bg_txPower6dBm:
+            return @"06";
+        case mk_bg_txPower5dBm:
+            return @"05";
+        case mk_bg_txPower4dBm:
+            return @"04";
+        case mk_bg_txPower3dBm:
+            return @"03";
+        case mk_bg_txPower2dBm:
+            return @"02";
+        case mk_bg_txPower0dBm:
+            return @"00";
+        case mk_bg_txPowerNeg4dBm:
+            return @"fc";
+        case mk_bg_txPowerNeg8dBm:
+            return @"f8";
+        case mk_bg_txPowerNeg12dBm:
+            return @"f4";
+        case mk_bg_txPowerNeg16dBm:
+            return @"f0";
+        case mk_bg_txPowerNeg20dBm:
+            return @"ec";
+        case mk_bg_txPowerNeg40dBm:
+            return @"d8";
+    }
+}
+
 #pragma mark - private method
 + (NSArray *)dataTypeList {
     return @[@"01",@"02",@"03",@"04",@"05",

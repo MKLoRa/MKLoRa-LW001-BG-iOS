@@ -29,6 +29,7 @@
 #import "MKBGBleSettingsDataModel.h"
 #import "MKBGBroadcastSettingsController.h"
 #import "MKBGBroadcastSettingsModel.h"
+#import "MKBGBroadcastTxPowerCell.h"
 #import "MKBGDeviceInfoController.h"
 #import "MKBGDeviceInfoModel.h"
 #import "MKBGDeviceModeController.h"

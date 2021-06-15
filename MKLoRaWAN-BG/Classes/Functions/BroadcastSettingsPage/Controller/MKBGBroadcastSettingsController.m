@@ -18,20 +18,26 @@
 
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
-#import "MKMeasureTxPowerCell.h"
+#import "MKNormalSliderCell.h"
+#import "MKCustomUIAdopter.h"
+
+#import "MKBGBroadcastTxPowerCell.h"
 
 #import "MKBGBroadcastSettingsModel.h"
 
 @interface MKBGBroadcastSettingsController ()<UITableViewDelegate,
 UITableViewDataSource,
 MKTextFieldCellDelegate,
-MKMeasureTxPowerCellDelegate>
+MKNormalSliderCellDelegate,
+MKBGBroadcastTxPowerCellDelegate>
 
 @property (nonatomic, strong)MKBaseTableView *tableView;
 
 @property (nonatomic, strong)NSMutableArray *section0List;
 
 @property (nonatomic, strong)NSMutableArray *section1List;
+
+@property (nonatomic, strong)NSMutableArray *section2List;
 
 @property (nonatomic, strong)MKBGBroadcastSettingsModel *dataModel;
 
@@ -43,8 +49,14 @@ MKMeasureTxPowerCellDelegate>
     NSLog(@"MKBGBroadcastSettingsController销毁");
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     self.view.shiftHeightAsDodgeViewForMLInputDodger = 50.0f;
     [self.view registerAsDodgeViewForMLInputDodgerWithOriginalY:self.view.frame.origin.y];
 }
@@ -53,22 +65,31 @@ MKMeasureTxPowerCellDelegate>
     [super viewDidLoad];
     [self loadSubViews];
     [self loadSectionDatas];
+    [self readDataFromDevice];
+}
+
+#pragma mark - super method
+- (void)rightButtonMethod {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel configDataWithSucBlock:^{
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
 }
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        return 60.f;
-    }
-    if (indexPath.section == 1) {
-        return 120.f;
-    }
-    return 0.f;
+    return 60.f;
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -77,6 +98,9 @@ MKMeasureTxPowerCellDelegate>
     }
     if (section == 1) {
         return self.section1List.count;
+    }
+    if (section == 2) {
+        return self.section2List.count;
     }
     return 0;
 }
@@ -88,8 +112,14 @@ MKMeasureTxPowerCellDelegate>
         cell.delegate = self;
         return cell;
     }
-    MKMeasureTxPowerCell *cell = [MKMeasureTxPowerCell initCellWithTableView:tableView];
-    cell.dataModel = self.section1List[indexPath.row];
+    if (indexPath.section == 1) {
+        MKNormalSliderCell *cell = [MKNormalSliderCell initCellWithTableView:tableView];
+        cell.dataModel = self.section1List[indexPath.row];
+        cell.delegate = self;
+        return cell;
+    }
+    MKBGBroadcastTxPowerCell *cell = [MKBGBroadcastTxPowerCell initCellWithTableView:tableView];
+    cell.dataModel = self.section2List[indexPath.row];
     cell.delegate = self;
     return cell;
 }
@@ -120,23 +150,42 @@ MKMeasureTxPowerCellDelegate>
     }
 }
 
-#pragma mark - MKMeasureTxPowerCellDelegate
-- (void)mk_measureTxPowerCell_measurePowerValueChanged:(NSString *)measurePower {
-    self.dataModel.measuredPower = [measurePower integerValue];
-    
-    MKMeasureTxPowerCellModel *measureModel = self.section1List[0];
-    measureModel.measurePower = self.dataModel.measuredPower;
+#pragma mark - MKNormalSliderCellDelegate
+/// slider值发生改变的回调事件
+/// @param value 当前slider的值
+/// @param index 当前cell所在的index
+- (void)mk_normalSliderValueChanged:(NSInteger)value index:(NSInteger)index {
+    if (index == 0) {
+        //RSSI@1m
+        self.dataModel.measuredPower = value;
+        MKNormalSliderCellModel *cellModel = self.section1List[0];
+        cellModel.sliderValue = value;
+        return;
+    }
 }
 
-- (void)mk_measureTxPowerCell_txPowerValueChanged:(mk_deviceTxPower)txPower {
+#pragma mark - MKBGBroadcastTxPowerCellDelegate
+- (void)bg_txPowerValueChanged:(NSInteger)txPower {
+    MKBGBroadcastTxPowerCellModel *cellModel = self.section2List[0];
+    cellModel.txPowerValue = txPower;
     self.dataModel.txPower = txPower;
-    
-    MKMeasureTxPowerCellModel *measureModel = self.section1List[0];
-    measureModel.txPower = self.dataModel.txPower;
 }
 
-#pragma mark -
-- (void)processCellDatas {
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readDataWithSucBlock:^{
+        [[MKHudManager share] hide];
+        [self updateCellModels];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)updateCellModels {
     MKTextFieldCellModel *advNameModel = self.section0List[0];
     advNameModel.textFieldValue = self.dataModel.advName;
     
@@ -150,9 +199,11 @@ MKMeasureTxPowerCellDelegate>
     minorModel.textFieldValue = self.dataModel.minor;
     
     
-    MKMeasureTxPowerCellModel *measureModel = self.section1List[0];
-    measureModel.measurePower = self.dataModel.measuredPower;
-    measureModel.txPower = self.dataModel.txPower;
+    MKNormalSliderCellModel *rssiModel = self.section1List[0];
+    rssiModel.sliderValue = self.dataModel.measuredPower;
+    
+    MKBGBroadcastTxPowerCellModel *txPowerModel = self.section2List[0];
+    txPowerModel.txPowerValue = self.dataModel.txPower;
     
     [self.tableView reloadData];
 }
@@ -161,6 +212,7 @@ MKMeasureTxPowerCellDelegate>
 - (void)loadSectionDatas {
     [self loadSection0Datas];
     [self loadSection1Datas];
+    [self loadSection2Datas];
     
     [self.tableView reloadData];
 }
@@ -199,8 +251,15 @@ MKMeasureTxPowerCellDelegate>
 }
 
 - (void)loadSection1Datas {
-    MKMeasureTxPowerCellModel *cellModel = [[MKMeasureTxPowerCellModel alloc] init];
+    MKNormalSliderCellModel *cellModel = [[MKNormalSliderCellModel alloc] init];
+    cellModel.index = 0;
+    cellModel.msg = [MKCustomUIAdopter attributedString:@[@"RSSI@1m",@"   (-127dBm ~ 0dBm)"] fonts:@[MKFont(15.f),MKFont(13.f)] colors:@[DEFAULT_TEXT_COLOR,RGBCOLOR(223, 223, 223)]];
     [self.section1List addObject:cellModel];
+}
+
+- (void)loadSection2Datas {
+    MKBGBroadcastTxPowerCellModel *cellModel = [[MKBGBroadcastTxPowerCellModel alloc] init];
+    [self.section2List addObject:cellModel];
 }
 
 #pragma mark - UI
@@ -239,6 +298,13 @@ MKMeasureTxPowerCellDelegate>
         _section1List = [NSMutableArray array];
     }
     return _section1List;
+}
+
+- (NSMutableArray *)section2List {
+    if (!_section2List) {
+        _section2List = [NSMutableArray array];
+    }
+    return _section2List;
 }
 
 - (MKBGBroadcastSettingsModel *)dataModel {

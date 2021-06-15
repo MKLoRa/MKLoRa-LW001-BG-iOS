@@ -30,8 +30,13 @@ NS_ASSUME_NONNULL_BEGIN
  4,    //-8dBm
  5,    //-4dBm
  6,       //0dBm
- 7,       //3dBm
- 8,       //4dBm
+ 7,     //2dBm
+ 8,       //3dBm
+ 9,       //4dBm
+ 10,      //5dBm
+ 11,     //6dBm
+ 12,     //7dBm
+ 13,     //8dBm
  
  */
 @property (nonatomic, assign)NSInteger txPower;

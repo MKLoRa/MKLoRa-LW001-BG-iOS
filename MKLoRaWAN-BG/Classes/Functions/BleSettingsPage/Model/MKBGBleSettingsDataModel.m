@@ -10,6 +10,9 @@
 
 #import "MKMacroDefines.h"
 
+#import "MKBGInterface.h"
+#import "MKBGInterface+MKBGConfig.h"
+
 @interface MKBGBleSettingsDataModel ()
 
 @property (nonatomic, strong)dispatch_queue_t readQueue;
@@ -22,6 +25,22 @@
 
 - (void)readWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock {
     dispatch_async(self.readQueue, ^{
+        if (![self readBeaconMode]) {
+            [self operationFailedBlockWithMsg:@"Read Beacon Mode Error" block:failedBlock];
+            return;
+        }
+        if (![self readConnectable]) {
+            [self operationFailedBlockWithMsg:@"Read Connectable Error" block:failedBlock];
+            return;
+        }
+        if (![self readADVInterval]) {
+            [self operationFailedBlockWithMsg:@"Read Adv Interval Error" block:failedBlock];
+            return;
+        }
+        if (![self readBroadcastTimeout]) {
+            [self operationFailedBlockWithMsg:@"Read Broadcast Timeout Error" block:failedBlock];
+            return;
+        }
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();
@@ -37,12 +56,100 @@
             [self operationFailedBlockWithMsg:checkMsg block:failedBlock];
             return;
         }
+        if (self.beaconModeIsOn) {
+            if (![self configADVInterval]) {
+                [self operationFailedBlockWithMsg:@"Config Adv Interval Error" block:failedBlock];
+                return;
+            }
+        }else {
+            if (![self configBroadcastTimeout]) {
+                [self operationFailedBlockWithMsg:@"Config Broadcast Timeout Error" block:failedBlock];
+                return;
+            }
+        }
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();
             }
         });
     });
+}
+
+#pragma mark - interface
+- (BOOL)readBeaconMode {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readBeaconModeStatusWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.beaconModeIsOn = [returnData[@"result"][@"isOn"] boolValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)readConnectable {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readDeviceConnectableWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.connectable = [returnData[@"result"][@"connectable"] boolValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)readADVInterval {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readBeaconAdvIntervalWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.advInterval = returnData[@"result"][@"interval"];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configADVInterval {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configBeaconAdvInterval:[self.advInterval integerValue] sucBlock:^{
+        success = YES;
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)readBroadcastTimeout {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readDeviceBroadcastTimeoutWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.broadcastTimeout = returnData[@"result"][@"interval"];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configBroadcastTimeout {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configDeviceBroadcastTimeout:[self.broadcastTimeout integerValue] sucBlock:^{
+        success = YES;
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
 }
 
 #pragma mark - private method

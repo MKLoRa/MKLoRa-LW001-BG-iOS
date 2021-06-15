@@ -1202,6 +1202,152 @@
                    failedBlock:failedBlock];
 }
 
+#pragma mark ****************************************蓝牙参数读取************************************************
+
++ (void)bg_configBeaconModeStatus:(BOOL)isOn
+                         sucBlock:(void (^)(void))sucBlock
+                      failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *commandString = (isOn ? @"ed01700101" : @"ed01700100");
+    [self configDataWithTaskID:mk_bg_taskConfigBeaconModeStatusOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configBeaconAdvInterval:(NSInteger)interval
+                          sucBlock:(void (^)(void))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock {
+    if (interval < 1 || interval > 100) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:1];
+    NSString *commandString = [@"ed017101" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigBeaconAdvIntervalOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configDeviceConnectable:(BOOL)connectable
+                          sucBlock:(void (^)(void))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *commandString = (connectable ? @"ed01720101" : @"ed01720100");
+    [self configDataWithTaskID:mk_bg_taskConfigDeviceConnectableOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configDeviceBroadcastTimeout:(NSInteger)time
+                               sucBlock:(void (^)(void))sucBlock
+                            failedBlock:(void (^)(NSError *error))failedBlock {
+    if (time < 1 || time > 60) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:time byteLen:1];
+    NSString *commandString = [@"ed017301" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigDeviceBroadcastTimeoutOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configBeaconProximityUUID:(NSString *)uuid
+                            sucBlock:(void (^)(void))sucBlock
+                         failedBlock:(void (^)(NSError *error))failedBlock {
+    if (![MKBLEBaseSDKAdopter isUUIDString:uuid]) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    uuid = [uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    NSString *commandString = [@"ed017410" stringByAppendingString:uuid];
+    [self configDataWithTaskID:mk_bg_taskConfigBeaconProximityUUIDOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMajor:(NSInteger)major
+              sucBlock:(void (^)(void))sucBlock
+           failedBlock:(void (^)(NSError *error))failedBlock {
+    if (major < 0 || major > 65535) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:major byteLen:2];
+    NSString *commandString = [@"ed017502" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigBeaconMajorOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMinor:(NSInteger)minor
+              sucBlock:(void (^)(void))sucBlock
+           failedBlock:(void (^)(NSError *error))failedBlock {
+    if (minor < 0 || minor > 65535) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:minor byteLen:2];
+    NSString *commandString = [@"ed017602" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigBeaconMinorOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configMeasuredPower:(NSInteger)measuredPower
+                      sucBlock:(void (^)(void))sucBlock
+                   failedBlock:(void (^)(NSError *error))failedBlock {
+    if (measuredPower > 0 || measuredPower < -127) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *power = [MKBLEBaseSDKAdopter hexStringFromSignedNumber:measuredPower];
+    NSString *commandString = [@"ed017701" stringByAppendingString:power];
+    [self configDataWithTaskID:mk_bg_taskConfigMeasuredPowerOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configTxPower:(mk_bg_txPower)txPower
+                sucBlock:(void (^)(void))sucBlock
+             failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *value = [MKBGSDKDataAdopter fetchTxPower:txPower];
+    NSString *commandString = [@"ed017801" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskConfigTxPowerOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configDeviceName:(NSString *)deviceName
+                   sucBlock:(void (^)(void))sucBlock
+                failedBlock:(void (^)(NSError *error))failedBlock {
+    if (![deviceName isKindOfClass:NSString.class] || deviceName.length > 13) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *tempString = @"";
+    for (NSInteger i = 0; i < deviceName.length; i ++) {
+        int asciiCode = [deviceName characterAtIndex:i];
+        tempString = [tempString stringByAppendingString:[NSString stringWithFormat:@"%1lx",(unsigned long)asciiCode]];
+    }
+    NSString *lenString = [NSString stringWithFormat:@"%1lx",(long)deviceName.length];
+    if (lenString.length == 1) {
+        lenString = [@"0" stringByAppendingString:lenString];
+    }
+    NSString *commandString = [NSString stringWithFormat:@"ed0179%@%@",lenString,tempString];
+    [self configDataWithTaskID:mk_bg_taskConfigDeviceNameOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
 #pragma mark - private method
 + (void)configDataWithTaskID:(mk_bg_taskOperationID)taskID
                         data:(NSString *)data

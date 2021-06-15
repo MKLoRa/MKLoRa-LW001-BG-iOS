@@ -708,110 +708,77 @@
             @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
         };
         operationID = mk_bg_taskReadLorawanReconnectIntervalOperation;
-    }else if ([cmd isEqualToString:@"07"]) {
-        //读取iBeacon数据上报间隔
-        resultDic = @{
-            @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
-        };
-        operationID = mk_bg_taskReadBeaconReportIntervalOperation;
-    }else if ([cmd isEqualToString:@"09"]) {
-        //读取重复数据过滤类型
-        resultDic = @{
-            @"type":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
-        };
-        operationID = mk_bg_taskReadFilterRepeatingDataTypeOperation;
-    }else if ([cmd isEqualToString:@"0a"]) {
-        //读取上报的iBeacon数据类型
-        NSString *state = [MKBLEBaseSDKAdopter binaryByhex:content];
-        BOOL unknown = [[state substringWithRange:NSMakeRange(7, 1)] isEqualToString:@"1"];
-        BOOL iBeacon = [[state substringWithRange:NSMakeRange(6, 1)] isEqualToString:@"1"];
-        BOOL eddystone = [[state substringWithRange:NSMakeRange(5, 1)] isEqualToString:@"1"];
-        resultDic = @{
-            @"unknown":@(unknown),
-            @"iBeacon":@(iBeacon),
-            @"eddystone":@(eddystone),
-        };
-        operationID = mk_bg_taskReadBeaconReportDataTypeOperation;
-    }else if ([cmd isEqualToString:@"0b"]) {
-        //读取上报的iBeacon最大数据长度
-        resultDic = @{
-            @"type":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
-        };
-        operationID = mk_bg_taskReadBeaconReportDataMaxLengthOperation;
-    }else if ([cmd isEqualToString:@"0d"]) {
-        //读取mac地址
-        NSString *macAddress = [NSString stringWithFormat:@"%@:%@:%@:%@:%@:%@",[content substringWithRange:NSMakeRange(0, 2)],[content substringWithRange:NSMakeRange(2, 2)],[content substringWithRange:NSMakeRange(4, 2)],[content substringWithRange:NSMakeRange(6, 2)],[content substringWithRange:NSMakeRange(8, 2)],[content substringWithRange:NSMakeRange(10, 2)]];
-        operationID = mk_bg_taskReadMacAddressOperation;
-        resultDic = @{@"macAddress":[macAddress uppercaseString]};
-    }else if ([cmd isEqualToString:@"0e"]) {
-        //读取iBeacon上报数据内容选择
-        NSString *state = [MKBLEBaseSDKAdopter binaryByhex:content];
-        BOOL response = [[state substringWithRange:NSMakeRange(7, 1)] isEqualToString:@"1"];
-        BOOL broadcast = [[state substringWithRange:NSMakeRange(6, 1)] isEqualToString:@"1"];
-        BOOL rssi = [[state substringWithRange:NSMakeRange(5, 1)] isEqualToString:@"1"];
-        BOOL mac = [[state substringWithRange:NSMakeRange(4, 1)] isEqualToString:@"1"];
-        BOOL timestamp = [[state substringWithRange:NSMakeRange(3, 1)] isEqualToString:@"1"];
-        resultDic = @{
-            @"response":@(response),
-            @"broadcast":@(broadcast),
-            @"rssi":@(rssi),
-            @"mac":@(mac),
-            @"timestamp":@(timestamp),
-        };
-        operationID = mk_bg_taskReadBeaconReportDataContentOperation;
-    }else if ([cmd isEqualToString:@"0f"]) {
-        //读取扫描MAC超限开关
+    }else if ([cmd isEqualToString:@"70"]) {
+        //读取Beacon模式状态
         BOOL isOn = ([content isEqualToString:@"01"]);
         resultDic = @{
             @"isOn":@(isOn)
         };
-        operationID = mk_bg_taskReadMacOverLimitScanStatusOperation;
-    }else if ([cmd isEqualToString:@"10"]) {
-        //读取扫描MAC超限间隔
+        operationID = mk_bg_taskReadBeaconModeStatusOperation;
+    }else if ([cmd isEqualToString:@"71"]) {
+        //读取Beacon广播间隔
         resultDic = @{
-            @"duration":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
+            @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
         };
-        operationID = mk_bg_taskReadMacOverLimitDurationOperation;
-    }else if ([cmd isEqualToString:@"11"]) {
-        //读取扫描MAC超限数量
+        operationID = mk_bg_taskReadBeaconAdvIntervalOperation;
+    }else if ([cmd isEqualToString:@"72"]) {
+        //读取可连接状态
+        BOOL connectable = ([content isEqualToString:@"01"]);
         resultDic = @{
-            @"quantities":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
+            @"connectable":@(connectable)
         };
-        operationID = mk_bg_taskReadMacOverLimitQuantitiesOperation;
-    }else if ([cmd isEqualToString:@"12"]) {
-        //读取扫描MAC超限RSSI
+        operationID = mk_bg_taskReadDeviceConnectableOperation;
+    }else if ([cmd isEqualToString:@"73"]) {
+        //读取蓝牙配置模式下广播超时时间
         resultDic = @{
-            @"rssi":[MKBLEBaseSDKAdopter signedHexTurnString:content],
+            @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
         };
-        operationID = mk_bg_taskReadMacOverLimitRSSIOperation;
-    }else if ([cmd isEqualToString:@"50"]) {
-        //读取蓝牙名称
+        operationID = mk_bg_taskReadDeviceBroadcastTimeoutOperation;
+    }else if ([cmd isEqualToString:@"74"]) {
+        //读取设备UUID
+        NSString *uuid = @"";
+        NSMutableArray *array = [NSMutableArray arrayWithObjects:[content substringWithRange:NSMakeRange(0, 8)],
+                                 [content substringWithRange:NSMakeRange(8, 4)],
+                                 [content substringWithRange:NSMakeRange(12, 4)],
+                                 [content substringWithRange:NSMakeRange(16,4)],
+                                 [content substringWithRange:NSMakeRange(20, 12)], nil];
+        [array insertObject:@"-" atIndex:1];
+        [array insertObject:@"-" atIndex:3];
+        [array insertObject:@"-" atIndex:5];
+        [array insertObject:@"-" atIndex:7];
+        for (NSString *string in array) {
+            uuid = [uuid stringByAppendingString:string];
+        }
+        resultDic = @{@"uuid":uuid};
+        operationID = mk_bg_taskReadBeaconProximityUUIDOperation;
+    }else if ([cmd isEqualToString:@"75"]) {
+        //读取设备Major
+        NSString *major = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{@"major":major};
+        operationID = mk_bg_taskReadBeaconMajorOperation;
+    }else if ([cmd isEqualToString:@"76"]) {
+        //读取设备Minor
+        NSString *minor = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{@"minor":minor};
+        operationID = mk_bg_taskReadBeaconMinorOperation;
+    }else if ([cmd isEqualToString:@"77"]) {
+        //读取设备measured power
+        NSString *measuredPower = [NSString stringWithFormat:@"%ld",(long)[[MKBLEBaseSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(0, content.length)]] integerValue]];
+        resultDic = @{@"measuredPower":measuredPower};
+        operationID = mk_bg_taskReadMeasuredPowerOperation;
+    }else if ([cmd isEqualToString:@"78"]) {
+        //读取设备Tx Power
+        NSString *txPower = [self fetchTxPower:content];
+        resultDic = @{@"txPower":txPower};
+        operationID = mk_bg_taskReadTxPowerOperation;
+    }else if ([cmd isEqualToString:@"79"]) {
+        //读取设备名称
         NSData *nameData = [data subdataWithRange:NSMakeRange(4, data.length - 4)];
         NSString *deviceName = [[NSString alloc] initWithData:nameData encoding:NSUTF8StringEncoding];
         resultDic = @{
             @"deviceName":(MKValidStr(deviceName) ? deviceName : @""),
         };
         operationID = mk_bg_taskReadDeviceNameOperation;
-    }else if ([cmd isEqualToString:@"51"]) {
-        //读取蓝牙广播间隔
-        resultDic = @{
-            @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
-        };
-        operationID = mk_bg_taskReadBroadcastIntervalOperation;
-    }else if ([cmd isEqualToString:@"52"]) {
-        //读取蓝牙扫描开关状态
-        BOOL isOn = ([content isEqualToString:@"01"]);
-        resultDic = @{
-            @"isOn":@(isOn)
-        };
-        operationID = mk_bg_taskReadScanStatusOperation;
-    }else if ([cmd isEqualToString:@"53"]) {
-        //读取扫描参数
-        NSString *scanWindow = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 2)];
-        resultDic = @{
-            @"scanWindow":scanWindow,
-        };
-        operationID = mk_bg_taskReadScanParamsOperation;
     }
     return [self dataParserGetDataSuccess:resultDic operationID:operationID];
 }
@@ -1038,42 +1005,36 @@
     }else if ([cmd isEqualToString:@"6f"]) {
         //LoRaWAN定时重连时间
         operationID = mk_bg_taskConfigReconnectIntervalOperation;
-    }else if ([cmd isEqualToString:@"07"]) {
-        //设置iBeacon数据上报间隔
-        operationID = mk_bg_taskConfigBeaconReportIntervalOperation;
-    }else if ([cmd isEqualToString:@"09"]) {
-        //配置重复数据过滤规则
-        operationID = mk_bg_taskConfigFilterRepeatingDataTypeOperation;
-    }else if ([cmd isEqualToString:@"0a"]) {
-        //设置iBeacon数据上报类型
-        operationID = mk_bg_taskConfigBeaconReportDataTypeOperation;
-    }else if ([cmd isEqualToString:@"0e"]) {
-        //配置iBeacon上报数据内容选择
-        operationID = mk_bg_taskConfigBeaconReportDataContentOperation;
-    }else if ([cmd isEqualToString:@"0f"]) {
-        //配置扫描MAC超限开关
-        operationID = mk_bg_taskConfigMacOverLimitScanStatusOperation;
-    }else if ([cmd isEqualToString:@"10"]) {
-        //配置扫描MAC超限间隔
-        operationID = mk_bg_taskConfigMacOverLimitDurationOperation;
-    }else if ([cmd isEqualToString:@"11"]) {
-        //配置扫描MAC超限数量
-        operationID = mk_bg_taskConfigMacOverLimitQuantitiesOperation;
-    }else if ([cmd isEqualToString:@"12"]) {
-        //配置扫描MAC超限RSSI
-        operationID = mk_bg_taskConfigMacOverLimitRssiOperation;
-    }else if ([cmd isEqualToString:@"50"]) {
-        //配置广播名称
+    }else if ([cmd isEqualToString:@"70"]) {
+        //配置Beacon的开关状态
+        operationID = mk_bg_taskConfigBeaconModeStatusOperation;
+    }else if ([cmd isEqualToString:@"71"]) {
+        //配置Beacon广播间隔
+        operationID = mk_bg_taskConfigBeaconAdvIntervalOperation;
+    }else if ([cmd isEqualToString:@"72"]) {
+        //配置蓝牙可连接状态
+        operationID = mk_bg_taskConfigDeviceConnectableOperation;
+    }else if ([cmd isEqualToString:@"73"]) {
+        //配置蓝牙配置模式下广播超时时间
+        operationID = mk_bg_taskConfigDeviceBroadcastTimeoutOperation;
+    }else if ([cmd isEqualToString:@"74"]) {
+        //配置UUID
+        operationID = mk_bg_taskConfigBeaconProximityUUIDOperation;
+    }else if ([cmd isEqualToString:@"75"]) {
+        //配置Major
+        operationID = mk_bg_taskConfigBeaconMajorOperation;
+    }else if ([cmd isEqualToString:@"76"]) {
+        //配置Minor
+        operationID = mk_bg_taskConfigBeaconMinorOperation;
+    }else if ([cmd isEqualToString:@"77"]) {
+        //配置Measured Power (RSSI@1m)
+        operationID = mk_bg_taskConfigMeasuredPowerOperation;
+    }else if ([cmd isEqualToString:@"78"]) {
+        //配置蓝牙TX power
+        operationID = mk_bg_taskConfigTxPowerOperation;
+    }else if ([cmd isEqualToString:@"79"]) {
+        //配置蓝牙广播名称
         operationID = mk_bg_taskConfigDeviceNameOperation;
-    }else if ([cmd isEqualToString:@"51"]) {
-        //配置广播间隔
-        operationID = mk_bg_taskConfigDeviceBroadcastIntervalOperation;
-    }else if ([cmd isEqualToString:@"52"]) {
-        //配置扫描开关
-        operationID = mk_bg_taskConfigScanStatusOperation;
-    }else if ([cmd isEqualToString:@"53"]) {
-        //配置扫描参数
-        operationID = mk_bg_taskConfigScanParamsOperation;
     }else if ([cmd isEqualToString:@"a0"]) {
         //读取多少天本地存储的数据
         operationID = mk_bg_taskReadNumberOfDaysStoredDataOperation;
@@ -1094,6 +1055,52 @@
         return @{};
     }
     return @{@"returnData":returnData,@"operationID":@(operationID)};
+}
+
++ (NSString *)fetchTxPower:(NSString *)content {
+    if ([content isEqualToString:@"08"]) {
+        return @"8dBm";
+    }
+    if ([content isEqualToString:@"07"]) {
+        return @"7dBm";
+    }
+    if ([content isEqualToString:@"06"]) {
+        return @"6dBm";
+    }
+    if ([content isEqualToString:@"05"]) {
+        return @"5dBm";
+    }
+    if ([content isEqualToString:@"04"]) {
+        return @"4dBm";
+    }
+    if ([content isEqualToString:@"03"]) {
+        return @"3dBm";
+    }
+    if ([content isEqualToString:@"02"]) {
+        return @"2dBm";
+    }
+    if ([content isEqualToString:@"00"]) {
+        return @"0dBm";
+    }
+    if ([content isEqualToString:@"fc"]) {
+        return @"-4dBm";
+    }
+    if ([content isEqualToString:@"f8"]) {
+        return @"-8dBm";
+    }
+    if ([content isEqualToString:@"f4"]) {
+        return @"-12dBm";
+    }
+    if ([content isEqualToString:@"f0"]) {
+        return @"-16dBm";
+    }
+    if ([content isEqualToString:@"ec"]) {
+        return @"-20dBm";
+    }
+    if ([content isEqualToString:@"d8"]) {
+        return @"-40dBm";
+    }
+    return @"0dBm";
 }
 
 @end

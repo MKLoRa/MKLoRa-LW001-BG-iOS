@@ -594,6 +594,68 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)bg_readLorawanReconnectIntervalWithSucBlock:(void (^)(id returnData))sucBlock
                                         failedBlock:(void (^)(NSError *error))failedBlock;
 
+#pragma mark ****************************************蓝牙参数读取************************************************
+
+/// Read whether the device has the Beacon broadcast function turned on.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readBeaconModeStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read beacon broadcast time interval.(Unit:100ms)
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readBeaconAdvIntervalWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the Bluetooth connection status of the device.When the device is set to be unconnectable, 3min is allowed to connect after the beacon mode is turned on.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readDeviceConnectableWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the broadcast timeout time in Bluetooth configuration mode.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readDeviceBroadcastTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                      failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the UUID of iBeacon.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readBeaconProximityUUIDWithSucBlock:(void (^)(id returnData))sucBlock
+                                   failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the major of iBeacon.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readBeaconMajorWithSucBlock:(void (^)(id returnData))sucBlock
+                           failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the minor of iBeacon.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readBeaconMinorWithSucBlock:(void (^)(id returnData))sucBlock
+                           failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the measured power(RSSI@1M) of device.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMeasuredPowerWithSucBlock:(void (^)(id returnData))sucBlock
+                             failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the txPower of device.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readTxPowerWithSucBlock:(void (^)(id returnData))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the broadcast name of the device.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readDeviceNameWithSucBlock:(void (^)(id returnData))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

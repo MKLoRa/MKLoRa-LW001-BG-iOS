@@ -639,6 +639,88 @@
                  failedBlock:failedBlock];
 }
 
+#pragma mark ****************************************蓝牙参数读取************************************************
+
++ (void)bg_readBeaconModeStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadBeaconModeStatusOperation
+                     cmdFlag:@"70"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readBeaconAdvIntervalWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadBeaconAdvIntervalOperation
+                     cmdFlag:@"71"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readDeviceConnectableWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadDeviceConnectableOperation
+                     cmdFlag:@"72"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readDeviceBroadcastTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                      failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadDeviceBroadcastTimeoutOperation
+                     cmdFlag:@"73"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readBeaconProximityUUIDWithSucBlock:(void (^)(id returnData))sucBlock
+                                   failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadBeaconProximityUUIDOperation
+                     cmdFlag:@"74"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readBeaconMajorWithSucBlock:(void (^)(id returnData))sucBlock
+                           failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadBeaconMajorOperation
+                     cmdFlag:@"75"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readBeaconMinorWithSucBlock:(void (^)(id returnData))sucBlock
+                           failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadBeaconMinorOperation
+                     cmdFlag:@"76"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMeasuredPowerWithSucBlock:(void (^)(id returnData))sucBlock
+                             failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMeasuredPowerOperation
+                     cmdFlag:@"77"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readTxPowerWithSucBlock:(void (^)(id returnData))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadTxPowerOperation
+                     cmdFlag:@"78"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readDeviceNameWithSucBlock:(void (^)(id returnData))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadDeviceNameOperation
+                     cmdFlag:@"79"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
 #pragma mark - private method
 
 + (void)readDataWithTaskID:(mk_bg_taskOperationID)taskID

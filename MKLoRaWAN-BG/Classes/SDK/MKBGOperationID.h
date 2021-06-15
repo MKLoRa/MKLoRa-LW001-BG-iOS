@@ -100,30 +100,17 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadLorawanDevTimeSyncIntervalOperation,  //读取devtime指令同步间隔
     mk_bg_taskReadLorawanReconnectIntervalOperation,    //读取定时重连时间
     
-    
-    
-    
-    
-    mk_bg_taskReadDeviceInfoReportIntervalOperation,    //读取设备信息上报间隔
-    mk_bg_taskReadDefaultPowerStatusOperation,          //读取设备上电状态
-    mk_bg_taskReadTriggerSensitivityOperation,          //读取防拆灵敏度
-    mk_bg_taskReadBeaconReportIntervalOperation,        //读取iBeacon数据上报间隔
-    mk_bg_taskReadFilterRepeatingDataTypeOperation,     //读取重复数据过滤类型
-    mk_bg_taskReadBeaconReportDataTypeOperation,        //读取上报的iBeacon数据类型
-    mk_bg_taskReadBeaconReportDataMaxLengthOperation,   //读取iBeacon最大上报数据长度
-    mk_bg_taskReadMacAddressOperation,          //读取设备mac地址
-    mk_bg_taskReadBeaconReportDataContentOperation, //读取iBeacon上报数据内容选择
-    mk_bg_taskReadMacOverLimitScanStatusOperation,  //读取MAC超限开关状态
-    mk_bg_taskReadMacOverLimitDurationOperation,    //读取MAC超限间隔
-    mk_bg_taskReadMacOverLimitQuantitiesOperation,  //读取MAC超限数量
-    mk_bg_taskReadMacOverLimitRSSIOperation,        //读取MAC超限触发RSSI
-    
-
-#pragma mark - 蓝牙广播扫描参数
-    mk_bg_taskReadDeviceNameOperation,              //读取蓝牙广播名称
-    mk_bg_taskReadBroadcastIntervalOperation,       //读取蓝牙广播间隔
-    mk_bg_taskReadScanStatusOperation,              //读取蓝牙扫描开关状态
-    mk_bg_taskReadScanParamsOperation,              //读取蓝牙扫描参数
+#pragma mark - 读取蓝牙配置参数
+    mk_bg_taskReadBeaconModeStatusOperation,            //读取Beacon开关使能状态
+    mk_bg_taskReadBeaconAdvIntervalOperation,           //读取Beacon广播间隔
+    mk_bg_taskReadDeviceConnectableOperation,           //读取蓝牙可连接状态
+    mk_bg_taskReadDeviceBroadcastTimeoutOperation,      //读取蓝牙配置模式下广播超时时间
+    mk_bg_taskReadBeaconProximityUUIDOperation,         //读取UUID
+    mk_bg_taskReadBeaconMajorOperation,                 //读取Major
+    mk_bg_taskReadBeaconMinorOperation,                 //读取Minor
+    mk_bg_taskReadMeasuredPowerOperation,               //读取Measured Power (RSSI@1m)
+    mk_bg_taskReadTxPowerOperation,                     //读取蓝牙TX power
+    mk_bg_taskReadDeviceNameOperation,                  //读取广播名称
     
     
 #pragma mark - 设备系统应用信息配置
@@ -215,28 +202,17 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigTimeSyncIntervalOperation,          //配置LoRaWAN的同步指令间隔
     mk_bg_taskConfigReconnectIntervalOperation,         //配置LoRaWAN定时重连时间
     
-    
-    
-    mk_bg_taskConfigConnectNetworkOperation,            //配置设备入网/重启
-    mk_bg_taskConfigDeviceInfoReportIntervalOperation,  //配置设备信息上报间隔
-    
-    mk_bg_taskConfigDefaultPowerStatusOperation,        //配置设备默认上电状态
-    mk_bg_taskConfigTriggerSensitivityOperation,        //配置防拆灵敏度
-    mk_bg_taskConfigBeaconReportIntervalOperation,      //配置iBeacon数据上报间隔
-    mk_bg_taskConfigFilterRepeatingDataTypeOperation,   //配置重复数据过滤规则
-    mk_bg_taskConfigBeaconReportDataTypeOperation,      //配置iBeacon数据上报类型
-    mk_bg_taskConfigBeaconReportDataMaxLenOperation,    //配置iBeacon数据最大上报长度
-    mk_bg_taskConfigBeaconReportDataContentOperation,   //配置iBeacon上报数据内容选择
-    mk_bg_taskConfigMacOverLimitScanStatusOperation,    //配置扫描MAC超限开关状态
-    mk_bg_taskConfigMacOverLimitDurationOperation,      //配置扫描MAC超限间隔
-    mk_bg_taskConfigMacOverLimitQuantitiesOperation,    //配置扫描MAC超限数量
-    mk_bg_taskConfigMacOverLimitRssiOperation,          //配置扫描MAC超限触发RSSI
-    
-#pragma mark - 蓝牙广播扫描参数
-    mk_bg_taskConfigDeviceNameOperation,                //配置设备广播名称
-    mk_bg_taskConfigDeviceBroadcastIntervalOperation,   //配置广播间隔
-    mk_bg_taskConfigScanStatusOperation,                //配置扫描开关
-    mk_bg_taskConfigScanParamsOperation,                //配置扫描参数
+#pragma mark - 配置蓝牙参数
+    mk_bg_taskConfigBeaconModeStatusOperation,          //配置Beacon开关状态
+    mk_bg_taskConfigBeaconAdvIntervalOperation,         //配置Beacon广播间隔
+    mk_bg_taskConfigDeviceConnectableOperation,         //配置蓝牙可连接状态
+    mk_bg_taskConfigDeviceBroadcastTimeoutOperation,    //配置蓝牙配置模式下广播超时时间
+    mk_bg_taskConfigBeaconProximityUUIDOperation,       //配置UUID
+    mk_bg_taskConfigBeaconMajorOperation,               //配置Beacon的Major
+    mk_bg_taskConfigBeaconMinorOperation,               //配置Beacon的Minor
+    mk_bg_taskConfigMeasuredPowerOperation,             //配置Measured Power (RSSI@1m)
+    mk_bg_taskConfigTxPowerOperation,                   //配置蓝牙TX power
+    mk_bg_taskConfigDeviceNameOperation,                //配置广播名称
     
     
 #pragma mark - 存储数据协议

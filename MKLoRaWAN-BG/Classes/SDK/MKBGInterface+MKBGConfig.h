@@ -574,6 +574,88 @@ NS_ASSUME_NONNULL_BEGIN
                           sucBlock:(void (^)(void))sucBlock
                        failedBlock:(void (^)(NSError *error))failedBlock;
 
+#pragma mark ****************************************蓝牙参数读取************************************************
+
+/// Configure whether the device has the Beacon broadcast function turned on.
+/// @param isOn isOn
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configBeaconModeStatus:(BOOL)isOn
+                         sucBlock:(void (^)(void))sucBlock
+                      failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure beacon broadcast time interval.
+/// @param interval 1 x 100ms ~ 100 x 100ms
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configBeaconAdvInterval:(NSInteger)interval
+                          sucBlock:(void (^)(void))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the Bluetooth connection status of the device.When the device is set to be unconnectable, 3min is allowed to connect after the beacon mode is turned on.
+/// @param connectable connectable
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configDeviceConnectable:(BOOL)connectable
+                          sucBlock:(void (^)(void))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the broadcast timeout time in Bluetooth configuration mode.
+/// @param time 1Min~60Mins
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configDeviceBroadcastTimeout:(NSInteger)time
+                               sucBlock:(void (^)(void))sucBlock
+                            failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the UUID of iBeacon.
+/// @param uuid uuid
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configBeaconProximityUUID:(NSString *)uuid
+                            sucBlock:(void (^)(void))sucBlock
+                         failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the major of iBeacon.
+/// @param major 0~65535.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMajor:(NSInteger)major
+              sucBlock:(void (^)(void))sucBlock
+           failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the minor of iBeacon.
+/// @param minor 0~65535.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMinor:(NSInteger)minor
+              sucBlock:(void (^)(void))sucBlock
+           failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the measured power(RSSI@1M) of device.
+/// @param measuredPower -127dBm~0dBm
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configMeasuredPower:(NSInteger)measuredPower
+                      sucBlock:(void (^)(void))sucBlock
+                   failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the txPower of device.
+/// @param txPower txPower
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configTxPower:(mk_bg_txPower)txPower
+                sucBlock:(void (^)(void))sucBlock
+             failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the broadcast name of the device.
+/// @param deviceName 0~13 ascii characters
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configDeviceName:(NSString *)deviceName
+                   sucBlock:(void (^)(void))sucBlock
+                failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END
