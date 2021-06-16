@@ -161,6 +161,7 @@ MKTextFieldCellDelegate>
         [[MKHudManager share] hide];
         MKTextSwitchCellModel *cellModel = self.section0List[0];
         cellModel.isOn = isOn;
+        self.dataModel.isOn = isOn;
     } failedBlock:^(NSError * _Nonnull error) {
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];

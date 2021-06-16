@@ -15,10 +15,15 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
+#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
 #import "MKTextSwitchCell.h"
+
+#import "MKBGInterface+MKBGConfig.h"
+
+#import "MKBGActiveStateDataModel.h"
 
 @interface MKBGActiveStateController ()<UITableViewDelegate,
 UITableViewDataSource,
@@ -30,6 +35,8 @@ mk_textSwitchCellDelegate>
 @property (nonatomic, strong)NSMutableArray *section0List;
 
 @property (nonatomic, strong)NSMutableArray *section1List;
+
+@property (nonatomic, strong)MKBGActiveStateDataModel *dataModel;
 
 @end
 
@@ -48,12 +55,12 @@ mk_textSwitchCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [self loadSectionDatas];
+    [self readDataFromDevice];
 }
 
 #pragma mark - super method
 - (void)rightButtonMethod {
-    
+    [self configDataToDevice];
 }
 
 #pragma mark - UITableViewDelegate
@@ -95,6 +102,7 @@ mk_textSwitchCellDelegate>
         //Idle Detection Timeout
         MKTextFieldCellModel *cellModel = self.section1List[0];
         cellModel.textFieldValue = value;
+        self.dataModel.interval = value;
         return;
     }
 }
@@ -106,10 +114,52 @@ mk_textSwitchCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Man Down Detection
-        MKTextSwitchCellModel *cellModel = self.section0List[0];
-        cellModel.isOn = isOn;
+        [self configActiveStateCount:isOn];
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self loadSectionDatas];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configDataToDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel configWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configActiveStateCount:(BOOL)isOn {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configActiveStateCountStatus:isOn sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextSwitchCellModel *cellModel = self.section0List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.isOn = isOn;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
+    }];
 }
 
 #pragma mark - loadSectionDatas
@@ -124,6 +174,7 @@ mk_textSwitchCellDelegate>
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 0;
     cellModel.msg = @"Active State Count";
+    cellModel.isOn = self.dataModel.isOn;
     [self.section0List addObject:cellModel];
 }
 
@@ -135,6 +186,7 @@ mk_textSwitchCellDelegate>
     cellModel.textFieldType = mk_realNumberOnly;
     cellModel.maxLength = 5;
     cellModel.unit = @"s";
+    cellModel.textFieldValue = self.dataModel.interval;
     [self.section1List addObject:cellModel];
 }
 
@@ -174,6 +226,13 @@ mk_textSwitchCellDelegate>
         _section1List = [NSMutableArray array];
     }
     return _section1List;
+}
+
+- (MKBGActiveStateDataModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKBGActiveStateDataModel alloc] init];
+    }
+    return _dataModel;
 }
 
 @end

@@ -12,6 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MKBGManDownDataModel : NSObject
 
+@property (nonatomic, assign)BOOL isOn;
+
+@property (nonatomic, copy)NSString *interval;
+
+- (void)readWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
+
+- (void)configWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

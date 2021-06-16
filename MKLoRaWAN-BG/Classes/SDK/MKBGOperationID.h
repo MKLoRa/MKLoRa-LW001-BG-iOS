@@ -122,7 +122,7 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadVibrationTimeoutOperation,                //读取震动次数判断间隔
     mk_bg_taskReadManDownDetectionOperation,                //读取闲置功能使能
     mk_bg_taskReadIdleDetectionTimeoutOperation,            //读取闲置超时时间
-    mk_bg_taskReadPreventDisassemblingEquipmentAlarmOperation,  //读取防拆报警使能
+    mk_bg_taskReadTamperAlarmStatusOperation,               //读取防拆报警使能
     mk_bg_taskReadActiveStateCountStatusOperation,          //读取活动记录使能
     mk_bg_taskReadActiveStateTimeoutOperation,              //读取活动判定间隔
     
@@ -236,7 +236,7 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigVibrationTimeoutOperation,                  //配置震动次数判断间隔
     mk_bg_taskConfigManDownDetectionStatusOperation,            //配置闲置功能使能
     mk_bg_taskConfigIdleDetectionTimeoutOperation,              //配置闲置超时时间
-    mk_bg_taskConfigPreventDisassemblingEquipmentAlarmStatusOperation,      //配置防拆报警使能
+    mk_bg_taskConfigTamperAlarmStatusOperation,                 //配置防拆报警使能
     mk_bg_taskConfigActiveStateCountStatusOperation,            //配置活动记录使能
     mk_bg_taskConfigActiveStateTimeoutOperation,                //配置活动判定间隔
     mk_bg_taskConfigIdleStutasResetOperation,                   //配置闲置清除

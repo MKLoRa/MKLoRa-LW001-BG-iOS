@@ -730,9 +730,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param isOn isOn
 /// @param sucBlock Success callback
 /// @param failedBlock Failure callback
-+ (void)bg_configPreventDisassemblingEquipmentAlarmStatus:(BOOL)isOn
-                                                 sucBlock:(void (^)(void))sucBlock
-                                              failedBlock:(void (^)(NSError *error))failedBlock;
++ (void)bg_configTamperAlarm:(BOOL)isOn
+                    sucBlock:(void (^)(void))sucBlock
+                 failedBlock:(void (^)(NSError *error))failedBlock;
 
 /// Configure Active State Count.
 /// @param isOn isOn
@@ -753,7 +753,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Clear the idle state of the device.
 /// @param sucBlock Success callback
 /// @param failedBlock Failure callback
-+ (void)bg_configIdleStutasResetWithSucBlock:(void (^)(id returnData))sucBlock
++ (void)bg_configIdleStutasResetWithSucBlock:(void (^)(void))sucBlock
                                  failedBlock:(void (^)(NSError *error))failedBlock;
 
 @end

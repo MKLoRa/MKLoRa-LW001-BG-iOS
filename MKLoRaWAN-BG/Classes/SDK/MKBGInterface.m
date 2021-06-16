@@ -787,9 +787,9 @@
                  failedBlock:failedBlock];
 }
 
-+ (void)bg_readPreventDisassemblingEquipmentAlarmWithSucBlock:(void (^)(id returnData))sucBlock
-                                                  failedBlock:(void (^)(NSError *error))failedBlock {
-    [self readDataWithTaskID:mk_bg_taskReadPreventDisassemblingEquipmentAlarmOperation
++ (void)bg_readTamperAlarmStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadTamperAlarmStatusOperation
                      cmdFlag:@"88"
                     sucBlock:sucBlock
                  failedBlock:failedBlock];

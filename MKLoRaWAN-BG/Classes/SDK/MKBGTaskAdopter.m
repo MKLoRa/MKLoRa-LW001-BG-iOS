@@ -842,7 +842,7 @@
         resultDic = @{
             @"isOn":@(isOn)
         };
-        operationID = mk_bg_taskReadPreventDisassemblingEquipmentAlarmOperation;
+        operationID = mk_bg_taskReadTamperAlarmStatusOperation;
     }else if ([cmd isEqualToString:@"89"]) {
         //读取活动记录使能
         BOOL isOn = ([content isEqualToString:@"01"]);
@@ -1138,7 +1138,7 @@
         operationID = mk_bg_taskConfigIdleDetectionTimeoutOperation;
     }else if ([cmd isEqualToString:@"88"]) {
         //配置防拆报警使能
-        operationID = mk_bg_taskConfigPreventDisassemblingEquipmentAlarmStatusOperation;
+        operationID = mk_bg_taskConfigTamperAlarmStatusOperation;
     }else if ([cmd isEqualToString:@"89"]) {
         //配置活动记录使能
         operationID = mk_bg_taskConfigActiveStateCountStatusOperation;

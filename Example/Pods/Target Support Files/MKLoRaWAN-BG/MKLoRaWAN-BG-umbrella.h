@@ -19,7 +19,6 @@
 #import "MKBGActiveStateController.h"
 #import "MKBGActiveStateDataModel.h"
 #import "MKBGAuxoliaryController.h"
-#import "MKBGAuxoliaryDataModel.h"
 #import "MKBGAxisSettingController.h"
 #import "MKBGAxisSettingDataModel.h"
 #import "MKBGBlePositionController.h"

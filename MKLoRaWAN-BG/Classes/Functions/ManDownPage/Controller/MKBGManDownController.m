@@ -15,12 +15,17 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
+#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
 #import "MKTextSwitchCell.h"
 
+#import "MKBGInterface+MKBGConfig.h"
+
 #import "MKBGTextButtonCell.h"
+
+#import "MKBGManDownDataModel.h"
 
 @interface MKBGManDownController ()<UITableViewDelegate,
 UITableViewDataSource,
@@ -35,6 +40,10 @@ MKBGTextButtonCellDelegate>
 @property (nonatomic, strong)NSMutableArray *section1List;
 
 @property (nonatomic, strong)NSMutableArray *section2List;
+
+@property (nonatomic, strong)MKBGManDownDataModel *dataModel;
+
+@property (nonatomic, strong)UIAlertController *alertView;
 
 @end
 
@@ -53,12 +62,12 @@ MKBGTextButtonCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [self loadSectionDatas];
+    [self readDataFromDevice];
 }
 
 #pragma mark - super method
 - (void)rightButtonMethod {
-    
+    [self configDataToDevice];
 }
 
 #pragma mark - UITableViewDelegate
@@ -109,6 +118,7 @@ MKBGTextButtonCellDelegate>
         //Idle Detection Timeout
         MKTextFieldCellModel *cellModel = self.section1List[0];
         cellModel.textFieldValue = value;
+        self.dataModel.interval = value;
         return;
     }
 }
@@ -120,8 +130,7 @@ MKBGTextButtonCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Man Down Detection
-        MKTextSwitchCellModel *cellModel = self.section0List[0];
-        cellModel.isOn = isOn;
+        [self configManDownDetection:isOn];
         return;
     }
 }
@@ -132,9 +141,66 @@ MKBGTextButtonCellDelegate>
 - (void)bg_textButtonCell_buttonAction:(NSInteger)index {
     if (index == 0) {
         //Idle Stutas
-        NSLog(@"点击了");
+        [self presentViewController:self.alertView animated:YES completion:nil];
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self loadSectionDatas];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configDataToDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel configWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configManDownDetection:(BOOL)isOn {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configManDownDetectionStatus:isOn sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextSwitchCellModel *cellModel = self.section0List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.isOn = isOn;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+    
+}
+
+- (void)resetIdleStatus{
+    [[MKHudManager share] showHUDWithTitle:@"Setting..."
+                                     inView:self.view
+                              isPenetration:NO];
+    [MKBGInterface bg_configIdleStutasResetWithSucBlock:^{
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
 }
 
 #pragma mark - loadSectionDatas
@@ -150,6 +216,7 @@ MKBGTextButtonCellDelegate>
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 0;
     cellModel.msg = @"Man Down Detection";
+    cellModel.isOn = self.dataModel.isOn;
     [self.section0List addObject:cellModel];
 }
 
@@ -161,6 +228,7 @@ MKBGTextButtonCellDelegate>
     cellModel.textFieldType = mk_realNumberOnly;
     cellModel.maxLength = 4;
     cellModel.unit = @"H";
+    cellModel.textFieldValue = self.dataModel.interval;
     [self.section1List addObject:cellModel];
 }
 
@@ -215,6 +283,32 @@ MKBGTextButtonCellDelegate>
         _section2List = [NSMutableArray array];
     }
     return _section2List;
+}
+
+- (MKBGManDownDataModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKBGManDownDataModel alloc] init];
+    }
+    return _dataModel;
+}
+
+- (UIAlertController *)alertView {
+    if (!_alertView) {
+        _alertView = [UIAlertController alertControllerWithTitle:@"Reset Idle Status"
+                                                         message:@"Whether to confirm the reset"
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [_alertView addAction:cancelAction];
+        @weakify(self);
+        UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            @strongify(self);
+            [self resetIdleStatus];
+        }];
+        [_alertView addAction:moreAction];
+    }
+    return _alertView;
 }
 
 @end

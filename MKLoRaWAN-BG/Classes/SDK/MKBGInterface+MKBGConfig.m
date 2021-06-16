@@ -1310,11 +1310,11 @@
                    failedBlock:failedBlock];
 }
 
-+ (void)bg_configPreventDisassemblingEquipmentAlarmStatus:(BOOL)isOn
-                                                 sucBlock:(void (^)(void))sucBlock
-                                              failedBlock:(void (^)(NSError *error))failedBlock {
++ (void)bg_configTamperAlarm:(BOOL)isOn
+                    sucBlock:(void (^)(void))sucBlock
+                 failedBlock:(void (^)(NSError *error))failedBlock {
     NSString *commandString = (isOn ? @"ed01880101" : @"ed01880100");
-    [self configDataWithTaskID:mk_bg_taskConfigPreventDisassemblingEquipmentAlarmStatusOperation
+    [self configDataWithTaskID:mk_bg_taskConfigTamperAlarmStatusOperation
                           data:commandString
                       sucBlock:sucBlock
                    failedBlock:failedBlock];

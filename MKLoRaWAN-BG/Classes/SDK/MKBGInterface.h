@@ -726,8 +726,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// Read the alarm switch status to prevent the device from being disassembled.
 /// @param sucBlock Success callback
 /// @param failedBlock Failure callback
-+ (void)bg_readPreventDisassemblingEquipmentAlarmWithSucBlock:(void (^)(id returnData))sucBlock
-                                                  failedBlock:(void (^)(NSError *error))failedBlock;
++ (void)bg_readTamperAlarmStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock;
 
 /// Read Active State Count.
 /// @param sucBlock Success callback

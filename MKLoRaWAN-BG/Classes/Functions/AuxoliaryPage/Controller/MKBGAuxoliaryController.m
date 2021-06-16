@@ -13,10 +13,13 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
+#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKNormalTextCell.h"
 #import "MKTextSwitchCell.h"
+
+#import "MKBGInterface+MKBGConfig.h"
 
 #import "MKBGDownlinkController.h"
 #import "MKBGVibrationController.h"
@@ -45,6 +48,7 @@ mk_textSwitchCellDelegate>
     [super viewDidLoad];
     [self loadSubViews];
     [self loadSectionDatas];
+    [self readDataFromDevice];
 }
 
 #pragma mark - UITableViewDelegate
@@ -110,10 +114,36 @@ mk_textSwitchCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Tamper Alarm
-        MKTextSwitchCellModel *cellModel = self.section1List[0];
-        cellModel.isOn = isOn;
+        [self configTamperAlarm:isOn];
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_readTamperAlarmStatusWithSucBlock:^(id  _Nonnull returnData) {
+        [[MKHudManager share] hide];
+        MKTextSwitchCellModel *cellModel = self.section1List[0];
+        cellModel.isOn = [returnData[@"result"][@"isOn"] boolValue];
+        [self.tableView mk_reloadSection:1 withRowAnimation:UITableViewRowAnimationNone];
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configTamperAlarm:(BOOL)isOn {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configTamperAlarm:isOn sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextSwitchCellModel *cellModel = self.section1List[0];
+        cellModel.isOn = isOn;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:1 withRowAnimation:UITableViewRowAnimationNone];
+    }];
 }
 
 #pragma mark - loadSectionDatas
