@@ -113,6 +113,19 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadDeviceNameOperation,                  //读取广播名称
     
     
+#pragma mark - 辅助功能参数读取
+    mk_bg_taskReadThreeAxisWakeupConditionsOperation,       //读取三轴唤醒条件
+    mk_bg_taskReadThreeAxisMotionParametersOperation,       //读取运动检测判断
+    mk_bg_taskReadVibrationDetectionStatusOperation,        //读取震动检测使能
+    mk_bg_taskReadVibrationThresholdsOperation,             //读取震动检测阈值
+    mk_bg_taskReadVibrationDetectionReportIntervalOperation,    //读取震动上发间隔
+    mk_bg_taskReadVibrationTimeoutOperation,                //读取震动次数判断间隔
+    mk_bg_taskReadManDownDetectionOperation,                //读取闲置功能使能
+    mk_bg_taskReadIdleDetectionTimeoutOperation,            //读取闲置超时时间
+    mk_bg_taskReadPreventDisassemblingEquipmentAlarmOperation,  //读取防拆报警使能
+    mk_bg_taskReadActiveStateCountStatusOperation,          //读取活动记录使能
+    mk_bg_taskReadActiveStateTimeoutOperation,              //读取活动判定间隔
+    
 #pragma mark - 设备系统应用信息配置
     mk_bg_taskRestartDeviceOperation,                   //重启设备
     mk_bg_taskFactoryResetOperation,                    //恢复出厂设置
@@ -214,6 +227,19 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigTxPowerOperation,                   //配置蓝牙TX power
     mk_bg_taskConfigDeviceNameOperation,                //配置广播名称
     
+#pragma mark - 辅助功能参数设置
+    mk_bg_taskConfigThreeAxisWakeupConditionsOperation,         //配置三轴唤醒条件
+    mk_bg_taskConfigThreeAxisMotionParametersOperation,         //配置运动检测判断
+    mk_bg_taskConfigVibrationDetectionStatusOperation,          //配置震动检测使能
+    mk_bg_taskConfigVibrationThresholdsOperation,               //配置震动检测阈值
+    mk_bg_taskConfigVibrationDetectionReportIntervalOperation,  //配置震动上发间隔
+    mk_bg_taskConfigVibrationTimeoutOperation,                  //配置震动次数判断间隔
+    mk_bg_taskConfigManDownDetectionStatusOperation,            //配置闲置功能使能
+    mk_bg_taskConfigIdleDetectionTimeoutOperation,              //配置闲置超时时间
+    mk_bg_taskConfigPreventDisassemblingEquipmentAlarmStatusOperation,      //配置防拆报警使能
+    mk_bg_taskConfigActiveStateCountStatusOperation,            //配置活动记录使能
+    mk_bg_taskConfigActiveStateTimeoutOperation,                //配置活动判定间隔
+    mk_bg_taskConfigIdleStutasResetOperation,                   //配置闲置清除
     
 #pragma mark - 存储数据协议
     mk_bg_taskReadNumberOfDaysStoredDataOperation,      //读取多少天本地存储的数据

@@ -12,6 +12,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MKBGVibrationDataModel : NSObject
 
+@property (nonatomic, assign)BOOL isOn;
+
+@property (nonatomic, copy)NSString *reportInterval;
+
+@property (nonatomic, copy)NSString *vibrationTimeout;
+
+- (void)readWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
+
+- (void)configWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

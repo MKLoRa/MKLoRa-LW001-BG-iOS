@@ -15,10 +15,15 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
+#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
 #import "MKTextSwitchCell.h"
+
+#import "MKBGInterface+MKBGConfig.h"
+
+#import "MKBGVibrationDataModel.h"
 
 @interface MKBGVibrationController ()<UITableViewDelegate,
 UITableViewDataSource,
@@ -30,6 +35,8 @@ MKTextFieldCellDelegate>
 @property (nonatomic, strong)NSMutableArray *section0List;
 
 @property (nonatomic, strong)NSMutableArray *section1List;
+
+@property (nonatomic, strong)MKBGVibrationDataModel *dataModel;
 
 @end
 
@@ -48,12 +55,12 @@ MKTextFieldCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [self loadSectionDatas];
+    [self readDataFromDevice];
 }
 
 #pragma mark - super method
 - (void)rightButtonMethod {
-    
+    [self configDataToDevice];
 }
 
 #pragma mark - UITableViewDelegate
@@ -93,8 +100,7 @@ MKTextFieldCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Vibration Detection
-        MKTextSwitchCellModel *cellModel = self.section0List[0];
-        cellModel.isOn = isOn;
+        [self configVibrationDetectionStatus:isOn];
         return;
     }
 }
@@ -108,14 +114,58 @@ MKTextFieldCellDelegate>
         //Report Interval
         MKTextFieldCellModel *cellModel = self.section1List[0];
         cellModel.textFieldValue = value;
+        self.dataModel.reportInterval = value;
         return;
     }
     if (index == 1) {
         //Vibration Timeout
         MKTextFieldCellModel *cellModel = self.section1List[1];
         cellModel.textFieldValue = value;
+        self.dataModel.vibrationTimeout = value;
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self loadSectionDatas];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configDataToDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel configWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configVibrationDetectionStatus:(BOOL)isOn {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configVibrationDetectionStatus:isOn sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextSwitchCellModel *cellModel = self.section0List[0];
+        cellModel.isOn = isOn;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
+    }];
 }
 
 #pragma mark - loadSectionDatas
@@ -130,6 +180,7 @@ MKTextFieldCellDelegate>
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 0;
     cellModel.msg = @"Vibration Detection";
+    cellModel.isOn = self.dataModel.isOn;
     [self.section0List addObject:cellModel];
 }
 
@@ -141,6 +192,7 @@ MKTextFieldCellDelegate>
     cellModel1.textFieldType = mk_realNumberOnly;
     cellModel1.maxLength = 3;
     cellModel1.unit = @"s";
+    cellModel1.textFieldValue = self.dataModel.reportInterval;
     [self.section1List addObject:cellModel1];
     
     MKTextFieldCellModel *cellModel2 = [[MKTextFieldCellModel alloc] init];
@@ -150,6 +202,7 @@ MKTextFieldCellDelegate>
     cellModel2.textFieldType = mk_realNumberOnly;
     cellModel2.maxLength = 2;
     cellModel2.unit = @"s";
+    cellModel2.textFieldValue = self.dataModel.vibrationTimeout;
     [self.section1List addObject:cellModel2];
 }
 
@@ -189,6 +242,13 @@ MKTextFieldCellDelegate>
         _section1List = [NSMutableArray array];
     }
     return _section1List;
+}
+
+- (MKBGVibrationDataModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKBGVibrationDataModel alloc] init];
+    }
+    return _dataModel;
 }
 
 @end

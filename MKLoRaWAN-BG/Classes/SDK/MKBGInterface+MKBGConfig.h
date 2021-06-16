@@ -656,6 +656,106 @@ NS_ASSUME_NONNULL_BEGIN
                    sucBlock:(void (^)(void))sucBlock
                 failedBlock:(void (^)(NSError *error))failedBlock;
 
+#pragma mark ****************************************辅助功能参数配置************************************************
+
+/// Configure three-axis sensor wake-up conditions.
+/// @param threshold 1 x 16ms ~20 x 16ms
+/// @param duration 1 x 10ms ~ 10 x 10ms
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configThreeAxisWakeupConditions:(NSInteger)threshold
+                                  duration:(NSInteger)duration
+                                  sucBlock:(void (^)(void))sucBlock
+                               failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure three-axis data motion detection judgment parameters.
+/// @param threshold 10 x 2mg ~ 250 x 2mg
+/// @param duration 1 x 5ms ~ 15 x 5ms
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configThreeAxisMotionParameters:(NSInteger)threshold
+                                  duration:(NSInteger)duration
+                                  sucBlock:(void (^)(void))sucBlock
+                               failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the state of the vibration detection switch.
+/// @param isOn isOn
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configVibrationDetectionStatus:(BOOL)isOn
+                                 sucBlock:(void (^)(void))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the vibration detection threshold.
+/// @param threshold 10 x 10mg ~ 255 x 10mg
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configVibrationThresholds:(NSInteger)threshold
+                            sucBlock:(void (^)(void))sucBlock
+                         failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the report interval of the vibration detection.
+/// @param interval 3s~255s
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configVibrationDetectionReportInterval:(NSInteger)interval
+                                         sucBlock:(void (^)(void))sucBlock
+                                      failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Vibration Timeout.
+/// @param interval 1s~20s
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configVibrationTimeout:(NSInteger)interval
+                         sucBlock:(void (^)(void))sucBlock
+                      failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure  Man Down Detection.
+/// @param isOn isOn
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configManDownDetectionStatus:(BOOL)isOn
+                               sucBlock:(void (^)(void))sucBlock
+                            failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Idle Detection Timeout.
+/// @param interval 1h~8760h
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configIdleDetectionTimeout:(NSInteger)interval
+                             sucBlock:(void (^)(void))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the alarm switch status to prevent the device from being disassembled.
+/// @param isOn isOn
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configPreventDisassemblingEquipmentAlarmStatus:(BOOL)isOn
+                                                 sucBlock:(void (^)(void))sucBlock
+                                              failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Active State Count.
+/// @param isOn isOn
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configActiveStateCountStatus:(BOOL)isOn
+                               sucBlock:(void (^)(void))sucBlock
+                            failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Active State Timeout.
+/// @param interval 1s~86400s
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configActiveStateTimeout:(long long)interval
+                           sucBlock:(void (^)(void))sucBlock
+                        failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Clear the idle state of the device.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configIdleStutasResetWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -779,6 +779,83 @@
             @"deviceName":(MKValidStr(deviceName) ? deviceName : @""),
         };
         operationID = mk_bg_taskReadDeviceNameOperation;
+    }else if ([cmd isEqualToString:@"80"]) {
+        //读取三轴唤醒条件
+        NSString *threshold = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 2)];
+        NSString *duration = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(2, 2)];
+        resultDic = @{
+            @"threshold":threshold,
+            @"duration":duration,
+        };
+        operationID = mk_bg_taskReadThreeAxisWakeupConditionsOperation;
+    }else if ([cmd isEqualToString:@"81"]) {
+        //读取运动检测判断
+        NSString *threshold = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 2)];
+        NSString *duration = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(2, 2)];
+        resultDic = @{
+            @"threshold":threshold,
+            @"duration":duration,
+        };
+        operationID = mk_bg_taskReadThreeAxisMotionParametersOperation;
+    }else if ([cmd isEqualToString:@"82"]) {
+        //读取震动检测开关状态
+        BOOL isOn = ([content isEqualToString:@"01"]);
+        resultDic = @{
+            @"isOn":@(isOn)
+        };
+        operationID = mk_bg_taskReadVibrationDetectionStatusOperation;
+    }else if ([cmd isEqualToString:@"83"]) {
+        //读取震动检测阈值
+        NSString *threshold = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"threshold":threshold,
+        };
+        operationID = mk_bg_taskReadVibrationThresholdsOperation;
+    }else if ([cmd isEqualToString:@"84"]) {
+        //读取震动上发间隔
+        resultDic = @{
+            @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
+        };
+        operationID = mk_bg_taskReadVibrationDetectionReportIntervalOperation;
+    }else if ([cmd isEqualToString:@"85"]) {
+        //读取震动次数判断间隔
+        resultDic = @{
+            @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
+        };
+        operationID = mk_bg_taskReadVibrationTimeoutOperation;
+    }else if ([cmd isEqualToString:@"86"]) {
+        //读取闲置功能使能
+        BOOL isOn = ([content isEqualToString:@"01"]);
+        resultDic = @{
+            @"isOn":@(isOn)
+        };
+        operationID = mk_bg_taskReadManDownDetectionOperation;
+    }else if ([cmd isEqualToString:@"87"]) {
+        //读取闲置超时时间
+        resultDic = @{
+            @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
+        };
+        operationID = mk_bg_taskReadIdleDetectionTimeoutOperation;
+    }else if ([cmd isEqualToString:@"88"]) {
+        //读取防拆报警使能
+        BOOL isOn = ([content isEqualToString:@"01"]);
+        resultDic = @{
+            @"isOn":@(isOn)
+        };
+        operationID = mk_bg_taskReadPreventDisassemblingEquipmentAlarmOperation;
+    }else if ([cmd isEqualToString:@"89"]) {
+        //读取活动记录使能
+        BOOL isOn = ([content isEqualToString:@"01"]);
+        resultDic = @{
+            @"isOn":@(isOn)
+        };
+        operationID = mk_bg_taskReadActiveStateCountStatusOperation;
+    }else if ([cmd isEqualToString:@"8a"]) {
+        //读取活动判定间隔
+        resultDic = @{
+            @"interval":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
+        };
+        operationID = mk_bg_taskReadActiveStateTimeoutOperation;
     }
     return [self dataParserGetDataSuccess:resultDic operationID:operationID];
 }
@@ -1035,6 +1112,42 @@
     }else if ([cmd isEqualToString:@"79"]) {
         //配置蓝牙广播名称
         operationID = mk_bg_taskConfigDeviceNameOperation;
+    }else if ([cmd isEqualToString:@"80"]) {
+        //配置三轴唤醒条件
+        operationID = mk_bg_taskConfigThreeAxisWakeupConditionsOperation;
+    }else if ([cmd isEqualToString:@"81"]) {
+        //配置运动检测判断
+        operationID = mk_bg_taskConfigThreeAxisMotionParametersOperation;
+    }else if ([cmd isEqualToString:@"82"]) {
+        //配置震动检测使能
+        operationID = mk_bg_taskConfigVibrationDetectionStatusOperation;
+    }else if ([cmd isEqualToString:@"83"]) {
+        //配置震动检测阈值
+        operationID = mk_bg_taskConfigVibrationThresholdsOperation;
+    }else if ([cmd isEqualToString:@"84"]) {
+        //配置震动上发间隔
+        operationID = mk_bg_taskConfigVibrationDetectionReportIntervalOperation;
+    }else if ([cmd isEqualToString:@"85"]) {
+        //配置震动次数判断间隔
+        operationID = mk_bg_taskConfigVibrationTimeoutOperation;
+    }else if ([cmd isEqualToString:@"86"]) {
+        //配置闲置功能使能
+        operationID = mk_bg_taskConfigManDownDetectionStatusOperation;
+    }else if ([cmd isEqualToString:@"87"]) {
+        //配置闲置超时时间
+        operationID = mk_bg_taskConfigIdleDetectionTimeoutOperation;
+    }else if ([cmd isEqualToString:@"88"]) {
+        //配置防拆报警使能
+        operationID = mk_bg_taskConfigPreventDisassemblingEquipmentAlarmStatusOperation;
+    }else if ([cmd isEqualToString:@"89"]) {
+        //配置活动记录使能
+        operationID = mk_bg_taskConfigActiveStateCountStatusOperation;
+    }else if ([cmd isEqualToString:@"8a"]) {
+        //配置活动判定间隔
+        operationID = mk_bg_taskConfigActiveStateTimeoutOperation;
+    }else if ([cmd isEqualToString:@"8b"]) {
+        //闲置清除
+        operationID = mk_bg_taskConfigIdleStutasResetOperation;
     }else if ([cmd isEqualToString:@"a0"]) {
         //读取多少天本地存储的数据
         operationID = mk_bg_taskReadNumberOfDaysStoredDataOperation;

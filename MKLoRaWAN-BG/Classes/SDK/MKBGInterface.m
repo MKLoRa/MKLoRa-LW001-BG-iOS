@@ -721,6 +721,96 @@
                  failedBlock:failedBlock];
 }
 
+#pragma mark ****************************************辅助功能参数读取************************************************
+
++ (void)bg_readThreeAxisWakeupConditionsWithSucBlock:(void (^)(id returnData))sucBlock
+                                         failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadThreeAxisWakeupConditionsOperation
+                     cmdFlag:@"80"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readThreeAxisMotionParametersWithSucBlock:(void (^)(id returnData))sucBlock
+                                         failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadThreeAxisMotionParametersOperation
+                     cmdFlag:@"81"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readVibrationDetectionStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                        failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadVibrationDetectionStatusOperation
+                     cmdFlag:@"82"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readVibrationThresholdsWithSucBlock:(void (^)(id returnData))sucBlock
+                                   failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadVibrationThresholdsOperation
+                     cmdFlag:@"83"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readVibrationDetectionReportIntervalWithSucBlock:(void (^)(id returnData))sucBlock
+                                                failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadVibrationDetectionReportIntervalOperation
+                     cmdFlag:@"84"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readVibrationTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadVibrationTimeoutOperation
+                     cmdFlag:@"85"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readManDownDetectionWithSucBlock:(void (^)(id returnData))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadManDownDetectionOperation
+                     cmdFlag:@"86"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readIdleDetectionTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                    failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadIdleDetectionTimeoutOperation
+                     cmdFlag:@"87"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readPreventDisassemblingEquipmentAlarmWithSucBlock:(void (^)(id returnData))sucBlock
+                                                  failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadPreventDisassemblingEquipmentAlarmOperation
+                     cmdFlag:@"88"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readActiveStateCountStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                      failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadActiveStateCountStatusOperation
+                     cmdFlag:@"89"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readActiveStateTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadActiveStateTimeoutOperation
+                     cmdFlag:@"8a"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
 #pragma mark - private method
 
 + (void)readDataWithTaskID:(mk_bg_taskOperationID)taskID

@@ -656,6 +656,91 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)bg_readDeviceNameWithSucBlock:(void (^)(id returnData))sucBlock
                           failedBlock:(void (^)(NSError *error))failedBlock;
 
+#pragma mark ****************************************辅助功能参数读取************************************************
+
+/// Read three-axis sensor wake-up conditions.
+/*
+ @{
+     @"threshold":threshold,        //x 16mg
+     @"duration":duration,          //x 10ms
+ };
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readThreeAxisWakeupConditionsWithSucBlock:(void (^)(id returnData))sucBlock
+                                         failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read three-axis data motion detection judgment parameters.
+/*
+ @{
+     @"threshold":threshold,        //x 2mg
+     @"duration":duration,          //x 5ms
+ };
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readThreeAxisMotionParametersWithSucBlock:(void (^)(id returnData))sucBlock
+                                         failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the state of the vibration detection switch.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readVibrationDetectionStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                        failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the vibration detection threshold.
+/*
+ @{
+     @"threshold":threshold,        //x 10mg
+ };
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readVibrationThresholdsWithSucBlock:(void (^)(id returnData))sucBlock
+                                   failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the report interval of the vibration detection.(Unit:s)
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readVibrationDetectionReportIntervalWithSucBlock:(void (^)(id returnData))sucBlock
+                                                failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read Vibration Timeout.(Unit:s)
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readVibrationTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read  Man Down Detection.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readManDownDetectionWithSucBlock:(void (^)(id returnData))sucBlock
+                                failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read Idle Detection Timeout.(Unit:h)
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readIdleDetectionTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                    failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the alarm switch status to prevent the device from being disassembled.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readPreventDisassemblingEquipmentAlarmWithSucBlock:(void (^)(id returnData))sucBlock
+                                                  failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read Active State Count.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readActiveStateCountStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                      failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read Active State Timeout.(Unit:s)
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readActiveStateTimeoutWithSucBlock:(void (^)(id returnData))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END
