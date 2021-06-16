@@ -47,6 +47,10 @@
             [self operationFailedBlockWithMsg:@"Opps！Save failed. Please check the input characters and try again." block:failedBlock];
             return;
         }
+        if (![self configStrategy]) {
+            [self operationFailedBlockWithMsg:@"Config Positioning Strategy Error" block:failedBlock];
+            return;
+        }
         if (![self configReportInterval]) {
             [self operationFailedBlockWithMsg:@"Config Report Interval Error" block:failedBlock];
             return;
@@ -65,6 +69,18 @@
     [MKBGInterface bg_readPeriodicModePositioningStrategyWithSucBlock:^(id  _Nonnull returnData) {
         success = YES;
         self.strategy = [self getPositioningStrategy:[returnData[@"result"][@"strategy"] integerValue]];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configStrategy {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configPeriodicModePositioningStrategy:self.strategy sucBlock:^{
+        success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {
         dispatch_semaphore_signal(self.semaphore);

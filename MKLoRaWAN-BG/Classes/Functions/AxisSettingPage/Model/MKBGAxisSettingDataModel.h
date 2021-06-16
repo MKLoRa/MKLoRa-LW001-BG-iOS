@@ -12,6 +12,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MKBGAxisSettingDataModel : NSObject
 
+@property (nonatomic, copy)NSString *wakeupThreshold;
+
+@property (nonatomic, copy)NSString *wakeupDuration;
+
+@property (nonatomic, copy)NSString *motionThreshold;
+
+@property (nonatomic, copy)NSString *motionDuration;
+
+@property (nonatomic, copy)NSString *vibrationThresholds;
+
+- (void)readWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
+
+- (void)configWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

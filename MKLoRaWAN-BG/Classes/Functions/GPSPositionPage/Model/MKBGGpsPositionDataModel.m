@@ -117,10 +117,10 @@
             [self operationFailedBlockWithMsg:@"Config PDOP Limit Error" block:failedBlock];
             return;
         }
-//        if (![self configAutonomousAiding]) {
-//            [self operationFailedBlockWithMsg:@"Config Autonomous Aiding Error" block:failedBlock];
-//            return;
-//        }
+        if (![self configAutonomousAiding]) {
+            [self operationFailedBlockWithMsg:@"Config Autonomous Aiding Error" block:failedBlock];
+            return;
+        }
         if (![self configAdingAccuracy]) {
             [self operationFailedBlockWithMsg:@"Config Ading Accuracy Error" block:failedBlock];
             return;
@@ -141,10 +141,10 @@
             [self operationFailedBlockWithMsg:@"Config Time Budget Error" block:failedBlock];
             return;
         }
-//        if (![self configExtremeMode]) {
-//            [self operationFailedBlockWithMsg:@"Config Extreme mode Error" block:failedBlock];
-//            return;
-//        }
+        if (![self configExtremeMode]) {
+            [self operationFailedBlockWithMsg:@"Config Extreme mode Error" block:failedBlock];
+            return;
+        }
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();

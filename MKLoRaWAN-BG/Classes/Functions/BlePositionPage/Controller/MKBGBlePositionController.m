@@ -24,8 +24,6 @@
 
 #import "MKBGNormalAdopter.h"
 
-#import "MKBGInterface+MKBGConfig.h"
-
 #import "MKBGBlePositionDataModel.h"
 
 #import "MKBGFilterConditionCell.h"
@@ -163,7 +161,9 @@ MKBGFilterConditionCellDelegate>
 /// 关于发生改变
 /// @param conditionIndex 0:And,1:Or
 - (void)mk_filterConditionsChanged:(NSInteger)conditionIndex {
-    [self configFilterConditionsChanged:conditionIndex];
+    self.dataModel.ABIsOr = (conditionIndex == 1);
+    MKBGFilterConditionCellModel *cellModel = self.section2List[0];
+    cellModel.conditionIndex = conditionIndex;
 }
 
 #pragma mark - interface
@@ -178,24 +178,6 @@ MKBGFilterConditionCellDelegate>
         @strongify(self);
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-    }];
-}
-
-- (void)configFilterConditionsChanged:(NSInteger)conditionIndex {
-    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    BOOL ABIsOr = (conditionIndex == 1);
-    [MKBGInterface bg_configBLELogicalRelationship:(ABIsOr ? mk_bg_BLELogicalRelationshipOR : mk_bg_BLELogicalRelationshipAND) sucBlock:^{
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:@"Success"];
-        
-        self.dataModel.ABIsOr = ABIsOr;
-        MKBGFilterConditionCellModel *cellModel = self.section2List[0];
-        cellModel.conditionIndex = conditionIndex;
-        
-    } failedBlock:^(NSError * _Nonnull error) {
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
     }];
 }
 

@@ -39,6 +39,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)readDataWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
 
+- (void)configData:(NSArray <MKBGTimingModeTimePointModel *>*)pointList
+          sucBlock:(void (^)(void))sucBlock
+       failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

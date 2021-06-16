@@ -15,7 +15,6 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
-#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
@@ -24,8 +23,6 @@
 #import "MKTableSectionLineHeader.h"
 
 #import "MKBGNormalAdopter.h"
-
-#import "MKBGInterface+MKBGConfig.h"
 
 #import "MKBGGpsPositionDataModel.h"
 
@@ -262,12 +259,16 @@ MKTextButtonCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Autonomous Aiding
-        [self configAutonomousAiding:isOn];
+        MKTextSwitchCellModel *cellModel = self.section2List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.autonomousAiding = isOn;
         return;
     }
     if (index == 1) {
         //Extreme Mode
-        [self configExtremeMode:isOn];
+        MKTextSwitchCellModel *cellModel = self.section7List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.extremeMode = isOn;
         return;
     }
 }
@@ -322,34 +323,6 @@ MKTextButtonCellDelegate>
         @strongify(self);
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-    }];
-}
-
-- (void)configAutonomousAiding:(BOOL)isOn {
-    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_configGpsAutonomousAidingStatus:isOn sucBlock:^{
-        [[MKHudManager share] hide];
-        MKTextSwitchCellModel *cellModel = self.section2List[0];
-        cellModel.isOn = isOn;
-        self.dataModel.autonomousAiding = isOn;
-    } failedBlock:^(NSError * _Nonnull error) {
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
-    }];
-}
-
-- (void)configExtremeMode:(BOOL)isOn {
-    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_configGpsExtremeModeStatus:isOn sucBlock:^{
-        [[MKHudManager share] hide];
-        MKTextSwitchCellModel *cellModel = self.section7List[0];
-        cellModel.isOn = isOn;
-        self.dataModel.extremeMode = isOn;
-    } failedBlock:^(NSError * _Nonnull error) {
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        [self.tableView mk_reloadSection:7 withRowAnimation:UITableViewRowAnimationNone];
     }];
 }
 

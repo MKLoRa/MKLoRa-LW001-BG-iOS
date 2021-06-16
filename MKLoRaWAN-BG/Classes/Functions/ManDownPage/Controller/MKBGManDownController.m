@@ -187,7 +187,6 @@ MKBGTextButtonCellDelegate>
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
         [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
     }];
-    
 }
 
 - (void)resetIdleStatus{

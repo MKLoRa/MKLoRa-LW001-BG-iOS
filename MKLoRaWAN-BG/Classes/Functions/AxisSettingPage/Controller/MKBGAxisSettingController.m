@@ -17,6 +17,8 @@
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
 
+#import "MKBGAxisSettingDataModel.h"
+
 @interface MKBGAxisSettingController ()<UITableViewDelegate,
 UITableViewDataSource,
 MKTextFieldCellDelegate>
@@ -24,6 +26,8 @@ MKTextFieldCellDelegate>
 @property (nonatomic, strong)MKBaseTableView *tableView;
 
 @property (nonatomic, strong)NSMutableArray *section0List;
+
+@property (nonatomic, strong)MKBGAxisSettingDataModel *dataModel;
 
 @end
 
@@ -36,12 +40,12 @@ MKTextFieldCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [self loadSectionDatas];
+    [self readDataFromDevice];
 }
 
 #pragma mark - super method
 - (void)rightButtonMethod {
-    
+    [self configDataToDevice];
 }
 
 #pragma mark - UITableViewDelegate
@@ -74,24 +78,58 @@ MKTextFieldCellDelegate>
     cellModel.textFieldValue = value;
     if (index == 0) {
         //Wakeup Threshold
+        self.dataModel.wakeupThreshold = value;
         return;
     }
     if (index == 1) {
         //Wakeup Duration
+        self.dataModel.wakeupDuration = value;
         return;
     }
     if (index == 2) {
         //Motion  Threshold
+        self.dataModel.motionThreshold = value;
         return;
     }
     if (index == 3) {
         //Motion  Duration
+        self.dataModel.motionDuration = value;
         return;
     }
     if (index == 4) {
         //Vibration  Thresholds
+        self.dataModel.vibrationThresholds = value;
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self loadSectionDatas];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configDataToDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel configWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
 }
 
 #pragma mark - loadSectionDatas
@@ -109,6 +147,7 @@ MKTextFieldCellDelegate>
     cellModel1.textFieldType = mk_realNumberOnly;
     cellModel1.maxLength = 2;
     cellModel1.unit = @"x16mg";
+    cellModel1.textFieldValue = self.dataModel.wakeupThreshold;
     [self.section0List addObject:cellModel1];
     
     MKTextFieldCellModel *cellModel2 = [[MKTextFieldCellModel alloc] init];
@@ -118,6 +157,7 @@ MKTextFieldCellDelegate>
     cellModel2.textFieldType = mk_realNumberOnly;
     cellModel2.maxLength = 2;
     cellModel2.unit = @"x10mg";
+    cellModel2.textFieldValue = self.dataModel.wakeupDuration;
     [self.section0List addObject:cellModel2];
     
     MKTextFieldCellModel *cellModel3 = [[MKTextFieldCellModel alloc] init];
@@ -127,6 +167,7 @@ MKTextFieldCellDelegate>
     cellModel3.textFieldType = mk_realNumberOnly;
     cellModel3.maxLength = 3;
     cellModel3.unit = @"x2mg";
+    cellModel3.textFieldValue = self.dataModel.motionThreshold;
     [self.section0List addObject:cellModel3];
     
     MKTextFieldCellModel *cellModel4 = [[MKTextFieldCellModel alloc] init];
@@ -136,6 +177,7 @@ MKTextFieldCellDelegate>
     cellModel4.textFieldType = mk_realNumberOnly;
     cellModel4.maxLength = 2;
     cellModel4.unit = @"x5mg";
+    cellModel4.textFieldValue = self.dataModel.motionDuration;
     [self.section0List addObject:cellModel4];
     
     MKTextFieldCellModel *cellModel5 = [[MKTextFieldCellModel alloc] init];
@@ -145,7 +187,10 @@ MKTextFieldCellDelegate>
     cellModel5.textFieldType = mk_realNumberOnly;
     cellModel5.maxLength = 3;
     cellModel5.unit = @"x10mg";
+    cellModel5.textFieldValue = self.dataModel.vibrationThresholds;
     [self.section0List addObject:cellModel5];
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - UI
@@ -177,6 +222,13 @@ MKTextFieldCellDelegate>
         _section0List = [NSMutableArray array];
     }
     return _section0List;
+}
+
+- (MKBGAxisSettingDataModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKBGAxisSettingDataModel alloc] init];
+    }
+    return _dataModel;
 }
 
 @end

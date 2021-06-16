@@ -19,8 +19,6 @@
 #import "MKTextButtonCell.h"
 #import "MKPickerView.h"
 
-#import "MKBGInterface+MKBGConfig.h"
-
 #import "MKBGTimingModeModel.h"
 
 #import "MKBGReportTimePointCell.h"
@@ -58,7 +56,7 @@ MKBGReportTimePointCellDelegate>
 
 #pragma mark - super method
 - (void)rightButtonMethod {
-    [self saveReportingTimePointToDevice];
+    [self saveDataToDevice];
 }
 
 #pragma mark - UITableViewDelegate
@@ -117,7 +115,9 @@ MKBGReportTimePointCellDelegate>
                                 value:(NSString *)value {
     if (index == 0) {
         //Positioning Strategy
-        [self configPositioningStrategy:dataListIndex];
+        MKTextButtonCellModel *cellModel = self.section0List[0];
+        cellModel.dataListIndex = dataListIndex;
+        self.dataModel.strategy = dataListIndex;
         return;
     }
 }
@@ -202,21 +202,7 @@ MKBGReportTimePointCellDelegate>
     }];
 }
 
-- (void)configPositioningStrategy:(NSInteger)strategy {
-    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_configTimingModePositioningStrategy:strategy sucBlock:^{
-        [[MKHudManager share] hide];
-        MKTextButtonCellModel *cellModel = self.section0List[0];
-        cellModel.dataListIndex = strategy;
-        self.dataModel.strategy = strategy;
-    } failedBlock:^(NSError * _Nonnull error) {
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
-    }];
-}
-
-- (void)saveReportingTimePointToDevice {
+- (void)saveDataToDevice {
     NSMutableArray *tempList = [NSMutableArray array];
     for (NSInteger i = 0; i < self.section2List.count; i ++) {
         MKBGReportTimePointCellModel *cellModel = self.section2List[i];
@@ -226,10 +212,13 @@ MKBGReportTimePointCellDelegate>
         [tempList addObject:pointModel];
     }
     [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_configTimingModeReportingTimePoint:tempList sucBlock:^{
+    @weakify(self);
+    [self.dataModel configData:tempList sucBlock:^{
+        @strongify(self);
         [[MKHudManager share] hide];
         [self.view showCentralToast:@"Success"];
     } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
     }];

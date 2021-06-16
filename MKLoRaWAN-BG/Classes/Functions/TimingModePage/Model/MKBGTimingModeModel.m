@@ -11,6 +11,7 @@
 #import "MKMacroDefines.h"
 
 #import "MKBGInterface.h"
+#import "MKBGInterface+MKBGConfig.h"
 
 @implementation MKBGTimingModeTimePointModel
 @end
@@ -43,12 +44,44 @@
     });
 }
 
+- (void)configData:(NSArray <MKBGTimingModeTimePointModel *>*)pointList
+          sucBlock:(void (^)(void))sucBlock
+       failedBlock:(void (^)(NSError *error))failedBlock {
+    dispatch_async(self.readQueue, ^{
+        if (![self configStrategy]) {
+            [self operationFailedBlockWithMsg:@"Config Positioning Strategy Error" block:failedBlock];
+            return;
+        }
+        if (![self configReportingTimePoint:pointList]) {
+            [self operationFailedBlockWithMsg:@"Config Reporting Time Point Error" block:failedBlock];
+            return;
+        }
+        moko_dispatch_main_safe(^{
+            if (sucBlock) {
+                sucBlock();
+            }
+        });
+    });
+}
+
 #pragma mark - interface
 - (BOOL)readStrategy {
     __block BOOL success = NO;
     [MKBGInterface bg_readTimingModePositioningStrategyWithSucBlock:^(id  _Nonnull returnData) {
         success = YES;
         self.strategy = [self getPositioningStrategy:[returnData[@"result"][@"strategy"] integerValue]];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configStrategy {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configTimingModePositioningStrategy:self.strategy sucBlock:^{
+        success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {
         dispatch_semaphore_signal(self.semaphore);
@@ -71,6 +104,18 @@
             [tempList addObject:pointModel];
         }
         self.pointList = [NSArray arrayWithArray:tempList];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configReportingTimePoint:(NSArray <MKBGTimingModeTimePointModel *>*)pointList {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configTimingModeReportingTimePoint:pointList sucBlock:^{
+        success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {
         dispatch_semaphore_signal(self.semaphore);

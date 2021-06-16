@@ -68,7 +68,10 @@
             [self operationFailedBlockWithMsg:@"Config Number Of Mac Error" block:failedBlock];
             return;
         }
-        
+        if (![self configLogicalRelationship]) {
+            [self operationFailedBlockWithMsg:@"Config Logical Relation Ship Error" block:failedBlock];
+            return;
+        }
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();
@@ -159,6 +162,18 @@
     [MKBGInterface bg_readBLELogicalRelationshipWithSucBlock:^(id  _Nonnull returnData) {
         success = YES;
         self.ABIsOr = ([returnData[@"result"][@"type"] integerValue] == 0);
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configLogicalRelationship {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configBLELogicalRelationship:(self.ABIsOr ? mk_bg_BLELogicalRelationshipOR : mk_bg_BLELogicalRelationshipAND) sucBlock:^{
+        success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {
         dispatch_semaphore_signal(self.semaphore);

@@ -15,13 +15,10 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
-#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextButtonCell.h"
 #import "MKTextFieldCell.h"
-
-#import "MKBGInterface+MKBGConfig.h"
 
 #import "MKBGPeriodicModeModel.h"
 
@@ -103,7 +100,9 @@ MKTextFieldCellDelegate>
                                 value:(NSString *)value {
     if (index == 0) {
         //Positioning Strategy
-        [self configPositioningStrategy:dataListIndex];
+        MKTextButtonCellModel *cellModel = self.section0List[0];
+        cellModel.dataListIndex = dataListIndex;
+        self.dataModel.strategy = dataListIndex;
         return;
     }
 }
@@ -148,20 +147,6 @@ MKTextFieldCellDelegate>
         @strongify(self);
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-    }];
-}
-
-- (void)configPositioningStrategy:(NSInteger)strategy {
-    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_configPeriodicModePositioningStrategy:strategy sucBlock:^{
-        [[MKHudManager share] hide];
-        MKTextButtonCellModel *cellModel = self.section0List[0];
-        cellModel.dataListIndex = strategy;
-        self.dataModel.strategy = strategy;
-    } failedBlock:^(NSError * _Nonnull error) {
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
     }];
 }
 
