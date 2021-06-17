@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong)UILabel *msgLabel;
 
+@property (nonatomic, strong)UILabel *noteLabel;
+
 @property (nonatomic, strong)UILabel *valueLabel;
 
 @property (nonatomic, strong)MKSlider *slider;
@@ -41,6 +43,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.msgLabel];
+        [self.contentView addSubview:self.noteLabel];
         [self.contentView addSubview:self.valueLabel];
         [self.contentView addSubview:self.slider];
     }
@@ -51,14 +54,20 @@
     [super layoutSubviews];
     [self.msgLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(15.f);
-        make.top.mas_equalTo(10.f);
         make.right.mas_equalTo(-15.f);
+        make.top.mas_equalTo(10.f);
         make.height.mas_equalTo(MKFont(15.f).lineHeight);
+    }];
+    [self.noteLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(15.f);
+        make.right.mas_equalTo(-15.f);
+        make.top.mas_equalTo(self.msgLabel.mas_bottom).mas_offset(5.f);
+        make.height.mas_equalTo(MKFont(13.f).lineHeight);
     }];
     [self.slider mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(15.f);
         make.right.mas_equalTo(self.valueLabel.mas_left).mas_offset(-5.f);
-        make.top.mas_equalTo(self.msgLabel.mas_bottom).mas_offset(5.f);
+        make.top.mas_equalTo(self.noteLabel.mas_bottom).mas_offset(10.f);
         make.height.mas_equalTo(10.f);
     }];
     [self.valueLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -137,9 +146,22 @@
     if (!_msgLabel) {
         _msgLabel = [[UILabel alloc] init];
         _msgLabel.textAlignment = NSTextAlignmentLeft;
-        _msgLabel.attributedText = [MKCustomUIAdopter attributedString:@[@"Tx Power",@" (-40,-20,-16,-12,-8,-4,0,+2,+3,+4,+5,+6,+7,+8)"] fonts:@[MKFont(15.f),MKFont(13.f)] colors:@[DEFAULT_TEXT_COLOR,RGBCOLOR(223, 223, 223)]];
+        _msgLabel.font = MKFont(15.f);
+        _msgLabel.textColor = DEFAULT_TEXT_COLOR;
+        _msgLabel.text = @"Tx Power";
     }
     return _msgLabel;
+}
+
+- (UILabel *)noteLabel {
+    if (!_noteLabel) {
+        _noteLabel = [[UILabel alloc] init];
+        _noteLabel.font = MKFont(13.f);
+        _noteLabel.textColor = RGBCOLOR(223, 223, 223);
+        _noteLabel.textAlignment = NSTextAlignmentLeft;
+        _noteLabel.text = @"(-40,-20,-16,-12,-8,-4,0,+2,+3,+4,+5,+6,+7,+8)";
+    }
+    return _noteLabel;
 }
 
 - (MKSlider *)slider {

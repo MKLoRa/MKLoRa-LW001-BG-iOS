@@ -78,26 +78,26 @@
             [self operationFailedBlockWithMsg:@"Opps！Save failed. Please check the input characters and try again." block:failedBlock];
             return;
         }
-//        if (![self configMotionModeEvents]) {
-//            [self operationFailedBlockWithMsg:@"Config Motion Mode Events Error" block:failedBlock];
-//            return;
-//        }
+        if (![self configMotionModeEvents]) {
+            [self operationFailedBlockWithMsg:@"Config Motion Mode Events Error" block:failedBlock];
+            return;
+        }
         if (![self configNumberOfFixOnStart]) {
             [self operationFailedBlockWithMsg:@"Config Number Of Fix On Start Error" block:failedBlock];
             return;
         }
-//        if (![self configPosStrategyOnStart]) {
-//            [self operationFailedBlockWithMsg:@"Config Pos-Strategy On Start Error" block:failedBlock];
-//            return;
-//        }
+        if (![self configPosStrategyOnStart]) {
+            [self operationFailedBlockWithMsg:@"Config Pos-Strategy On Start Error" block:failedBlock];
+            return;
+        }
         if (![self configReportIntervalInTrip]) {
             [self operationFailedBlockWithMsg:@"Config Report Interval In Trip Error" block:failedBlock];
             return;
         }
-//        if (![self configPosStrategyInTrip]) {
-//            [self operationFailedBlockWithMsg:@"Config Pos-Strategy In Trip Error" block:failedBlock];
-//            return;
-//        }
+        if (![self configPosStrategyInTrip]) {
+            [self operationFailedBlockWithMsg:@"Config Pos-Strategy In Trip Error" block:failedBlock];
+            return;
+        }
         if (![self configTripEndTimeout]) {
             [self operationFailedBlockWithMsg:@"Config Trip End Timeout Error" block:failedBlock];
             return;
@@ -110,32 +110,16 @@
             [self operationFailedBlockWithMsg:@"Config Report Interval On End Error" block:failedBlock];
             return;
         }
-//        if (![self configPosStrategyOnEnd]) {
-//            [self operationFailedBlockWithMsg:@"Config Pos-Strategy On End Error" block:failedBlock];
-//            return;
-//        }
+        if (![self configPosStrategyOnEnd]) {
+            [self operationFailedBlockWithMsg:@"Config Pos-Strategy On End Error" block:failedBlock];
+            return;
+        }
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();
             }
         });
     });
-}
-
-- (void)configMotionModeEvents:(MKBGMotionModeEventsModel *)eventsModel
-                      sucBlock:(void (^)(void))sucBlock
-                   failedBlock:(void (^)(NSError *error))failedBlock {
-    [MKBGInterface bg_configMotionModeEvents:eventsModel sucBlock:^{
-        self.notifyEventOnStart = eventsModel.notifyEventOnStart;
-        self.fixOnStart = eventsModel.fixOnStart;
-        self.notifyEventInTrip = eventsModel.notifyEventInTrip;
-        self.fixInTrip = eventsModel.fixInTrip;
-        self.notifyEventOnEnd = eventsModel.notifyEventOnEnd;
-        self.fixOnEnd = eventsModel.fixOnEnd;
-        if (sucBlock) {
-            sucBlock();
-        }
-    } failedBlock:failedBlock];
 }
 
 #pragma mark - interface

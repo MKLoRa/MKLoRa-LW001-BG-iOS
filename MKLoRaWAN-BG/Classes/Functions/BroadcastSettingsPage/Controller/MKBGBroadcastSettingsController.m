@@ -84,6 +84,9 @@ MKBGBroadcastTxPowerCellDelegate>
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 2) {
+        return 80.f;
+    }
     return 60.f;
 }
 

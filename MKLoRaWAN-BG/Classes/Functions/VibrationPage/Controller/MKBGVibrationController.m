@@ -15,13 +15,10 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
-#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
 #import "MKTextSwitchCell.h"
-
-#import "MKBGInterface+MKBGConfig.h"
 
 #import "MKBGVibrationDataModel.h"
 
@@ -100,7 +97,9 @@ MKTextFieldCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Vibration Detection
-        [self configVibrationDetectionStatus:isOn];
+        MKTextSwitchCellModel *cellModel = self.section0List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.isOn = isOn;
         return;
     }
 }
@@ -152,20 +151,6 @@ MKTextFieldCellDelegate>
         @strongify(self);
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-    }];
-}
-
-- (void)configVibrationDetectionStatus:(BOOL)isOn {
-    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_configVibrationDetectionStatus:isOn sucBlock:^{
-        [[MKHudManager share] hide];
-        MKTextSwitchCellModel *cellModel = self.section0List[0];
-        cellModel.isOn = isOn;
-        self.dataModel.isOn = isOn;
-    } failedBlock:^(NSError * _Nonnull error) {
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
     }];
 }
 

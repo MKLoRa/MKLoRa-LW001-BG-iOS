@@ -15,13 +15,10 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
-#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
 #import "MKTextSwitchCell.h"
-
-#import "MKBGInterface+MKBGConfig.h"
 
 #import "MKBGTextButtonCell.h"
 
@@ -51,6 +48,9 @@ MKBGTextButtonCellDelegate>
 
 - (void)dealloc {
     NSLog(@"MKBGManDownController销毁");
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"mk_bg_settingPageNeedDismissAlert"
+                                                  object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -62,6 +62,10 @@ MKBGTextButtonCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dismissAlert)
+                                                 name:@"mk_bg_settingPageNeedDismissAlert"
+                                               object:nil];
     [self readDataFromDevice];
 }
 
@@ -130,7 +134,9 @@ MKBGTextButtonCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Man Down Detection
-        [self configManDownDetection:isOn];
+        MKTextSwitchCellModel *cellModel = self.section0List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.isOn = isOn;
         return;
     }
 }
@@ -143,6 +149,13 @@ MKBGTextButtonCellDelegate>
         //Idle Stutas
         [self presentViewController:self.alertView animated:YES completion:nil];
         return;
+    }
+}
+
+#pragma mark - note
+- (void)dismissAlert {
+    if (self.alertView && (self.presentedViewController == self.alertView)) {
+        [self.alertView dismissViewControllerAnimated:NO completion:nil];
     }
 }
 
@@ -175,25 +188,11 @@ MKBGTextButtonCellDelegate>
     }];
 }
 
-- (void)configManDownDetection:(BOOL)isOn {
-    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_configManDownDetectionStatus:isOn sucBlock:^{
-        [[MKHudManager share] hide];
-        MKTextSwitchCellModel *cellModel = self.section0List[0];
-        cellModel.isOn = isOn;
-        self.dataModel.isOn = isOn;
-    } failedBlock:^(NSError * _Nonnull error) {
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        [self.tableView mk_reloadSection:0 withRowAnimation:UITableViewRowAnimationNone];
-    }];
-}
-
 - (void)resetIdleStatus{
     [[MKHudManager share] showHUDWithTitle:@"Setting..."
                                      inView:self.view
                               isPenetration:NO];
-    [MKBGInterface bg_configIdleStutasResetWithSucBlock:^{
+    [self.dataModel resetIdleStatusWithSucBlock:^{
         [[MKHudManager share] hide];
         [self.view showCentralToast:@"Success"];
     } failedBlock:^(NSError * _Nonnull error) {

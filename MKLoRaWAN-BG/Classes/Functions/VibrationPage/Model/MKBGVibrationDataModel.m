@@ -51,6 +51,10 @@
             [self operationFailedBlockWithMsg:@"Opps！Save failed. Please check the input characters and try again." block:failedBlock];
             return;
         }
+        if (![self configVibrationDetection]) {
+            [self operationFailedBlockWithMsg:@"Config Vibration Detection Error" block:failedBlock];
+            return;
+        }
         if (![self configReportInterval]) {
             [self operationFailedBlockWithMsg:@"Config Report Interval Error" block:failedBlock];
             return;
@@ -73,6 +77,18 @@
     [MKBGInterface bg_readVibrationDetectionStatusWithSucBlock:^(id  _Nonnull returnData) {
         success = YES;
         self.isOn = [returnData[@"result"][@"isOn"] boolValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configVibrationDetection {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configVibrationDetectionStatus:self.isOn sucBlock:^{
+        success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {
         dispatch_semaphore_signal(self.semaphore);

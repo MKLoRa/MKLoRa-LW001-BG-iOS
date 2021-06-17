@@ -56,7 +56,15 @@
             [self operationFailedBlockWithMsg:checkMsg block:failedBlock];
             return;
         }
+        if (![self configBeaconMode]) {
+            [self operationFailedBlockWithMsg:@"Config Beacon Mode Error" block:failedBlock];
+            return;
+        }
         if (self.beaconModeIsOn) {
+            if (![self configConnectable]) {
+                [self operationFailedBlockWithMsg:@"Config Connectable Error" block:failedBlock];
+                return;
+            }
             if (![self configADVInterval]) {
                 [self operationFailedBlockWithMsg:@"Config Adv Interval Error" block:failedBlock];
                 return;
@@ -89,11 +97,35 @@
     return success;
 }
 
+- (BOOL)configBeaconMode {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configBeaconModeStatus:self.beaconModeIsOn sucBlock:^{
+        success = YES;
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
 - (BOOL)readConnectable {
     __block BOOL success = NO;
     [MKBGInterface bg_readDeviceConnectableWithSucBlock:^(id  _Nonnull returnData) {
         success = YES;
         self.connectable = [returnData[@"result"][@"connectable"] boolValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configConnectable {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configDeviceConnectable:self.connectable sucBlock:^{
+        success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {
         dispatch_semaphore_signal(self.semaphore);

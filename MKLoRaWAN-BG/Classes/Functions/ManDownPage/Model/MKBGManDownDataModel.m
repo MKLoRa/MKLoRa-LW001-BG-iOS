@@ -47,6 +47,10 @@
             [self operationFailedBlockWithMsg:@"Opps！Save failed. Please check the input characters and try again." block:failedBlock];
             return;
         }
+        if (![self configManDownDetection]) {
+            [self operationFailedBlockWithMsg:@"Config Man Down Detection Error" block:failedBlock];
+            return;
+        }
         if (![self configIdleDetectionTimeout]) {
             [self operationFailedBlockWithMsg:@"Config Idle Detection Timeout Error" block:failedBlock];
             return;
@@ -59,12 +63,28 @@
     });
 }
 
+- (void)resetIdleStatusWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock {
+    [MKBGInterface bg_configIdleStutasResetWithSucBlock:sucBlock failedBlock:failedBlock];
+}
+
 #pragma mark - interface
 - (BOOL)readManDownDetection {
     __block BOOL success = NO;
     [MKBGInterface bg_readManDownDetectionWithSucBlock:^(id  _Nonnull returnData) {
         success = YES;
         self.isOn = [returnData[@"result"][@"isOn"] boolValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configManDownDetection {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configManDownDetectionStatus:self.isOn sucBlock:^{
+        success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {
         dispatch_semaphore_signal(self.semaphore);

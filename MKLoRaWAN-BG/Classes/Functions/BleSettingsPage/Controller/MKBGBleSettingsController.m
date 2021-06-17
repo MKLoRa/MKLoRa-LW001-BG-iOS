@@ -22,8 +22,6 @@
 #import "MKTextSwitchCell.h"
 #import "MKNormalTextCell.h"
 
-#import "MKBGInterface+MKBGConfig.h"
-
 #import "MKBGBleSettingsDataModel.h"
 
 #import "MKBGBroadcastSettingsController.h"
@@ -47,12 +45,17 @@ mk_textSwitchCellDelegate>
 
 @property (nonatomic, strong)MKBGBleSettingsDataModel *dataModel;
 
+@property (nonatomic, strong)UIAlertController *alertView;
+
 @end
 
 @implementation MKBGBleSettingsController
 
 - (void)dealloc {
     NSLog(@"MKBGBleSettingsController销毁");
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"mk_bg_settingPageNeedDismissAlert"
+                                                  object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -66,6 +69,10 @@ mk_textSwitchCellDelegate>
     [super viewDidLoad];
     [self loadSubViews];
     [self loadSectionDatas];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dismissAlert)
+                                                 name:@"mk_bg_settingPageNeedDismissAlert"
+                                               object:nil];
 }
 
 #pragma mark - super method
@@ -175,34 +182,23 @@ mk_textSwitchCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Beacon  Mode
-        [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-        [MKBGInterface bg_configBeaconModeStatus:isOn sucBlock:^{
-            [[MKHudManager share] hide];
-            MKTextSwitchCellModel *cellModel = self.section1List[0];
-            cellModel.isOn = isOn;
-            self.dataModel.beaconModeIsOn = isOn;
-            [self.tableView reloadData];
-        } failedBlock:^(NSError * _Nonnull error) {
-            [[MKHudManager share] hide];
-            [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-            [self.tableView reloadData];
-        }];
+        MKTextSwitchCellModel *cellModel = self.section1List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.beaconModeIsOn = isOn;
+        [self.tableView reloadData];
         return;
     }
     if (index == 1) {
         //Connectable
-        [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-        [MKBGInterface bg_configDeviceConnectable:isOn sucBlock:^{
-            [[MKHudManager share] hide];
-            MKTextSwitchCellModel *cellModel = self.section2List[0];
-            cellModel.isOn = isOn;
-            self.dataModel.connectable = isOn;
-        } failedBlock:^(NSError * _Nonnull error) {
-            [[MKHudManager share] hide];
-            [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-            [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
-        }];
+        [self configConnectEnable:isOn];
         return;
+    }
+}
+
+#pragma mark - note
+- (void)dismissAlert {
+    if (self.alertView && (self.presentedViewController == self.alertView)) {
+        [self.alertView dismissViewControllerAnimated:NO completion:nil];
     }
 }
 
@@ -218,6 +214,29 @@ mk_textSwitchCellDelegate>
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
     }];
+}
+
+- (void)configConnectEnable:(BOOL)connect{
+    NSString *msg = (connect ? @"Are you sure to make the device connectable?" : @"Are you sure to make the device unconnectable?");
+    self.alertView = nil;
+    self.alertView = [UIAlertController alertControllerWithTitle:@"Warning!"
+                                                         message:msg
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+    @weakify(self);
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+    [self.alertView addAction:cancelAction];
+    UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        MKTextSwitchCellModel *cellModel = self.section2List[0];
+        cellModel.isOn = connect;
+        self.dataModel.connectable = connect;
+    }];
+    [self.alertView addAction:moreAction];
+    
+    [self presentViewController:self.alertView animated:YES completion:nil];
 }
 
 #pragma mark - updateCellModels

@@ -15,7 +15,6 @@
 #import "MKMacroDefines.h"
 #import "MKBaseTableView.h"
 #import "UIView+MKAdd.h"
-#import "UITableView+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
@@ -24,8 +23,6 @@
 #import "MKTableSectionLineHeader.h"
 
 #import "MKBGNormalAdopter.h"
-
-#import "MKBGInterface+MKBGConfig.h"
 
 #import "MKBGMotionModeModel.h"
 
@@ -271,47 +268,23 @@ MKTextButtonCellDelegate>
                                 value:(NSString *)value {
     if (index == 0) {
         //Pos-Strategy On Start
-        [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-        [MKBGInterface bg_configMotionModePosStrategyOnStart:dataListIndex sucBlock:^{
-            [[MKHudManager share] hide];
-            MKTextButtonCellModel *cellModel = self.section2List[0];
-            cellModel.dataListIndex = dataListIndex;
-            self.dataModel.posStrategyOnStart = dataListIndex;
-        } failedBlock:^(NSError * _Nonnull error) {
-            [[MKHudManager share] hide];
-            [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-            [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
-        }];
+        MKTextButtonCellModel *cellModel = self.section2List[0];
+        cellModel.dataListIndex = dataListIndex;
+        self.dataModel.posStrategyOnStart = dataListIndex;
         return;
     }
     if (index == 1) {
         //Pos-Strategy In Trip
-        [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-        [MKBGInterface bg_configMotionModePosStrategyInTrip:dataListIndex sucBlock:^{
-            [[MKHudManager share] hide];
-            MKTextButtonCellModel *cellModel = self.section5List[0];
-            cellModel.dataListIndex = dataListIndex;
-            self.dataModel.posStrategyInTrip = dataListIndex;
-        } failedBlock:^(NSError * _Nonnull error) {
-            [[MKHudManager share] hide];
-            [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-            [self.tableView mk_reloadSection:5 withRowAnimation:UITableViewRowAnimationNone];
-        }];
+        MKTextButtonCellModel *cellModel = self.section5List[0];
+        cellModel.dataListIndex = dataListIndex;
+        self.dataModel.posStrategyInTrip = dataListIndex;
         return;
     }
     if (index == 2) {
         //Pos-Strategy On End
-        [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-        [MKBGInterface bg_configMotionModePosStrategyOnEnd:dataListIndex sucBlock:^{
-            [[MKHudManager share] hide];
-            MKTextButtonCellModel *cellModel = self.section8List[0];
-            cellModel.dataListIndex = dataListIndex;
-            self.dataModel.posStrategyOnEnd = dataListIndex;
-        } failedBlock:^(NSError * _Nonnull error) {
-            [[MKHudManager share] hide];
-            [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-            [self.tableView mk_reloadSection:8 withRowAnimation:UITableViewRowAnimationNone];
-        }];
+        MKTextButtonCellModel *cellModel = self.section8List[0];
+        cellModel.dataListIndex = dataListIndex;
+        self.dataModel.posStrategyOnEnd = dataListIndex;
         return;
     }
 }
@@ -332,47 +305,27 @@ MKTextButtonCellDelegate>
 }
 
 - (void)configMotionModeEvents:(BOOL)isOn index:(NSInteger)index {
-    
-    MKBGMotionModeEventsModel *eventModel = [[MKBGMotionModeEventsModel alloc] init];
-    eventModel.notifyEventOnStart = self.dataModel.notifyEventOnStart;
-    eventModel.fixOnStart = self.dataModel.fixOnStart;
-    eventModel.notifyEventInTrip = self.dataModel.notifyEventInTrip;
-    eventModel.fixInTrip = self.dataModel.fixInTrip;
-    eventModel.notifyEventOnEnd = self.dataModel.notifyEventOnEnd;
-    eventModel.fixOnEnd = self.dataModel.fixOnEnd;
-    
     if (index == 0) {
         //Fix On Start
-        eventModel.fixOnStart = isOn;
+        self.dataModel.fixOnStart = isOn;
     }else if (index == 1) {
         //Fix In Trip
-        eventModel.fixInTrip = isOn;
+        self.dataModel.fixInTrip = isOn;
     }else if (index == 2) {
         //Fix On End
-        eventModel.fixOnEnd = isOn;
+        self.dataModel.fixOnEnd = isOn;
     }else if (index == 3) {
         //Notify Event On Start
-        eventModel.notifyEventOnStart = isOn;
+        self.dataModel.notifyEventOnStart = isOn;
     }else if (index == 4) {
         //Notify Event In Trip
-        eventModel.notifyEventInTrip = isOn;
+        self.dataModel.notifyEventInTrip = isOn;
     }else if (index == 5) {
         //Notify Event On End
-        eventModel.notifyEventOnEnd = isOn;
+        self.dataModel.notifyEventOnEnd = isOn;
     }
-    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    @weakify(self);
-    [self.dataModel configMotionModeEvents:eventModel sucBlock:^{
-        @strongify(self);
-        [[MKHudManager share] hide];
-        MKTextSwitchCellModel *cellModel = [self fetchEventModel:index];
-        cellModel.isOn = isOn;
-    } failedBlock:^(NSError * _Nonnull error) {
-        @strongify(self);
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-        [self.tableView mk_reloadSection:[self fetchEventReloadSection:index] withRowAnimation:UITableViewRowAnimationNone];
-    }];
+    MKTextSwitchCellModel *cellModel = [self fetchEventModel:index];
+    cellModel.isOn = isOn;
 }
 
 #pragma mark - Private method
@@ -398,22 +351,6 @@ MKTextButtonCellDelegate>
         return self.section9List[1];
     }
     return self.section9List[2];
-}
-
-- (NSInteger)fetchEventReloadSection:(NSInteger)index {
-    if (index == 0) {
-        //Fix On Start
-        return 0;
-    }
-    if (index == 1) {
-        //Fix In Trip
-        return 3;
-    }
-    if (index == 2) {
-        //Fix On End
-        return 6;
-    }
-    return 9;
 }
 
 #pragma mark - loadSections
