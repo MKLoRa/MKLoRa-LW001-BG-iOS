@@ -56,6 +56,14 @@ NS_ASSUME_NONNULL_BEGIN
                  sucBlock:(void (^)(void))sucBlock
               failedBlock:(void (^)(NSError *error))failedBlock;
 
+/// Default Operating mode after the device is repowered.
+/// @param mode mode
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configRepoweredDefaultMode:(mk_bg_repoweredDefaultMode)mode
+                             sucBlock:(void (^)(void))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock;
+
 /// Configure the heartbeat packet interval of the device.
 /// @param interval 300s~86400s
 /// @param sucBlock Success callback
@@ -64,6 +72,22 @@ NS_ASSUME_NONNULL_BEGIN
                           sucBlock:(void (^)(void))sucBlock
                        failedBlock:(void (^)(NSError *error))failedBlock;
 
+/// Configure Off By Magnet Status.
+/// @param isOn isOn
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configOffByMagnetStatus:(BOOL)isOn
+                          sucBlock:(void (^)(void))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Shutdown Payload Status.
+/// @param isOn isOn
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configShutdownPayloadStatus:(BOOL)isOn
+                              sucBlock:(void (^)(void))sucBlock
+                           failedBlock:(void (^)(NSError *error))failedBlock;
+
 ///  Whether to enable positioning when the device fails to connect to the Lorawan network.
 /// @param isOn isOn
 /// @param sucBlock Success callback
@@ -71,6 +95,24 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)bg_configOfflineFix:(BOOL)isOn
                    sucBlock:(void (^)(void))sucBlock
                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure low battery related parameters.
+/// @param isOn Whether low battery can trigger the device heartbeat packet.
+/// @param prompt How much battery is below that can trigger a low battery alarm.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configLowPowerPayload:(BOOL)isOn
+                          prompt:(mk_bg_lowPowerPrompt)prompt
+                        sucBlock:(void (^)(void))sucBlock
+                     failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure Indicator Settings.
+/// @param protocol protocol.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configIndicatorSettings:(id <mk_bg_indicatorSettingsProtocol>)protocol
+                          sucBlock:(void (^)(void))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock;
 
 #pragma mark ****************************************模式相关参数************************************************
 

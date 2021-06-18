@@ -94,6 +94,14 @@
                  failedBlock:failedBlock];
 }
 
++ (void)bg_readRepoweredDefaultModeWithSucBlock:(void (^)(id returnData))sucBlock
+                                    failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadRepoweredDefaultModeOperation
+                     cmdFlag:@"07"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
 + (void)bg_readDeviceHeartbeatIntervalWithSucBlock:(void (^)(id returnData))sucBlock
                                        failedBlock:(void (^)(NSError *error))failedBlock {
     [self readDataWithTaskID:mk_bg_taskReadDeviceHeartbeatIntervalOperation
@@ -102,10 +110,74 @@
                  failedBlock:failedBlock];
 }
 
++ (void)bg_readOffByMagnetStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadOffByMagnetStatusOperation
+                     cmdFlag:@"09"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readShutdownPayloadStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                     failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadShutdownPayloadStatusOperation
+                     cmdFlag:@"0a"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
 + (void)bg_readOfflineFixStatusWithSucBlock:(void (^)(id returnData))sucBlock
                                 failedBlock:(void (^)(NSError *error))failedBlock {
     [self readDataWithTaskID:mk_bg_taskReadOfflineFixStatusOperation
                      cmdFlag:@"0b"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readLowPowerParamsWithSucBlock:(void (^)(id returnData))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadLowPowerParamsOperation
+                     cmdFlag:@"0c"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readIndicatorSettingsWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadIndicatorSettingsOperation
+                     cmdFlag:@"0d"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readTemperatureOfChipWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadTemperatureOfChipOperation
+                     cmdFlag:@"0e"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readCurrentSystemTimeZoneTimeWithSucBlock:(void (^)(id returnData))sucBlock
+                                         failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadCurrentSystemTimeZoneTimeOperation
+                     cmdFlag:@"0f"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readBatteryLevelWithSucBlock:(void (^)(id returnData))sucBlock
+                            failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadBatteryLevelOperation
+                     cmdFlag:@"11"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readMacAddressWithSucBlock:(void (^)(id returnData))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadMacAddressOperation
+                     cmdFlag:@"12"
                     sucBlock:sucBlock
                  failedBlock:failedBlock];
 }

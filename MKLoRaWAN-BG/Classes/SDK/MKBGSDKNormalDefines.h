@@ -31,6 +31,16 @@ typedef NS_ENUM(NSInteger, mk_bg_deviceMode) {
     mk_bg_deviceMode_motionMode,          //Motion Mode
 };
 
+typedef NS_ENUM(NSInteger, mk_bg_repoweredDefaultMode) {
+    mk_bg_repoweredDefaultMode_offMode,             //Off mode
+    mk_bg_repoweredDefaultMode_revertToLastMode,    //Revert To Last Mode
+};
+
+typedef NS_ENUM(NSInteger, mk_bg_lowPowerPrompt) {
+    mk_bg_lowPowerPrompt_fivePercent,
+    mk_bg_lowPowerPrompt_tenPercent
+};
+
 typedef NS_ENUM(NSInteger, mk_bg_positioningStrategy) {
     mk_bg_positioningStrategy_wifi,
     mk_bg_positioningStrategy_ble,
@@ -162,6 +172,22 @@ typedef NS_ENUM(NSInteger, mk_bg_txPower) {
 @property (nonatomic, assign)BOOL notifyEventOnEnd;
 
 @property (nonatomic, assign)BOOL fixOnEnd;
+
+@end
+
+@protocol mk_bg_indicatorSettingsProtocol <NSObject>
+
+@property (nonatomic, assign)BOOL Tamper;
+@property (nonatomic, assign)BOOL LowPower;
+@property (nonatomic, assign)BOOL InBluetoothFix;
+@property (nonatomic, assign)BOOL BTFixSuccessful;
+@property (nonatomic, assign)BOOL FailToBTFix;
+@property (nonatomic, assign)BOOL InGPSFix;
+@property (nonatomic, assign)BOOL GPSFixsuccessful;
+@property (nonatomic, assign)BOOL FailToGPSFix;
+@property (nonatomic, assign)BOOL InWIFIFix;
+@property (nonatomic, assign)BOOL WIFIFixSuccessful;
+@property (nonatomic, assign)BOOL FailToWIFIFix;
 
 @end
 

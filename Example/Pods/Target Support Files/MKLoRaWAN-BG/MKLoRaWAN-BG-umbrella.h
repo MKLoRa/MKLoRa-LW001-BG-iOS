@@ -67,6 +67,8 @@
 #import "MKBGTimingModeModel.h"
 #import "MKBGReportTimePointCell.h"
 #import "MKBGTimingModeAddCell.h"
+#import "MKBGUpdateController.h"
+#import "MKBGDFUModule.h"
 #import "MKBGVibrationController.h"
 #import "MKBGVibrationDataModel.h"
 #import "MKBGWifiPositionController.h"

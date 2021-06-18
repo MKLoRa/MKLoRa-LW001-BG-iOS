@@ -280,6 +280,35 @@
     }
 }
 
++ (NSDictionary *)fetchIndicatorSettings:(NSString *)content {
+    NSString *binaryHigh = [MKBLEBaseSDKAdopter binaryByhex:[content substringWithRange:NSMakeRange(0, 2)]];
+    NSString *binaryLow = [MKBLEBaseSDKAdopter binaryByhex:[content substringWithRange:NSMakeRange(2, 2)]];
+    BOOL Tamper = [[binaryLow substringWithRange:NSMakeRange(7, 1)] isEqualToString:@"1"];
+    BOOL LowPower = [[binaryLow substringWithRange:NSMakeRange(6, 1)] isEqualToString:@"1"];
+    BOOL InBluetoothFix = [[binaryLow substringWithRange:NSMakeRange(5, 1)] isEqualToString:@"1"];
+    BOOL BTFixSuccessful = [[binaryLow substringWithRange:NSMakeRange(4, 1)] isEqualToString:@"1"];
+    BOOL FailToBTFix = [[binaryLow substringWithRange:NSMakeRange(3, 1)] isEqualToString:@"1"];
+    BOOL InGPSFix = [[binaryLow substringWithRange:NSMakeRange(2, 1)] isEqualToString:@"1"];
+    BOOL GPSFixsuccessful = [[binaryLow substringWithRange:NSMakeRange(1, 1)] isEqualToString:@"1"];
+    BOOL FailToGPSFix = [[binaryLow substringWithRange:NSMakeRange(0, 1)] isEqualToString:@"1"];
+    BOOL InWIFIFix = [[binaryHigh substringWithRange:NSMakeRange(7, 1)] isEqualToString:@"1"];
+    BOOL WIFIFixSuccessful = [[binaryHigh substringWithRange:NSMakeRange(6, 1)] isEqualToString:@"1"];
+    BOOL FailToWIFIFix = [[binaryHigh substringWithRange:NSMakeRange(5, 1)] isEqualToString:@"1"];
+    return @{
+        @"Tamper":@(Tamper),
+        @"LowPower":@(LowPower),
+        @"InBluetoothFix":@(InBluetoothFix),
+        @"BTFixSuccessful":@(BTFixSuccessful),
+        @"FailToBTFix":@(FailToBTFix),
+        @"InGPSFix":@(InGPSFix),
+        @"GPSFixsuccessful":@(GPSFixsuccessful),
+        @"FailToGPSFix":@(FailToGPSFix),
+        @"InWIFIFix":@(InWIFIFix),
+        @"WIFIFixSuccessful":@(WIFIFixSuccessful),
+        @"FailToWIFIFix":@(FailToWIFIFix),
+    };
+}
+
 #pragma mark - private method
 + (NSArray *)dataTypeList {
     return @[@"01",@"02",@"03",@"04",@"05",

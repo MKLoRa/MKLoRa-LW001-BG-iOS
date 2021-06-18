@@ -8,31 +8,27 @@
 
 #import <Foundation/Foundation.h>
 
+#import "MKBGSDKNormalDefines.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MKBGIndicatorSettingsModel : NSObject
+@interface MKBGIndicatorSettingsModel : NSObject<mk_bg_indicatorSettingsProtocol>
 
-@property (nonatomic, assign)BOOL tamperIsOn;
+@property (nonatomic, assign)BOOL Tamper;
+@property (nonatomic, assign)BOOL LowPower;
+@property (nonatomic, assign)BOOL InBluetoothFix;
+@property (nonatomic, assign)BOOL BTFixSuccessful;
+@property (nonatomic, assign)BOOL FailToBTFix;
+@property (nonatomic, assign)BOOL InGPSFix;
+@property (nonatomic, assign)BOOL GPSFixsuccessful;
+@property (nonatomic, assign)BOOL FailToGPSFix;
+@property (nonatomic, assign)BOOL InWIFIFix;
+@property (nonatomic, assign)BOOL WIFIFixSuccessful;
+@property (nonatomic, assign)BOOL FailToWIFIFix;
 
-@property (nonatomic, assign)BOOL lowPowerIsOn;
+- (void)readWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
 
-@property (nonatomic, assign)BOOL inWifiFixIsOn;
-
-@property (nonatomic, assign)BOOL wifiFixSuccessfulIsOn;
-
-@property (nonatomic, assign)BOOL failToWifiFixIsOn;
-
-@property (nonatomic, assign)BOOL InBleFixIsOn;
-
-@property (nonatomic, assign)BOOL BTFixSuccessfulIsOn;
-
-@property (nonatomic, assign)BOOL failToBTFixIsOn;
-
-@property (nonatomic, assign)BOOL inGpsFixIsOn;
-
-@property (nonatomic, assign)BOOL gpsFixSuccessfulIsOn;
-
-@property (nonatomic, assign)BOOL failToGpsFixIsOn;
+- (void)configWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
 
 @end
 

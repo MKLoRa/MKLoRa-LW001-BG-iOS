@@ -23,6 +23,10 @@
 
 #import "MKBGNormalAdopter.h"
 
+#import "MKBGDeviceInfoModel.h"
+
+#import "MKBGUpdateController.h"
+
 @interface MKBGDeviceInfoController ()<UITableViewDelegate,
 UITableViewDataSource,
 MKBGTextButtonCellDelegate>
@@ -41,18 +45,38 @@ MKBGTextButtonCellDelegate>
 
 @property (nonatomic, strong)NSMutableArray *headerList;
 
+@property (nonatomic, strong)MKBGDeviceInfoModel *dataModel;
+
+@property (nonatomic, assign)BOOL onlyBattery;
+
+/// 用户进入dfu页面开启升级模式，返回该页面，不需要读取任何的数据
+@property (nonatomic, assign)BOOL isDfuModel;
+
 @end
 
 @implementation MKBGDeviceInfoController
 
 - (void)dealloc {
     NSLog(@"MKBGDeviceInfoController销毁");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (!self.isDfuModel) {
+        //用户进入dfu页面开启升级模式，返回该页面，不需要读取任何的数据
+        [self readDataFromDevice];
+    }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
     [self loadSectionDatas];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(deviceStartDFUProcess)
+                                                 name:@"mk_bg_startDfuProcessNotification"
+                                               object:nil];
 }
 
 #pragma mark - UITableViewDelegate
@@ -127,9 +151,69 @@ MKBGTextButtonCellDelegate>
 - (void)bg_textButtonCell_buttonAction:(NSInteger)index {
     if (index == 0) {
         //DFU
-        NSLog(@"DFU");
+        MKBGUpdateController *vc = [[MKBGUpdateController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
         return;
     }
+}
+
+#pragma mark - note
+- (void)deviceStartDFUProcess {
+    self.isDfuModel = YES;
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel startLoadSystemInformation:self.onlyBattery sucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        if (!self.onlyBattery) {
+            self.onlyBattery = YES;
+        }
+        [self updateCellDatas];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)updateCellDatas {
+    if (ValidStr(self.dataModel.software)) {
+        MKNormalTextCellModel *softwareModel = self.section0List[0];
+        softwareModel.rightMsg = self.dataModel.software;
+    }
+    if (ValidStr(self.dataModel.firmware)) {
+        MKBGTextButtonCellModel *firmwareModel = self.section1List[0];
+        firmwareModel.rightMsg = self.dataModel.firmware;
+    }
+    if (ValidStr(self.dataModel.hardware)) {
+        MKNormalTextCellModel *hardware = self.section2List[0];
+        hardware.rightMsg = self.dataModel.hardware;
+    }
+    
+    if (ValidStr(self.dataModel.battery)) {
+        MKNormalTextCellModel *soc = self.section3List[0];
+        NSString *mvValue = [NSString stringWithFormat:@"%.3f",[self.dataModel.battery integerValue] * 0.001];
+        soc.rightMsg = [NSString stringWithFormat:@"%@%@",mvValue,@"V"];
+    }
+    
+    if (ValidStr(self.dataModel.macAddress)) {
+        MKNormalTextCellModel *mac = self.section4List[0];
+        mac.rightMsg = self.dataModel.macAddress;
+    }
+    if (ValidStr(self.dataModel.productMode)) {
+        MKNormalTextCellModel *produceModel = self.section4List[1];
+        produceModel.rightMsg = self.dataModel.productMode;
+    }
+    
+    if (ValidStr(self.dataModel.manu)) {
+        MKNormalTextCellModel *manuModel = self.section4List[2];
+        manuModel.rightMsg = self.dataModel.manu;
+    }
+    [self.tableView reloadData];
 }
 
 #pragma mark - loadSectionDatas
@@ -247,6 +331,13 @@ MKBGTextButtonCellDelegate>
         [_headerList addObjectsFromArray:[MKBGNormalAdopter loadSectionHeaderListWithNumber:5]];
     }
     return _headerList;
+}
+
+- (MKBGDeviceInfoModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKBGDeviceInfoModel alloc] init];
+    }
+    return _dataModel;
 }
 
 @end

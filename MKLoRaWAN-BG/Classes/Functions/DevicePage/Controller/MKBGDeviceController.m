@@ -24,6 +24,10 @@
 
 #import "MKBGNormalAdopter.h"
 
+#import "MKBGInterface+MKBGConfig.h"
+
+#import "MKBGDevicePageModel.h"
+
 #import "MKBGIndicatorSettingsController.h"
 #import "MKBGOnOffSettingsController.h"
 #import "MKBGDeviceInfoController.h"
@@ -55,18 +59,41 @@ mk_textSwitchCellDelegate>
 
 @property (nonatomic, strong)NSMutableArray *headerList;
 
+@property (nonatomic, strong)MKBGDevicePageModel *dataModel;
+
+@property (nonatomic, strong)UITextField *passwordTextField;
+
+@property (nonatomic, strong)UITextField *confirmTextField;
+
+/// 当前present的alert
+@property (nonatomic, strong)UIAlertController *currentAlert;
+
+@property (nonatomic, copy)NSString *passwordAsciiStr;
+
+@property (nonatomic, copy)NSString *confirmAsciiStr;
+
 @end
 
 @implementation MKBGDeviceController
 
 - (void)dealloc {
     NSLog(@"MKBGDeviceController销毁");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self readDataFromDevice];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
     [self loadSectionDatas];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dismissAlert)
+                                                 name:@"mk_bg_settingPageNeedDismissAlert"
+                                               object:nil];
 }
 
 #pragma mark - super method
@@ -113,6 +140,16 @@ mk_textSwitchCellDelegate>
         //Device Info
         MKBGDeviceInfoController *vc = [[MKBGDeviceInfoController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    if (indexPath.section == 7 && indexPath.row == 0) {
+        //恢复出厂设置
+        [self factoryReset];
+        return;
+    }
+    if (indexPath.section == 7 && indexPath.row == 1) {
+        //修改密码
+        [self configPassword];
         return;
     }
 }
@@ -210,16 +247,12 @@ mk_textSwitchCellDelegate>
                                 value:(NSString *)value {
     if (index == 0) {
         //Current Time Zone
-        MKTextButtonCellModel *cellModel = self.section2List[0];
-        cellModel.dataListIndex = dataListIndex;
+        [self configCurrentTimeZone:dataListIndex];
         return;
     }
     if (index == 1) {
         //Low Power Prompt
-        MKTextButtonCellModel *cellModel = self.section5List[0];
-        cellModel.dataListIndex = dataListIndex;
-        cellModel.noteMsg = [NSString stringWithFormat:@"*When the battery is less than or equal to %@, the red LED will flashe once every 30 seconds.",value];
-        [self.tableView mk_reloadRow:0 inSection:5 withRowAnimation:UITableViewRowAnimationNone];
+        [self configLowPowerPrompt:dataListIndex];
         return;
     }
 }
@@ -231,22 +264,285 @@ mk_textSwitchCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         //Shutdown Payload
-        MKTextSwitchCellModel *cellModel = self.section3List[0];
-        cellModel.isOn = isOn;
+        [self configShutdownPayload:isOn];
         return;
     }
     if (index == 1) {
         //Low-power Payload
-        MKTextSwitchCellModel *cellModel = self.section3List[1];
-        cellModel.isOn = isOn;
+        [self configLowPowerPayload:isOn];
         return;
     }
     if (index == 2) {
         //Power Off
-        MKTextSwitchCellModel *cellModel = self.section8List[0];
-        cellModel.isOn = isOn;
+        [self powerOff];
         return;
     }
+}
+
+#pragma mark - note
+- (void)dismissAlert {
+    if (self.currentAlert && (self.presentedViewController == self.currentAlert)) {
+        [self.currentAlert dismissViewControllerAnimated:NO completion:nil];
+    }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readWithSucBlock:^{
+        [[MKHudManager share] hide];
+        [self updateCellStates];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configCurrentTimeZone:(NSInteger)index {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configTimeZone:(index - 12) sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextButtonCellModel *cellModel = self.section2List[0];
+        cellModel.dataListIndex = index;
+        self.dataModel.currentTimeZone = index;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+
+- (void)configShutdownPayload:(BOOL)isOn {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configShutdownPayloadStatus:isOn sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextSwitchCellModel *cellModel = self.section3List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.shutdownPayload = isOn;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+
+- (void)configLowPowerPrompt:(NSInteger)prompt {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configLowPowerPayload:self.dataModel.lowPowerPayload prompt:prompt sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextButtonCellModel *cellModel = self.section5List[0];
+        cellModel.dataListIndex = prompt;
+        cellModel.noteMsg = [NSString stringWithFormat:@"*When the battery is less than or equal to %@, the red LED will flashe once every 30 seconds.",cellModel.dataList[prompt]];
+        self.dataModel.prompt = prompt;
+        [self.tableView mk_reloadRow:0 inSection:5 withRowAnimation:UITableViewRowAnimationNone];
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadRow:0 inSection:5 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+
+- (void)configLowPowerPayload:(BOOL)isOn {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configLowPowerPayload:isOn prompt:self.dataModel.prompt sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextSwitchCellModel *cellModel = self.section3List[1];
+        cellModel.isOn = isOn;
+        self.dataModel.lowPowerPayload = isOn;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadRow:1 inSection:3 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+
+- (void)updateCellStates {
+    MKTextButtonCellModel *timeZoneModel = self.section2List[0];
+    timeZoneModel.dataListIndex = self.dataModel.currentTimeZone;
+    
+    MKTextSwitchCellModel *shutdownModel = self.section3List[0];
+    shutdownModel.isOn = self.dataModel.shutdownPayload;
+    
+    MKTextSwitchCellModel *lowPowerPayloadModel = self.section3List[1];
+    lowPowerPayloadModel.isOn = self.dataModel.lowPowerPayload;
+    
+    MKTextButtonCellModel *promptModel = self.section5List[0];
+    promptModel.dataListIndex = self.dataModel.prompt;
+    
+    [self.tableView reloadData];
+}
+
+#pragma mark - 恢复出厂设置
+
+- (void)factoryReset{
+    NSString *msg = @"After factory reset,all the data will be reseted to the factory values.";
+    self.currentAlert = nil;
+    self.currentAlert = [UIAlertController alertControllerWithTitle:@"Factory Reset"
+                                                            message:msg
+                                                     preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [self.currentAlert addAction:cancelAction];
+    @weakify(self);
+    UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        [self sendResetCommandToDevice];
+    }];
+    [self.currentAlert addAction:moreAction];
+    
+    [self presentViewController:self.currentAlert animated:YES completion:nil];
+}
+
+- (void)sendResetCommandToDevice{
+    [[MKHudManager share] showHUDWithTitle:@"Setting..."
+                                     inView:self.view
+                              isPenetration:NO];
+    [MKBGInterface bg_factoryResetWithSucBlock:^{
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Factory reset successfully!Please reconnect the device."];
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+#pragma mark - 设置密码
+- (void)configPassword{
+    @weakify(self);
+    self.currentAlert = nil;
+    NSString *msg = @"Note:The password should be 8 characters.";
+    self.currentAlert = [UIAlertController alertControllerWithTitle:@"Change Password"
+                                                            message:msg
+                                                     preferredStyle:UIAlertControllerStyleAlert];
+    [self.currentAlert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        @strongify(self);
+        self.passwordTextField = nil;
+        self.passwordTextField = textField;
+        self.passwordAsciiStr = @"";
+        [self.passwordTextField setPlaceholder:@"Enter new password"];
+        [self.passwordTextField addTarget:self
+                                   action:@selector(passwordTextFieldValueChanged:)
+                         forControlEvents:UIControlEventEditingChanged];
+    }];
+    [self.currentAlert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        @strongify(self);
+        self.confirmTextField = nil;
+        self.confirmTextField = textField;
+        self.confirmAsciiStr = @"";
+        [self.confirmTextField setPlaceholder:@"Enter new password again"];
+        [self.confirmTextField addTarget:self
+                                  action:@selector(passwordTextFieldValueChanged:)
+                        forControlEvents:UIControlEventEditingChanged];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [self.currentAlert addAction:cancelAction];
+    UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        [self setPasswordToDevice];
+    }];
+    [self.currentAlert addAction:moreAction];
+    
+    [self presentViewController:self.currentAlert animated:YES completion:nil];
+}
+
+- (void)passwordTextFieldValueChanged:(UITextField *)textField{
+    NSString *inputValue = textField.text;
+    if (!ValidStr(inputValue)) {
+        textField.text = @"";
+        if (textField == self.passwordTextField) {
+            self.passwordAsciiStr = @"";
+        }else if (textField == self.confirmTextField) {
+            self.confirmAsciiStr = @"";
+        }
+        return;
+    }
+    NSInteger strLen = inputValue.length;
+    NSInteger dataLen = [inputValue dataUsingEncoding:NSUTF8StringEncoding].length;
+    
+    NSString *currentStr = @"";
+    if (textField == self.passwordTextField) {
+        currentStr = self.passwordAsciiStr;
+    }else {
+        currentStr = self.confirmAsciiStr;
+    }
+    if (dataLen == strLen) {
+        //当前输入是ascii字符
+        currentStr = inputValue;
+    }
+    if (currentStr.length > 8) {
+        textField.text = [currentStr substringToIndex:8];
+        if (textField == self.passwordTextField) {
+            self.passwordAsciiStr = [currentStr substringToIndex:8];
+        }else {
+            self.confirmAsciiStr = [currentStr substringToIndex:8];
+        }
+    }else {
+        textField.text = currentStr;
+        if (textField == self.passwordTextField) {
+            self.passwordAsciiStr = currentStr;
+        }else {
+            self.confirmAsciiStr = currentStr;
+        }
+    }
+}
+
+- (void)setPasswordToDevice{
+    NSString *password = self.passwordTextField.text;
+    NSString *confirmpassword = self.confirmTextField.text;
+    if (!ValidStr(password) || !ValidStr(confirmpassword) || password.length != 8 || confirmpassword.length != 8) {
+        [self.view showCentralToast:@"The password should be 8 characters.Please try again."];
+        return;
+    }
+    if (![password isEqualToString:confirmpassword]) {
+        [self.view showCentralToast:@"Password do not match! Please try again."];
+        return;
+    }
+    [[MKHudManager share] showHUDWithTitle:@"Setting..."
+                                     inView:self.view
+                              isPenetration:NO];
+    [MKBGInterface bg_configPassword:password sucBlock:^{
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+#pragma mark - 开关机
+- (void)powerOff{
+    NSString *msg = @"Are you sure to turn off the device? Please make sure the device has a button to turn on!";
+    self.currentAlert = nil;
+    self.currentAlert = [UIAlertController alertControllerWithTitle:@"Warning!"
+                                                            message:msg
+                                                     preferredStyle:UIAlertControllerStyleAlert];
+    @weakify(self);
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        [self.tableView mk_reloadSection:8 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+    [self.currentAlert addAction:cancelAction];
+    UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        [self commandPowerOff];
+    }];
+    [self.currentAlert addAction:moreAction];
+    
+    [self presentViewController:self.currentAlert animated:YES completion:nil];
+}
+
+- (void)commandPowerOff{
+    [[MKHudManager share] showHUDWithTitle:@"Setting..."
+                                     inView:self.view
+                              isPenetration:NO];
+    [MKBGInterface bg_configWorkMode:mk_bg_deviceMode_offMode sucBlock:^{
+        [[MKHudManager share] hide];
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:8 withRowAnimation:UITableViewRowAnimationNone];
+    }];
 }
 
 #pragma mark - loadSections
@@ -269,8 +565,6 @@ mk_textSwitchCellDelegate>
     cellModel.showRightIcon = YES;
     cellModel.leftMsg = @"Local Data Sync";
     [self.section0List addObject:cellModel];
-    
-    
 }
 
 - (void)loadSection1Datas {
@@ -291,7 +585,6 @@ mk_textSwitchCellDelegate>
                            @"UTC+4",@"UTC+5",@"UTC+6",@"UTC+7",
                            @"UTC+8",@"UTC+9",@"UTC+10",@"UTC+11",
                            @"UTC+12"];
-    cellModel.dataListIndex = 2;
     [self.section2List addObject:cellModel];
 }
 
@@ -443,6 +736,13 @@ mk_textSwitchCellDelegate>
         [_headerList addObjectsFromArray:[MKBGNormalAdopter loadSectionHeaderListWithNumber:9]];
     }
     return _headerList;
+}
+
+- (MKBGDevicePageModel *)dataModel {
+    if (!_dataModel) {
+        _dataModel = [[MKBGDevicePageModel alloc] init];
+    }
+    return _dataModel;
 }
 
 @end

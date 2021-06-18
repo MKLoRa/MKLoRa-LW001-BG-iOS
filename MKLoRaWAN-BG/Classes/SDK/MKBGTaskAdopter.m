@@ -119,6 +119,13 @@
             @"mode":mode,
         };
         operationID = mk_bg_taskReadWorkModeOperation;
+    }else if ([cmd isEqualToString:@"07"]) {
+        //读取设备上电后模式选择
+        NSString *mode = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"mode":mode,
+        };
+        operationID = mk_bg_taskReadRepoweredDefaultModeOperation;
     }else if ([cmd isEqualToString:@"08"]) {
         //读取心跳间隔
         NSString *interval = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
@@ -126,6 +133,20 @@
             @"interval":interval,
         };
         operationID = mk_bg_taskReadDeviceHeartbeatIntervalOperation;
+    }else if ([cmd isEqualToString:@"09"]) {
+        //读取磁簧开关关机功能
+        BOOL isOn = [content isEqualToString:@"01"];
+        resultDic = @{
+            @"isOn":@(isOn),
+        };
+        operationID = mk_bg_taskReadOffByMagnetStatusOperation;
+    }else if ([cmd isEqualToString:@"0a"]) {
+        //读取关机信息上报
+        BOOL isOn = [content isEqualToString:@"01"];
+        resultDic = @{
+            @"isOn":@(isOn),
+        };
+        operationID = mk_bg_taskReadShutdownPayloadStatusOperation;
     }else if ([cmd isEqualToString:@"0b"]) {
         //读取设备离线定位状态
         BOOL isOn = [content isEqualToString:@"01"];
@@ -133,6 +154,76 @@
             @"isOn":@(isOn),
         };
         operationID = mk_bg_taskReadOfflineFixStatusOperation;
+    }else if ([cmd isEqualToString:@"0c"]) {
+        //读取低电参数
+        NSString *binary = [MKBLEBaseSDKAdopter binaryByhex:content];
+        NSString *prompt = [binary substringWithRange:NSMakeRange(7, 1)];
+        BOOL isOn = [[binary substringWithRange:NSMakeRange(6, 1)] isEqualToString:@"1"];
+        resultDic = @{
+            @"prompt":prompt,
+            @"isOn":@(isOn),
+        };
+        operationID = mk_bg_taskReadLowPowerParamsOperation;
+    }else if ([cmd isEqualToString:@"0d"]) {
+        //读取指示灯功能
+        NSDictionary *indicatorSettings = [MKBGSDKDataAdopter fetchIndicatorSettings:content];
+        resultDic = @{
+            @"indicatorSettings":indicatorSettings,
+        };
+        operationID = mk_bg_taskReadIndicatorSettingsOperation;
+    }else if ([cmd isEqualToString:@"0e"]) {
+        //读取芯片温度
+        NSString *temperature = [NSString stringWithFormat:@"%ld",(long)[[MKBLEBaseSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(0, content.length)]] integerValue]];
+        resultDic = @{
+            @"temperature":temperature,
+        };
+        operationID = mk_bg_taskReadTemperatureOfChipOperation;
+        
+    }else if ([cmd isEqualToString:@"0f"]) {
+        //读取当前系统时区时间
+        NSString *year = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 4)];
+        NSString *month = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(4, 2)];
+        if (month.length == 1) {
+            month = [@"0" stringByAppendingString:month];
+        }
+        NSString *day = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(6, 2)];
+        if (day.length == 1) {
+            day = [@"0" stringByAppendingString:day];
+        }
+        NSString *hour = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(8, 2)];
+        if (hour.length == 1) {
+            hour = [@"0" stringByAppendingString:hour];
+        }
+        NSString *minute = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(10, 2)];
+        if (minute.length == 1) {
+            minute = [@"0" stringByAppendingString:minute];
+        }
+        NSString *second = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(12, 2)];
+        if (second.length == 1) {
+            second = [@"0" stringByAppendingString:second];
+        }
+        resultDic = @{
+            @"year":year,
+            @"month":month,
+            @"day":day,
+            @"hour":hour,
+            @"minute":minute,
+            @"second":second,
+        };
+        operationID = mk_bg_taskReadCurrentSystemTimeZoneTimeOperation;
+        
+    }else if ([cmd isEqualToString:@"11"]) {
+        //读取电池电量
+        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"batteryLevel":batteryPower,
+        };
+        operationID = mk_bg_taskReadBatteryLevelOperation;
+    }else if ([cmd isEqualToString:@"12"]) {
+        //读取芯片MAC
+        NSString *macAddress = [NSString stringWithFormat:@"%@:%@:%@:%@:%@:%@",[content substringWithRange:NSMakeRange(0, 2)],[content substringWithRange:NSMakeRange(2, 2)],[content substringWithRange:NSMakeRange(4, 2)],[content substringWithRange:NSMakeRange(6, 2)],[content substringWithRange:NSMakeRange(8, 2)],[content substringWithRange:NSMakeRange(10, 2)]];
+        resultDic = @{@"macAddress":[macAddress uppercaseString]};
+        operationID = mk_bg_taskReadMacAddressOperation;
     }else if ([cmd isEqualToString:@"20"]) {
         //读取定期模式定位策略
         NSString *strategy = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
@@ -881,12 +972,27 @@
     }else if ([cmd isEqualToString:@"06"]) {
         //设置工作模式
         operationID = mk_bg_taskConfigWorkModeOperation;
+    }else if ([cmd isEqualToString:@"07"]) {
+        //设置设备上电后模式
+        operationID = mk_bg_taskConfigRepoweredDefaultModeOperation;
     }else if ([cmd isEqualToString:@"08"]) {
         //设置心跳间隔
         operationID = mk_bg_taskConfigHeartbeatIntervalOperation;
+    }else if ([cmd isEqualToString:@"09"]) {
+        //设置磁簧开关关机功能
+        operationID = mk_bg_taskConfigOffByMagnetStatusOperation;
+    }else if ([cmd isEqualToString:@"0a"]) {
+        //设置关机信息上报
+        operationID = mk_bg_taskConfigShutdownPayloadStatusOperation;
     }else if ([cmd isEqualToString:@"0b"]) {
         //设置离线定位功能
         operationID = mk_bg_taskConfigOfflineFixStatusOperation;
+    }else if ([cmd isEqualToString:@"0c"]) {
+        //设置低电模式
+        operationID = mk_bg_taskConfigLowPowerPayloadOperation;
+    }else if ([cmd isEqualToString:@"0d"]) {
+        //设置指示灯功能
+        operationID = mk_bg_taskConfigIndicatorSettingsOperation;
     }else if ([cmd isEqualToString:@"20"]) {
         //设置定期模式定位策略
         operationID = mk_bg_taskConfigPeriodicModePositioningStrategyOperation;

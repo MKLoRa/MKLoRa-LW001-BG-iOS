@@ -64,6 +64,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)fetchTxPower:(mk_bg_txPower)txPower;
 
+/// 读取回来两个字节的数据转换为对应的状态标志
+/// @param content content
++ (NSDictionary *)fetchIndicatorSettings:(NSString *)content;
+
 @end
 
 NS_ASSUME_NONNULL_END

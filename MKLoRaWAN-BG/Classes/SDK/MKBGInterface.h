@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark ****************************************Device Service Information************************************************
 
-/// Read the battery level of the device
+/// Read the battery level of the device.(%)
 /// @param sucBlock Success callback
 /// @param failedBlock Failure callback
 + (void)bg_readBatteryPowerWithSucBlock:(void (^)(id returnData))sucBlock
@@ -67,10 +67,34 @@ NS_ASSUME_NONNULL_BEGIN
                         failedBlock:(void (^)(NSError *error))failedBlock;
 
 /// Read the working mode of the device.
+/*
+ @{
+ @"mode":@"2"
+ }
+ 
+ 0：Off mode
+ 1：Standby mode
+ 2：Periodic mode
+ 3：Timing mode
+ 4：Motion Mode
+ */
 /// @param sucBlock Success callback
 /// @param failedBlock Failure callback
 + (void)bg_readWorkModeWithSucBlock:(void (^)(id returnData))sucBlock
                         failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Default Operating mode after the device is repowered.
+/*
+ @{
+ @"mode":@"1"
+ }
+ 0: Off mode
+ 1:Revert to last mode
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readRepoweredDefaultModeWithSucBlock:(void (^)(id returnData))sucBlock
+                                    failedBlock:(void (^)(NSError *error))failedBlock;
 
 /// Read the heartbeat packet interval of the device.
 /// @param sucBlock Success callback
@@ -78,11 +102,59 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)bg_readDeviceHeartbeatIntervalWithSucBlock:(void (^)(id returnData))sucBlock
                                        failedBlock:(void (^)(NSError *error))failedBlock;
 
+/// Read Off By Magnet Status.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readOffByMagnetStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read Shutdown Payload Status.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readShutdownPayloadStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                     failedBlock:(void (^)(NSError *error))failedBlock;
+
 /// Whether to enable positioning when the device fails to connect to the Lorawan network.
 /// @param sucBlock Success callback
 /// @param failedBlock Failure callback
 + (void)bg_readOfflineFixStatusWithSucBlock:(void (^)(id returnData))sucBlock
                                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read low battery related parameters.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readLowPowerParamsWithSucBlock:(void (^)(id returnData))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read Indicator Settings.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readIndicatorSettingsWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the current temperature of the chip.(Unit:℃)
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readTemperatureOfChipWithSucBlock:(void (^)(id returnData))sucBlock
+                                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the current system time zone time.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readCurrentSystemTimeZoneTimeWithSucBlock:(void (^)(id returnData))sucBlock
+                                         failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read battery level.(Unit:mV)
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readBatteryLevelWithSucBlock:(void (^)(id returnData))sucBlock
+                            failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the mac address of the device.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readMacAddressWithSucBlock:(void (^)(id returnData))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock;
 
 #pragma mark ****************************************模式相关参数************************************************
 

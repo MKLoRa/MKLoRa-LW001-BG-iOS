@@ -18,8 +18,17 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadTimeZoneOperation,                  //读取时区
     mk_bg_taskReadPasswordOperation,                  //读取密码
     mk_bg_taskReadWorkModeOperation,                  //读取设备工作模式
+    mk_bg_taskReadRepoweredDefaultModeOperation,      //读取设备上电后模式
     mk_bg_taskReadDeviceHeartbeatIntervalOperation,   //读取设备心跳间隔
+    mk_bg_taskReadOffByMagnetStatusOperation,         //读取磁簧开关关机功能
+    mk_bg_taskReadShutdownPayloadStatusOperation,     //读取关机信息上报
     mk_bg_taskReadOfflineFixStatusOperation,          //读取设备离线定位状态
+    mk_bg_taskReadLowPowerParamsOperation,            //读取低电参数
+    mk_bg_taskReadIndicatorSettingsOperation,         //读取指示灯功能
+    mk_bg_taskReadTemperatureOfChipOperation,         //读取芯片温度
+    mk_bg_taskReadCurrentSystemTimeZoneTimeOperation,   //读取当前系统时区时间
+    mk_bg_taskReadBatteryLevelOperation,              //读取电池电量
+    mk_bg_taskReadMacAddressOperation,                  //读取设备Mac地址
     
     
 #pragma mark - 模式相关参数
@@ -133,8 +142,13 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigTimeZoneOperation,                  //同步时区
     mk_bg_taskConfigPasswordOperation,                  //配置密码
     mk_bg_taskConfigWorkModeOperation,                  //配置工作模式
+    mk_bg_taskConfigRepoweredDefaultModeOperation,      //配置设备上电后模式
     mk_bg_taskConfigHeartbeatIntervalOperation,         //配置设备心跳间隔
+    mk_bg_taskConfigOffByMagnetStatusOperation,         //配置磁簧开关关机功能
+    mk_bg_taskConfigShutdownPayloadStatusOperation,     //配置关机信息上报
     mk_bg_taskConfigOfflineFixStatusOperation,          //配置离线定位功能
+    mk_bg_taskConfigLowPowerPayloadOperation,           //配置低电参数
+    mk_bg_taskConfigIndicatorSettingsOperation,         //配置指示灯功能
     
 #pragma mark - 配置模式相关参数
     mk_bg_taskConfigPeriodicModePositioningStrategyOperation,       //配置定期模式定位策略

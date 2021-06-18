@@ -51,7 +51,12 @@ mk_textSwitchCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [self loadSectionDatas];
+    [self readDataFromDevice];
+}
+
+#pragma mark - super method
+- (void)rightButtonMethod {
+    [self configDataToDevice];
 }
 
 #pragma mark - UITableViewDelegate
@@ -113,79 +118,108 @@ mk_textSwitchCellDelegate>
         //Tamper
         MKTextSwitchCellModel *cellModel = self.section0List[0];
         cellModel.isOn = isOn;
-        self.dataModel.tamperIsOn = isOn;
+        self.dataModel.Tamper = isOn;
         return;
     }
     if (index == 1) {
         //Low-power
         MKTextSwitchCellModel *cellModel = self.section0List[1];
         cellModel.isOn = isOn;
-        self.dataModel.lowPowerIsOn = isOn;
+        self.dataModel.LowPower = isOn;
         return;
     }
     if (index == 2) {
         //In WIFI Fix
         MKTextSwitchCellModel *cellModel = self.section1List[0];
         cellModel.isOn = isOn;
-        self.dataModel.inWifiFixIsOn = isOn;
+        self.dataModel.InWIFIFix = isOn;
         return;
     }
     if (index == 3) {
         //WIFI Fix Successful
         MKTextSwitchCellModel *cellModel = self.section1List[1];
         cellModel.isOn = isOn;
-        self.dataModel.wifiFixSuccessfulIsOn = isOn;
+        self.dataModel.WIFIFixSuccessful = isOn;
         return;
     }
     if (index == 4) {
         //Fail To WIFI Fix
         MKTextSwitchCellModel *cellModel = self.section1List[2];
         cellModel.isOn = isOn;
-        self.dataModel.failToWifiFixIsOn = isOn;
+        self.dataModel.FailToWIFIFix = isOn;
         return;
     }
     if (index == 5) {
         //In Bluetooth Fix
         MKTextSwitchCellModel *cellModel = self.section2List[0];
         cellModel.isOn = isOn;
-        self.dataModel.InBleFixIsOn = isOn;
+        self.dataModel.InBluetoothFix = isOn;
         return;
     }
     if (index == 6) {
         //BT Fix Successful
         MKTextSwitchCellModel *cellModel = self.section2List[1];
         cellModel.isOn = isOn;
-        self.dataModel.BTFixSuccessfulIsOn = isOn;
+        self.dataModel.BTFixSuccessful = isOn;
         return;
     }
     if (index == 7) {
         //Fail To BT Fix
         MKTextSwitchCellModel *cellModel = self.section2List[2];
         cellModel.isOn = isOn;
-        self.dataModel.failToBTFixIsOn = isOn;
+        self.dataModel.FailToBTFix = isOn;
         return;
     }
     if (index == 8) {
         //In GPS Fix
         MKTextSwitchCellModel *cellModel = self.section3List[0];
         cellModel.isOn = isOn;
-        self.dataModel.inGpsFixIsOn = isOn;
+        self.dataModel.InGPSFix = isOn;
         return;
     }
     if (index == 9) {
         //GPS Fix successful
         MKTextSwitchCellModel *cellModel = self.section3List[1];
         cellModel.isOn = isOn;
-        self.dataModel.gpsFixSuccessfulIsOn = isOn;
+        self.dataModel.GPSFixsuccessful = isOn;
         return;
     }
     if (index == 10) {
         //Fail To GPS Fix
         MKTextSwitchCellModel *cellModel = self.section3List[2];
         cellModel.isOn = isOn;
-        self.dataModel.failToGpsFixIsOn = isOn;
+        self.dataModel.FailToGPSFix = isOn;
         return;
     }
+}
+
+#pragma mark - interface
+- (void)readDataFromDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel readWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self loadSectionDatas];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
+}
+
+- (void)configDataToDevice {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    @weakify(self);
+    [self.dataModel configWithSucBlock:^{
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:@"Success"];
+    } failedBlock:^(NSError * _Nonnull error) {
+        @strongify(self);
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+    }];
 }
 
 #pragma mark - loadSectionDatas
@@ -202,13 +236,13 @@ mk_textSwitchCellDelegate>
     MKTextSwitchCellModel *cellModel1 = [[MKTextSwitchCellModel alloc] init];
     cellModel1.index = 0;
     cellModel1.msg = @"Tamper";
-    cellModel1.isOn = self.dataModel.tamperIsOn;
+    cellModel1.isOn = self.dataModel.Tamper;
     [self.section0List addObject:cellModel1];
     
     MKTextSwitchCellModel *cellModel2 = [[MKTextSwitchCellModel alloc] init];
     cellModel2.index = 1;
     cellModel2.msg = @"Low-power";
-    cellModel2.isOn = self.dataModel.lowPowerIsOn;
+    cellModel2.isOn = self.dataModel.LowPower;
     [self.section0List addObject:cellModel2];
 }
 
@@ -216,19 +250,19 @@ mk_textSwitchCellDelegate>
     MKTextSwitchCellModel *cellModel1 = [[MKTextSwitchCellModel alloc] init];
     cellModel1.index = 2;
     cellModel1.msg = @"In WIFI Fix";
-    cellModel1.isOn = self.dataModel.inWifiFixIsOn;
+    cellModel1.isOn = self.dataModel.InWIFIFix;
     [self.section1List addObject:cellModel1];
     
     MKTextSwitchCellModel *cellModel2 = [[MKTextSwitchCellModel alloc] init];
     cellModel2.index = 3;
     cellModel2.msg = @"WIFI Fix Successful";
-    cellModel2.isOn = self.dataModel.wifiFixSuccessfulIsOn;
+    cellModel2.isOn = self.dataModel.WIFIFixSuccessful;
     [self.section1List addObject:cellModel2];
     
     MKTextSwitchCellModel *cellModel3 = [[MKTextSwitchCellModel alloc] init];
     cellModel3.index = 4;
     cellModel3.msg = @"Fail To WIFI Fix";
-    cellModel3.isOn = self.dataModel.failToWifiFixIsOn;
+    cellModel3.isOn = self.dataModel.FailToWIFIFix;
     [self.section1List addObject:cellModel3];
 }
 
@@ -236,19 +270,19 @@ mk_textSwitchCellDelegate>
     MKTextSwitchCellModel *cellModel1 = [[MKTextSwitchCellModel alloc] init];
     cellModel1.index = 5;
     cellModel1.msg = @"In Bluetooth Fix";
-    cellModel1.isOn = self.dataModel.InBleFixIsOn;
+    cellModel1.isOn = self.dataModel.InBluetoothFix;
     [self.section2List addObject:cellModel1];
     
     MKTextSwitchCellModel *cellModel2 = [[MKTextSwitchCellModel alloc] init];
     cellModel2.index = 6;
     cellModel2.msg = @"BT Fix Successful";
-    cellModel2.isOn = self.dataModel.BTFixSuccessfulIsOn;
+    cellModel2.isOn = self.dataModel.BTFixSuccessful;
     [self.section2List addObject:cellModel2];
     
     MKTextSwitchCellModel *cellModel3 = [[MKTextSwitchCellModel alloc] init];
     cellModel3.index = 7;
     cellModel3.msg = @"Fail To BT Fix";
-    cellModel3.isOn = self.dataModel.failToBTFixIsOn;
+    cellModel3.isOn = self.dataModel.FailToBTFix;
     [self.section2List addObject:cellModel3];
 }
 
@@ -256,19 +290,19 @@ mk_textSwitchCellDelegate>
     MKTextSwitchCellModel *cellModel1 = [[MKTextSwitchCellModel alloc] init];
     cellModel1.index = 8;
     cellModel1.msg = @"In GPS Fix";
-    cellModel1.isOn = self.dataModel.inGpsFixIsOn;
+    cellModel1.isOn = self.dataModel.InGPSFix;
     [self.section3List addObject:cellModel1];
     
     MKTextSwitchCellModel *cellModel2 = [[MKTextSwitchCellModel alloc] init];
     cellModel2.index = 9;
     cellModel2.msg = @"GPS Fix successful";
-    cellModel2.isOn = self.dataModel.gpsFixSuccessfulIsOn;
+    cellModel2.isOn = self.dataModel.GPSFixsuccessful;
     [self.section3List addObject:cellModel2];
     
     MKTextSwitchCellModel *cellModel3 = [[MKTextSwitchCellModel alloc] init];
     cellModel3.index = 10;
     cellModel3.msg = @"Fail To GPS Fix";
-    cellModel3.isOn = self.dataModel.failToGpsFixIsOn;
+    cellModel3.isOn = self.dataModel.FailToGPSFix;
     [self.section3List addObject:cellModel3];
 }
 

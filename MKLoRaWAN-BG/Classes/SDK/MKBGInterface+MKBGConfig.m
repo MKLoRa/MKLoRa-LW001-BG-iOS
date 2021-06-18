@@ -95,6 +95,20 @@
                    failedBlock:failedBlock];
 }
 
++ (void)bg_configRepoweredDefaultMode:(mk_bg_repoweredDefaultMode)mode
+                             sucBlock:(void (^)(void))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *modeString = @"00";
+    if (mode == mk_bg_repoweredDefaultMode_revertToLastMode) {
+        modeString = @"01";
+    }
+    NSString *commandString = [@"ed010701" stringByAppendingString:modeString];
+    [self configDataWithTaskID:mk_bg_taskConfigRepoweredDefaultModeOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
 + (void)bg_configHeartbeatInterval:(long long)interval
                           sucBlock:(void (^)(void))sucBlock
                        failedBlock:(void (^)(NSError *error))failedBlock {
@@ -110,6 +124,26 @@
                    failedBlock:failedBlock];
 }
 
++ (void)bg_configOffByMagnetStatus:(BOOL)isOn
+                          sucBlock:(void (^)(void))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *commandString = (isOn ? @"ed01090101" : @"ed01090100");
+    [self configDataWithTaskID:mk_bg_taskConfigOffByMagnetStatusOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configShutdownPayloadStatus:(BOOL)isOn
+                              sucBlock:(void (^)(void))sucBlock
+                           failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *commandString = (isOn ? @"ed010a0101" : @"ed010a0100");
+    [self configDataWithTaskID:mk_bg_taskConfigShutdownPayloadStatusOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
 + (void)bg_configOfflineFix:(BOOL)isOn
                    sucBlock:(void (^)(void))sucBlock
                 failedBlock:(void (^)(NSError *error))failedBlock {
@@ -119,6 +153,49 @@
                       sucBlock:sucBlock
                    failedBlock:failedBlock];
     
+}
+
++ (void)bg_configLowPowerPayload:(BOOL)isOn
+                          prompt:(mk_bg_lowPowerPrompt)prompt
+                        sucBlock:(void (^)(void))sucBlock
+                     failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *payload = (isOn ? @"1" : @"0");
+    NSString *promptString = (prompt == mk_bg_lowPowerPrompt_fivePercent) ? @"0" : @"1";
+    NSString *binary = [NSString stringWithFormat:@"%@%@%@",@"000000",payload,promptString];
+    NSString *hex = [MKBGSDKDataAdopter getHexByBinary:binary];
+    NSString *commandString = [@"ed010c01" stringByAppendingString:hex];
+    [self configDataWithTaskID:mk_bg_taskConfigLowPowerPayloadOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configIndicatorSettings:(id <mk_bg_indicatorSettingsProtocol>)protocol
+                          sucBlock:(void (^)(void))sucBlock
+                       failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *Tamper = (protocol.Tamper ? @"1" : @"0");
+    NSString *LowPower = (protocol.LowPower ? @"1" : @"0");
+    NSString *InBluetoothFix = (protocol.InBluetoothFix ? @"1" : @"0");
+    NSString *BTFixSuccessful = (protocol.BTFixSuccessful ? @"1" : @"0");
+    NSString *FailToBTFix = (protocol.FailToBTFix ? @"1" : @"0");
+    NSString *InGPSFix = (protocol.InGPSFix ? @"1" : @"0");
+    NSString *GPSFixsuccessful = (protocol.GPSFixsuccessful ? @"1" : @"0");
+    NSString *FailToGPSFix = (protocol.FailToGPSFix ? @"1" : @"0");
+    
+    NSString *binaryLow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@",FailToGPSFix,GPSFixsuccessful,InGPSFix,
+                           FailToBTFix,BTFixSuccessful,InBluetoothFix,LowPower,Tamper];
+    
+    NSString *InWIFIFix = (protocol.InWIFIFix ? @"1" : @"0");
+    NSString *WIFIFixSuccessful = (protocol.WIFIFixSuccessful ? @"1" : @"0");
+    NSString *FailToWIFIFix = (protocol.FailToWIFIFix ? @"1" : @"0");
+    
+    NSString *binaryHigh = [NSString stringWithFormat:@"%@%@%@%@",@"11111",FailToWIFIFix,WIFIFixSuccessful,InWIFIFix];
+    NSString *commandString = [NSString stringWithFormat:@"%@%@%@",@"ed010d02",[MKBGSDKDataAdopter getHexByBinary:binaryHigh],[MKBGSDKDataAdopter getHexByBinary:binaryLow]];
+    
+    [self configDataWithTaskID:mk_bg_taskConfigIndicatorSettingsOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
 }
 
 #pragma mark ****************************************模式相关参数************************************************
