@@ -13,7 +13,6 @@
 #import "NSString+MKAdd.h"
 
 #import "MKBGInterface.h"
-#import "MKBGInterface+MKBGConfig.h"
 
 @implementation MKBGFilterRawAdvDataModel
 @end

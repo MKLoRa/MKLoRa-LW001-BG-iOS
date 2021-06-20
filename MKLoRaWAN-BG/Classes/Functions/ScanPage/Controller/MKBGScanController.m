@@ -34,7 +34,6 @@
 #import "MKBGScanPageCell.h"
 
 #import "MKBGTabBarController.h"
-#import "MKBGAboutController.h"
 
 static NSString *const localPasswordKey = @"mk_bg_passwordKey";
 
@@ -104,7 +103,7 @@ MKBGTabBarControllerDelegate>
 #pragma mark - super method
 
 - (void)rightButtonMethod {
-    MKBGAboutController *vc = [[MKBGAboutController alloc] init];
+    UIViewController *vc = [[CTMediator sharedInstance] CTMediator_LORAWAN_BG_AboutPage];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -12,6 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Target_LoRaWANBG_Module : NSObject
 
+/// 扫描页面
+- (UIViewController *)Action_LoRaWANBG_Module_ScanController:(NSDictionary *)params;
+
+/// 关于页面
+- (UIViewController *)Action_LoRaWANBG_Module_AboutController:(NSDictionary *)params;
+
 @end
 
 NS_ASSUME_NONNULL_END

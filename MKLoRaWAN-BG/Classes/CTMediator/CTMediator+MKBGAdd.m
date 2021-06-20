@@ -8,7 +8,25 @@
 
 #import "CTMediator+MKBGAdd.h"
 
+#import "MKMacroDefines.h"
+
+#import "MKLoRaWANBGModuleKey.h"
+
 @implementation CTMediator (MKBGAdd)
+
+- (UIViewController *)CTMediator_LORAWAN_BG_AboutPage {
+    UIViewController *viewController = [self performTarget:kTarget_loRaApp_la_module
+                                                    action:kAction_loRaApp_la_aboutPage
+                                                    params:@{}
+                                         shouldCacheTarget:NO];
+    if ([viewController isKindOfClass:[UIViewController class]]) {
+        return viewController;
+    }
+    return [self performTarget:kTarget_loRaApp_bg_module
+                        action:kAction_loRaApp_bg_aboutPage
+                        params:@{}
+             shouldCacheTarget:NO];
+}
 
 #pragma mark - private method
 - (UIViewController *)Action_LoRaApp_ViewControllerWithTarget:(NSString *)targetName

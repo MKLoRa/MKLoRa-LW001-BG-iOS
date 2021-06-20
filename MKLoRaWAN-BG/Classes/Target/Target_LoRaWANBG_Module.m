@@ -8,6 +8,20 @@
 
 #import "Target_LoRaWANBG_Module.h"
 
+#import "MKBGScanController.h"
+
+#import "MKBGAboutController.h"
+
 @implementation Target_LoRaWANBG_Module
+
+/// 扫描页面
+- (UIViewController *)Action_LoRaWANBG_Module_ScanController:(NSDictionary *)params {
+    return [[MKBGScanController alloc] init];
+}
+
+/// 关于页面
+- (UIViewController *)Action_LoRaWANBG_Module_AboutController:(NSDictionary *)params {
+    return [[MKBGAboutController alloc] init];
+}
 
 @end
