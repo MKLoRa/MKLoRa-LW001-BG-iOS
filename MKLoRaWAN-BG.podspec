@@ -43,5 +43,6 @@ TODO: Add long description of the pod here.
   s.dependency 'MLInputDodger'
   s.dependency 'iOSDFULibrary'
   s.dependency 'CTMediator'
+  s.dependency 'FMDB'
   
 end

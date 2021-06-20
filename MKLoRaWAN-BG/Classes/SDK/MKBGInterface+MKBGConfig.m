@@ -1431,6 +1431,42 @@
                    failedBlock:failedBlock];
 }
 
+#pragma mark ****************************************存储数据协议************************************************
+
++ (void)bg_readNumberOfDaysStoredData:(NSInteger)days
+                             sucBlock:(void (^)(void))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock {
+    if (days < 1 || days > 65535) {
+        [self operationParamsErrorBlock:failedBlock];
+        return;
+    }
+    NSString *value = [MKBGSDKDataAdopter fetchHexValue:days byteLen:2];
+    NSString *commandString = [@"ed01a002" stringByAppendingString:value];
+    [self configDataWithTaskID:mk_bg_taskReadNumberOfDaysStoredDataOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_clearAllDatasWithSucBlock:(void (^)(void))sucBlock
+                         failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *commandString = @"ed01a100";
+    [self configDataWithTaskID:mk_bg_taskClearAllDatasOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_pauseSendLocalData:(BOOL)pause
+                     sucBlock:(void (^)(void))sucBlock
+                  failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *commandString = (pause ? @"ed01a20100" : @"ed01a20101");
+    [self configDataWithTaskID:mk_bg_taskPauseSendLocalDataOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
 #pragma mark - private method
 + (void)configDataWithTaskID:(mk_bg_taskOperationID)taskID
                         data:(NSString *)data

@@ -1,6 +1,9 @@
 PODS:
   - CircleProgressBar (0.32)
   - CTMediator (46)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - HHTransition (3.0.2)
   - iOSDFULibrary (4.10.3):
     - ZIPFoundation (= 0.9.11)
@@ -305,6 +308,7 @@ PODS:
     - MKBaseModuleLibrary
   - MKLoRaWAN-BG (1.0.0):
     - CTMediator
+    - FMDB
     - HHTransition
     - iOSDFULibrary
     - MKBaseBleModule
@@ -322,6 +326,7 @@ SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - CircleProgressBar
     - CTMediator
+    - FMDB
     - HHTransition
     - iOSDFULibrary
     - Masonry
@@ -341,6 +346,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   CircleProgressBar: 3920079be5224b62b3d9ed6eeb23ac01c835b681
   CTMediator: f1cf58d509fb3192086c367711f039efd769b907
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   HHTransition: ca5035c126a6a2dc1eb9a90d084013784bf4bf0a
   iOSDFULibrary: 7aade51a907d01ca9a87055003cd232b09efd78f
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
@@ -349,7 +355,7 @@ SPEC CHECKSUMS:
   MKBaseBleModule: 2c18242ab1c5267ed7b4ec2e3521ea4f9750e93e
   MKBaseModuleLibrary: 3f6402005cd7aafb0a1564261b3ba798bd6b8ba9
   MKCustomUIModule: 30244cfff5057ec186d055995472b8d486ad012b
-  MKLoRaWAN-BG: d8cba4d31d6fe88b1f48b9aee255d2d7c996e653
+  MKLoRaWAN-BG: db9cfe6ab0b86f4543bc0fa3fd91af0c06f314b6
   MLInputDodger: 79a0e420a80d0d3bba122bf2639603cc76609ba8
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197

@@ -28,6 +28,7 @@
 
 #import "MKBGDevicePageModel.h"
 
+#import "MKBGSynDataController.h"
 #import "MKBGIndicatorSettingsController.h"
 #import "MKBGOnOffSettingsController.h"
 #import "MKBGDeviceInfoController.h"
@@ -124,6 +125,12 @@ mk_textSwitchCellDelegate>
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        //Local Data Sync
+        MKBGSynDataController *vc = [[MKBGSynDataController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
     if (indexPath.section == 1 && indexPath.row == 0) {
         //Indicator Settings
         MKBGIndicatorSettingsController *vc = [[MKBGIndicatorSettingsController alloc] init];

@@ -798,6 +798,29 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)bg_configIdleStutasResetWithSucBlock:(void (^)(void))sucBlock
                                  failedBlock:(void (^)(NSError *error))failedBlock;
 
+#pragma mark ****************************************存储协议************************************************
+/// Read the data stored by the device every day.
+/// @param days 1 ~ 65535
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readNumberOfDaysStoredData:(NSInteger)days
+                             sucBlock:(void (^)(void))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Clear all data stored in the device.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_clearAllDatasWithSucBlock:(void (^)(void))sucBlock
+                         failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Pause/resume data transmission of local data.
+/// @param pause YES:pause,NO:resume
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_pauseSendLocalData:(BOOL)pause
+                     sucBlock:(void (^)(void))sucBlock
+                  failedBlock:(void (^)(NSError *error))failedBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END
