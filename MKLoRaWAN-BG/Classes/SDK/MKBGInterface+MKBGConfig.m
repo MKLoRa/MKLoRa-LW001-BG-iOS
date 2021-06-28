@@ -116,7 +116,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *timeString = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:4];
+    NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:4];
     NSString *commandString = [@"ed010804" stringByAppendingString:timeString];
     [self configDataWithTaskID:mk_bg_taskConfigHeartbeatIntervalOperation
                           data:commandString
@@ -162,7 +162,7 @@
     NSString *payload = (isOn ? @"1" : @"0");
     NSString *promptString = (prompt == mk_bg_lowPowerPrompt_fivePercent) ? @"0" : @"1";
     NSString *binary = [NSString stringWithFormat:@"%@%@%@",@"000000",payload,promptString];
-    NSString *hex = [MKBGSDKDataAdopter getHexByBinary:binary];
+    NSString *hex = [MKBLEBaseSDKAdopter getHexByBinary:binary];
     NSString *commandString = [@"ed010c01" stringByAppendingString:hex];
     [self configDataWithTaskID:mk_bg_taskConfigLowPowerPayloadOperation
                           data:commandString
@@ -190,7 +190,7 @@
     NSString *FailToWIFIFix = (protocol.FailToWIFIFix ? @"1" : @"0");
     
     NSString *binaryHigh = [NSString stringWithFormat:@"%@%@%@%@",@"11111",FailToWIFIFix,WIFIFixSuccessful,InWIFIFix];
-    NSString *commandString = [NSString stringWithFormat:@"%@%@%@",@"ed010d02",[MKBGSDKDataAdopter getHexByBinary:binaryHigh],[MKBGSDKDataAdopter getHexByBinary:binaryLow]];
+    NSString *commandString = [NSString stringWithFormat:@"%@%@%@",@"ed010d02",[MKBLEBaseSDKAdopter getHexByBinary:binaryHigh],[MKBLEBaseSDKAdopter getHexByBinary:binaryLow]];
     
     [self configDataWithTaskID:mk_bg_taskConfigIndicatorSettingsOperation
                           data:commandString
@@ -218,7 +218,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:4];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:4];
     NSString *commandString = [@"ed012104" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigPeriodicModeReportIntervalOperation
                           data:commandString
@@ -262,7 +262,7 @@
     NSString *notifyEventOnEndValue = (protocol.notifyEventOnEnd ? @"1" : @"0");
     NSString *fixOnEndValue = (protocol.fixOnEnd ? @"1" : @"0");
     NSString *resultValue = [NSString stringWithFormat:@"%@%@%@%@%@%@%@",@"00",fixOnEndValue,notifyEventOnEndValue,fixInTripValue,notifyEventInTripValue,fixOnStartValue,notifyEventOnStartValue];
-    NSString *cmdValue = [MKBGSDKDataAdopter getHexByBinary:resultValue];
+    NSString *cmdValue = [MKBLEBaseSDKAdopter getHexByBinary:resultValue];
     NSString *commandString = [@"ed012401" stringByAppendingString:cmdValue];
     [self configDataWithTaskID:mk_bg_taskConfigMotionModeEventsOperation
                           data:commandString
@@ -277,7 +277,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:number byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:number byteLen:1];
     NSString *commandString = [@"ed012501" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigMotionModeNumberOfFixOnStartOperation
                           data:commandString
@@ -303,7 +303,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:4];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:4];
     NSString *commandString = [@"ed012704" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigMotionModeReportIntervalInTripOperation
                           data:commandString
@@ -329,7 +329,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:time byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:1];
     NSString *commandString = [@"ed012901" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigMotionModeTripEndTimeoutOperation
                           data:commandString
@@ -344,7 +344,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:number byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:number byteLen:1];
     NSString *commandString = [@"ed012a01" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigMotionModeNumberOfFixOnEndOperation
                           data:commandString
@@ -359,7 +359,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:2];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:2];
     NSString *commandString = [@"ed012b02" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigMotionModeReportIntervalOnEndOperation
                           data:commandString
@@ -399,7 +399,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
     NSString *commandString = [@"ed013001" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigWifiPositioningTimeoutOperation
                           data:commandString
@@ -414,7 +414,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:number byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:number byteLen:1];
     NSString *commandString = [@"ed013101" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigWifiNumberOfBSSIDOperation
                           data:commandString
@@ -429,7 +429,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
     NSString *commandString = [@"ed013201" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigBLEPositioningTimeoutOperation
                           data:commandString
@@ -444,7 +444,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:number byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:number byteLen:1];
     NSString *commandString = [@"ed013301" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigBLENumberOfMacOperation
                           data:commandString
@@ -574,8 +574,8 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *minString = [MKBGSDKDataAdopter fetchHexValue:majorMin byteLen:2];
-    NSString *maxString = [MKBGSDKDataAdopter fetchHexValue:majorMax byteLen:2];
+    NSString *minString = [MKBLEBaseSDKAdopter fetchHexValue:majorMin byteLen:2];
+    NSString *maxString = [MKBLEBaseSDKAdopter fetchHexValue:majorMax byteLen:2];
     NSString *typeString = (type == mk_bg_filterRulesClassAType ? @"38" : @"41");
     NSString *rulesString = (rules == mk_bg_filterRules_forward ? @"01" : @"02");
     mk_bg_taskOperationID taskID = (type == mk_bg_filterRulesClassAType ? mk_bg_taskConfigBLEFilterAMajorOperation : mk_bg_taskConfigBLEFilterBMajorOperation);
@@ -607,8 +607,8 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *minString = [MKBGSDKDataAdopter fetchHexValue:minorMin byteLen:2];
-    NSString *maxString = [MKBGSDKDataAdopter fetchHexValue:minorMax byteLen:2];
+    NSString *minString = [MKBLEBaseSDKAdopter fetchHexValue:minorMin byteLen:2];
+    NSString *maxString = [MKBLEBaseSDKAdopter fetchHexValue:minorMax byteLen:2];
     NSString *typeString = (type == mk_bg_filterRulesClassAType ? @"39" : @"42");
     NSString *rulesString = (rules == mk_bg_filterRules_forward ? @"01" : @"02");
     mk_bg_taskOperationID taskID = (type == mk_bg_filterRulesClassAType ? mk_bg_taskConfigBLEFilterAMinorOperation : mk_bg_taskConfigBLEFilterBMinorOperation);
@@ -645,13 +645,13 @@
             [self operationParamsErrorBlock:failedBlock];
             return;
         }
-        NSString *minIndex = [MKBGSDKDataAdopter fetchHexValue:protocol.minIndex byteLen:1];
-        NSString *maxIndex = [MKBGSDKDataAdopter fetchHexValue:protocol.maxIndex byteLen:1];
-        NSString *lenString = [MKBGSDKDataAdopter fetchHexValue:(protocol.rawData.length / 2 + 3) byteLen:1];
+        NSString *minIndex = [MKBLEBaseSDKAdopter fetchHexValue:protocol.minIndex byteLen:1];
+        NSString *maxIndex = [MKBLEBaseSDKAdopter fetchHexValue:protocol.maxIndex byteLen:1];
+        NSString *lenString = [MKBLEBaseSDKAdopter fetchHexValue:(protocol.rawData.length / 2 + 3) byteLen:1];
         NSString *conditionString = [NSString stringWithFormat:@"%@%@%@%@%@",lenString,protocol.dataType,minIndex,maxIndex,protocol.rawData];
         contentData = [contentData stringByAppendingString:conditionString];
     }
-    NSString *lenString = [MKBGSDKDataAdopter fetchHexValue:((contentData.length / 2) + 1) byteLen:1];
+    NSString *lenString = [MKBLEBaseSDKAdopter fetchHexValue:((contentData.length / 2) + 1) byteLen:1];
     NSString *typeString = (type == mk_bg_filterRulesClassAType ? @"3a" : @"43");
     NSString *rulesString = (rules == mk_bg_filterRules_forward ? @"01" : @"02");
     mk_bg_taskOperationID taskID = (type == mk_bg_filterRulesClassAType ? mk_bg_taskConfigBLEFilterARawDataOperation : mk_bg_taskConfigBLEFilterBRawDataOperation);
@@ -681,7 +681,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *lenString = [MKBGSDKDataAdopter fetchHexValue:((uuid.length / 2) + 1) byteLen:1];
+    NSString *lenString = [MKBLEBaseSDKAdopter fetchHexValue:((uuid.length / 2) + 1) byteLen:1];
     NSString *typeString = (type == mk_bg_filterRulesClassAType ? @"3b" : @"44");
     NSString *rulesString = (rules == mk_bg_filterRules_forward ? @"01" : @"02");
     mk_bg_taskOperationID taskID = (type == mk_bg_filterRulesClassAType ? mk_bg_taskConfigBLEFilterAUUIDOperation : mk_bg_taskConfigBLEFilterBUUIDOperation);
@@ -748,7 +748,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *timeString = [MKBGSDKDataAdopter fetchHexValue:time byteLen:1];
+    NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:1];
     NSString *commandString = [@"ed014701" stringByAppendingString:timeString];
     [self configDataWithTaskID:mk_bg_taskConfigGpsColdStardTimeOperation
                           data:commandString
@@ -763,7 +763,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *valueString = [MKBGSDKDataAdopter fetchHexValue:value byteLen:1];
+    NSString *valueString = [MKBLEBaseSDKAdopter fetchHexValue:value byteLen:1];
     NSString *commandString = [@"ed014801" stringByAppendingString:valueString];
     [self configDataWithTaskID:mk_bg_taskConfigGpsCoarseAccuracyMaskOperation
                           data:commandString
@@ -778,7 +778,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *valueString = [MKBGSDKDataAdopter fetchHexValue:value byteLen:1];
+    NSString *valueString = [MKBLEBaseSDKAdopter fetchHexValue:value byteLen:1];
     NSString *commandString = [@"ed014901" stringByAppendingString:valueString];
     [self configDataWithTaskID:mk_bg_taskConfigGpsFineAccuracyTargetOperation
                           data:commandString
@@ -793,7 +793,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *timeString = [MKBGSDKDataAdopter fetchHexValue:time byteLen:2];
+    NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:2];
     NSString *commandString = [@"ed014a02" stringByAppendingString:timeString];
     [self configDataWithTaskID:mk_bg_taskConfigGpsCoarseTimeOperation
                           data:commandString
@@ -808,7 +808,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *timeString = [MKBGSDKDataAdopter fetchHexValue:time byteLen:4];
+    NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:4];
     NSString *commandString = [@"ed014b04" stringByAppendingString:timeString];
     [self configDataWithTaskID:mk_bg_taskConfigGpsFineTimeOperation
                           data:commandString
@@ -823,7 +823,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *valueString = [MKBGSDKDataAdopter fetchHexValue:value byteLen:1];
+    NSString *valueString = [MKBLEBaseSDKAdopter fetchHexValue:value byteLen:1];
     NSString *commandString = [@"ed014c01" stringByAppendingString:valueString];
     [self configDataWithTaskID:mk_bg_taskConfigGpsPDOPLimitOperation
                           data:commandString
@@ -860,7 +860,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *timeString = [MKBGSDKDataAdopter fetchHexValue:time byteLen:4];
+    NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:4];
     NSString *commandString = [@"ed014f04" stringByAppendingString:timeString];
     [self configDataWithTaskID:mk_bg_taskConfigGpsTimeBudgetOperation
                           data:commandString
@@ -885,7 +885,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *valueString = [MKBGSDKDataAdopter fetchHexValue:value byteLen:2];
+    NSString *valueString = [MKBLEBaseSDKAdopter fetchHexValue:value byteLen:2];
     NSString *commandString = [@"ed015102" stringByAppendingString:valueString];
     [self configDataWithTaskID:mk_bg_taskConfigGpsAdingAccuracyOperation
                           data:commandString
@@ -900,7 +900,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *timeString = [MKBGSDKDataAdopter fetchHexValue:time byteLen:2];
+    NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:2];
     NSString *commandString = [@"ed015202" stringByAppendingString:timeString];
     [self configDataWithTaskID:mk_bg_taskConfigGpsAidingTimeOperation
                           data:commandString
@@ -1042,8 +1042,8 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *lowValue = [MKBGSDKDataAdopter fetchHexValue:chlValue byteLen:1];
-    NSString *highValue = [MKBGSDKDataAdopter fetchHexValue:chhValue byteLen:1];
+    NSString *lowValue = [MKBLEBaseSDKAdopter fetchHexValue:chlValue byteLen:1];
+    NSString *highValue = [MKBLEBaseSDKAdopter fetchHexValue:chhValue byteLen:1];
     NSString *commandString = [NSString stringWithFormat:@"%@%@%@",@"ed016a02",lowValue,highValue];
     [self configDataWithTaskID:mk_bg_taskConfigCHValueOperation
                           data:commandString
@@ -1058,7 +1058,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:drValue byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:drValue byteLen:1];
     NSString *commandString = [NSString stringWithFormat:@"%@%@",@"ed016b01",value];
     [self configDataWithTaskID:mk_bg_taskConfigDRValueOperation
                           data:commandString
@@ -1076,8 +1076,8 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *lowValue = [MKBGSDKDataAdopter fetchHexValue:DRL byteLen:1];
-    NSString *highValue = [MKBGSDKDataAdopter fetchHexValue:DRH byteLen:1];
+    NSString *lowValue = [MKBLEBaseSDKAdopter fetchHexValue:DRL byteLen:1];
+    NSString *highValue = [MKBLEBaseSDKAdopter fetchHexValue:DRH byteLen:1];
     NSString *commandString = [NSString stringWithFormat:@"%@%@%@%@%@",@"ed016c04",(isOn ? @"01" : @"00"),(twice ? @"02" : @"01"),lowValue,highValue];
     [self configDataWithTaskID:mk_bg_taskConfigUplinkStrategyOperation
                           data:commandString
@@ -1102,7 +1102,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
     NSString *commandString = [@"ed016e01" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigTimeSyncIntervalOperation
                           data:commandString
@@ -1117,7 +1117,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
     NSString *commandString = [@"ed016f01" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigReconnectIntervalOperation
                           data:commandString
@@ -1144,7 +1144,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
     NSString *commandString = [@"ed017101" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigBeaconAdvIntervalOperation
                           data:commandString
@@ -1169,7 +1169,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:time byteLen:1];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:1];
     NSString *commandString = [@"ed017301" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigDeviceBroadcastTimeoutOperation
                           data:commandString
@@ -1199,7 +1199,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:major byteLen:2];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:major byteLen:2];
     NSString *commandString = [@"ed017502" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigBeaconMajorOperation
                           data:commandString
@@ -1214,7 +1214,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:minor byteLen:2];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:minor byteLen:2];
     NSString *commandString = [@"ed017602" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskConfigBeaconMinorOperation
                           data:commandString
@@ -1281,8 +1281,8 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *thresholdString = [MKBGSDKDataAdopter fetchHexValue:threshold byteLen:1];
-    NSString *durationString = [MKBGSDKDataAdopter fetchHexValue:duration byteLen:1];
+    NSString *thresholdString = [MKBLEBaseSDKAdopter fetchHexValue:threshold byteLen:1];
+    NSString *durationString = [MKBLEBaseSDKAdopter fetchHexValue:duration byteLen:1];
     NSString *commandString = [NSString stringWithFormat:@"%@%@%@",@"ed018002",thresholdString,durationString];
     [self configDataWithTaskID:mk_bg_taskConfigThreeAxisWakeupConditionsOperation
                           data:commandString
@@ -1298,8 +1298,8 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *thresholdString = [MKBGSDKDataAdopter fetchHexValue:threshold byteLen:1];
-    NSString *durationString = [MKBGSDKDataAdopter fetchHexValue:duration byteLen:1];
+    NSString *thresholdString = [MKBLEBaseSDKAdopter fetchHexValue:threshold byteLen:1];
+    NSString *durationString = [MKBLEBaseSDKAdopter fetchHexValue:duration byteLen:1];
     NSString *commandString = [NSString stringWithFormat:@"%@%@%@",@"ed018102",thresholdString,durationString];
     [self configDataWithTaskID:mk_bg_taskConfigThreeAxisMotionParametersOperation
                           data:commandString
@@ -1324,7 +1324,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *thresholdString = [MKBGSDKDataAdopter fetchHexValue:threshold byteLen:1];
+    NSString *thresholdString = [MKBLEBaseSDKAdopter fetchHexValue:threshold byteLen:1];
     NSString *commandString = [@"ed018301" stringByAppendingString:thresholdString];
     [self configDataWithTaskID:mk_bg_taskConfigVibrationThresholdsOperation
                           data:commandString
@@ -1339,7 +1339,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *intervalString = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:1];
+    NSString *intervalString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
     NSString *commandString = [@"ed018401" stringByAppendingString:intervalString];
     [self configDataWithTaskID:mk_bg_taskConfigVibrationDetectionReportIntervalOperation
                           data:commandString
@@ -1354,7 +1354,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *intervalString = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:1];
+    NSString *intervalString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
     NSString *commandString = [@"ed018501" stringByAppendingString:intervalString];
     [self configDataWithTaskID:mk_bg_taskConfigVibrationTimeoutOperation
                           data:commandString
@@ -1379,7 +1379,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *intervalString = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:2];
+    NSString *intervalString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:2];
     NSString *commandString = [@"ed018702" stringByAppendingString:intervalString];
     [self configDataWithTaskID:mk_bg_taskConfigIdleDetectionTimeoutOperation
                           data:commandString
@@ -1414,7 +1414,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *intervalString = [MKBGSDKDataAdopter fetchHexValue:interval byteLen:4];
+    NSString *intervalString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:4];
     NSString *commandString = [@"ed018a04" stringByAppendingString:intervalString];
     [self configDataWithTaskID:mk_bg_taskConfigActiveStateTimeoutOperation
                           data:commandString
@@ -1440,7 +1440,7 @@
         [self operationParamsErrorBlock:failedBlock];
         return;
     }
-    NSString *value = [MKBGSDKDataAdopter fetchHexValue:days byteLen:2];
+    NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:days byteLen:2];
     NSString *commandString = [@"ed01a002" stringByAppendingString:value];
     [self configDataWithTaskID:mk_bg_taskReadNumberOfDaysStoredDataOperation
                           data:commandString

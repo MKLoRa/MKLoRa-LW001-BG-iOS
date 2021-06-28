@@ -477,7 +477,7 @@ MKTextButtonCellDelegate>
 
 #pragma mark - UI
 - (void)loadSubViews {
-    self.defaultTitle = @"GPS Positioning";
+    self.defaultTitle = @"GPS Fix";
     [self.rightButton setImage:LOADICON(@"MKLoRaWAN-BG", @"MKBGGpsPositionController", @"bg_slotSaveIcon.png") forState:UIControlStateNormal];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {

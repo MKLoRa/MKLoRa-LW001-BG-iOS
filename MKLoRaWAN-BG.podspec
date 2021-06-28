@@ -73,7 +73,7 @@ TODO: Add long description of the pod here.
   s.subspec 'ConnectModule' do |ss|
     ss.source_files = 'MKLoRaWAN-BG/Classes/ConnectModule/**'
     
-    ss.dependency 'MKLoRaWAN-B/SDK'
+    ss.dependency 'MKLoRaWAN-BG/SDK'
     
     ss.dependency 'MKBaseModuleLibrary'
   end
@@ -417,7 +417,6 @@ TODO: Add long description of the pod here.
         ssss.dependency 'MKLoRaWAN-BG/Functions/ScanPage/View'
         
         ssss.dependency 'MKLoRaWAN-BG/Functions/TabBarPage/Controller'
-        ssss.dependency 'MKLoRaWAN-BG/Functions/AboutPage/Controller'
       end
       
       sss.subspec 'Model' do |ssss|

@@ -80,7 +80,7 @@
       "name": "ConnectModule",
       "source_files": "MKLoRaWAN-BG/Classes/ConnectModule/**",
       "dependencies": {
-        "MKLoRaWAN-B/SDK": [
+        "MKLoRaWAN-BG/SDK": [
 
         ],
         "MKBaseModuleLibrary": [
@@ -636,9 +636,6 @@
 
                 ],
                 "MKLoRaWAN-BG/Functions/TabBarPage/Controller": [
-
-                ],
-                "MKLoRaWAN-BG/Functions/AboutPage/Controller": [
 
                 ]
               }

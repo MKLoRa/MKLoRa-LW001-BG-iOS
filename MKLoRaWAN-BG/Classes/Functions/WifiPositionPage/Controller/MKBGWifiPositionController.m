@@ -145,7 +145,7 @@ MKTextFieldCellDelegate>
 
 #pragma mark - UI
 - (void)loadSubViews {
-    self.defaultTitle = @"WIFI Positioning";
+    self.defaultTitle = @"WIFI Fix";
     [self.rightButton setImage:LOADICON(@"MKLoRaWAN-BG", @"MKBGWifiPositionController", @"bg_slotSaveIcon.png") forState:UIControlStateNormal];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {

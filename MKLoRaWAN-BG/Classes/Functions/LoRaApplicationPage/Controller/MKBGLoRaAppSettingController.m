@@ -164,7 +164,7 @@ MKTextFieldCellDelegate>
 
 #pragma mark - UI
 - (void)loadSubViews {
-    self.defaultTitle = @"LoRa Application Settings";
+    self.defaultTitle = @"Application Settings";
     [self.rightButton setImage:LOADICON(@"MKLoRaWAN-BG", @"MKBGLoRaAppSettingController", @"bg_slotSaveIcon.png") forState:UIControlStateNormal];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
