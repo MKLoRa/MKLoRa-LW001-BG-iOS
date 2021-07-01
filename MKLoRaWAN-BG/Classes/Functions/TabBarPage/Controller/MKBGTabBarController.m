@@ -11,6 +11,8 @@
 #import "MKMacroDefines.h"
 #import "MKBaseNavigationController.h"
 
+#import "MKAlertController.h"
+
 #import "MKBGLoRaController.h"
 #import "MKBGPositionController.h"
 #import "MKBGGeneralController.h"
@@ -104,7 +106,7 @@
         return;
     }
     if ([type isEqualToString:@"03"]) {
-        [self showAlertWithMsg:@"No data communication for 2 minutes, the device is disconnected." title:@""];
+        [self showAlertWithMsg:@"No data communication for 3 minutes, the device is disconnected." title:@""];
         return;
     }
     if ([type isEqualToString:@"04"]) {
@@ -132,7 +134,7 @@
 
 #pragma mark - private method
 - (void)showAlertWithMsg:(NSString *)msg title:(NSString *)title{
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+    MKAlertController *alertController = [MKAlertController alertControllerWithTitle:title
                                                                              message:msg
                                                                       preferredStyle:UIAlertControllerStyleAlert];
     @weakify(self);

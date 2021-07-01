@@ -26,8 +26,6 @@
 #import "MKCustomUIAdopter.h"
 #import "MKNormalSliderCell.h"
 
-#import "MKBGFilterByPHYCell.h"
-
 #import "MKBGFilterConditionModel.h"
 
 static CGFloat const statusOnHeight = 145.f;
@@ -40,8 +38,7 @@ MKNormalSliderCellDelegate,
 MKFilterDataCellDelegate,
 MKRawAdvDataOperationCellDelegate,
 mk_textSwitchCellDelegate,
-MKFilterRawAdvDataCellDelegate,
-MKBGFilterByPHYCellDelegate>
+MKFilterRawAdvDataCellDelegate>
 
 @property (nonatomic, strong)MKBaseTableView *tableView;
 
@@ -54,8 +51,6 @@ MKBGFilterByPHYCellDelegate>
 @property (nonatomic, strong)NSMutableArray *section3List;
 
 @property (nonatomic, strong)NSMutableArray *section4List;
-
-@property (nonatomic, strong)NSMutableArray *section5List;
 
 @property (nonatomic, strong)MKBGFilterConditionModel *dataModel;
 
@@ -151,10 +146,7 @@ MKBGFilterByPHYCellDelegate>
         return 95.f;
     }
     if (indexPath.section == 4) {
-        return self.dataModel.filterPHYIsOn ? 95.f : 44.f;
-    }
-    if (indexPath.section == 5) {
-        MKTextSwitchCellModel *cellModel = self.section5List[indexPath.row];
+        MKTextSwitchCellModel *cellModel = self.section4List[indexPath.row];
         return [cellModel cellHeightWithContentWidth:kViewWidth];
     }
     return 0;
@@ -162,7 +154,7 @@ MKBGFilterByPHYCellDelegate>
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 6;
+    return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -180,9 +172,6 @@ MKBGFilterByPHYCellDelegate>
     }
     if (section == 4) {
         return self.section4List.count;
-    }
-    if (section == 5) {
-        return self.section5List.count;
     }
     return 0;
 }
@@ -212,14 +201,8 @@ MKBGFilterByPHYCellDelegate>
         cell.delegate = self;
         return cell;
     }
-    if (indexPath.section == 4) {
-        MKBGFilterByPHYCell *cell = [MKBGFilterByPHYCell initCellWithTableView:tableView];
-        cell.dataModel = self.section4List[indexPath.row];
-        cell.delegate = self;
-        return cell;
-    }
     MKTextSwitchCell *cell = [MKTextSwitchCell initCellWithTableView:tableView];
-    cell.dataModel = self.section5List[indexPath.row];
+    cell.dataModel = self.section4List[indexPath.row];
     cell.delegate = self;
     return cell;
 }
@@ -363,7 +346,7 @@ MKBGFilterByPHYCellDelegate>
 - (void)mk_textSwitchCellStatusChanged:(BOOL)isOn index:(NSInteger)index {
     if (index == 0) {
         self.dataModel.enableFilterConditions = isOn;
-        MKTextSwitchCellModel *cellModel = self.section5List[0];
+        MKTextSwitchCellModel *cellModel = self.section4List[0];
         cellModel.isOn = isOn;
     }
 }
@@ -402,37 +385,6 @@ MKBGFilterByPHYCellDelegate>
     }
 }
 
-#pragma mark - MKBGFilterByPHYCellDelegate
-/// 开关发生改变
-/// @param index cell的index
-/// @param isOn isOn
-- (void)bg_filterByPHYStatusChanged:(NSInteger)index isOn:(BOOL)isOn {
-    if (index == 0) {
-        //Filter by PHY
-        self.dataModel.filterPHYIsOn = isOn;
-        MKBGFilterByPHYCellModel *cellModel = self.section4List[0];
-        cellModel.isOn = isOn;
-        [self.tableView mk_reloadSection:4 withRowAnimation:UITableViewRowAnimationNone];
-        return;
-    }
-}
-
-/// 底部按钮点击之后出现的pickView，选中数据之后点击了Confirm按钮事件
-/// @param index cell的index
-/// @param dataListIndex 点击按钮选中的dataList里面的index
-/// @param value dataList[dataListIndex]
-- (void)bg_filterByPHYTypeChanged:(NSInteger)index
-                    dataListIndex:(NSInteger)dataListIndex
-                            value:(NSString *)value {
-    if (index == 0) {
-        //Filter by PHY
-        self.dataModel.phyType = dataListIndex;
-        MKBGFilterByPHYCellModel *cellModel = self.section4List[0];
-        cellModel.dataListIndex = dataListIndex;
-        return;
-    }
-}
-
 #pragma mark - interface
 - (void)readDataFromDevice {
     [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
@@ -455,7 +407,6 @@ MKBGFilterByPHYCellDelegate>
     [self loadSection2Datas];
     [self loadSection3Datas];
     [self loadSection4Datas];
-    [self loadSection5Datas];
     
     [self.tableView reloadData];
 }
@@ -547,16 +498,6 @@ MKBGFilterByPHYCellDelegate>
 }
 
 - (void)loadSection4Datas {
-    MKBGFilterByPHYCellModel *cellModel = [[MKBGFilterByPHYCellModel alloc] init];
-    cellModel.index = 0;
-    cellModel.msg = @"Filter by PHY";
-    cellModel.dataList = @[@"1M phy",@"2M phy",@"Coded phy"];
-    cellModel.dataListIndex = self.dataModel.phyType;
-    cellModel.isOn = self.dataModel.filterPHYIsOn;
-    [self.section4List addObject:cellModel];
-}
-
-- (void)loadSection5Datas {
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 0;
     NSString *conditionType = (self.conditionType == mk_bg_conditionType_A) ? @"A" : @"B";
@@ -564,7 +505,7 @@ MKBGFilterByPHYCellDelegate>
     cellModel.noteMsg = [NSString stringWithFormat:@"*Turn on the Filter Condition %@ ,all filtration of this page will take effect.Turn off the Filter Condition %@, all filtration of this page will not take effect.",conditionType,conditionType];
     cellModel.noteMsgColor = RGBCOLOR(102, 102, 102);
     cellModel.isOn = self.dataModel.enableFilterConditions;
-    [self.section5List addObject:cellModel];
+    [self.section4List addObject:cellModel];
 }
 
 #pragma mark - UI
@@ -623,13 +564,6 @@ MKBGFilterByPHYCellDelegate>
         _section4List = [NSMutableArray array];
     }
     return _section4List;
-}
-
-- (NSMutableArray *)section5List {
-    if (!_section5List) {
-        _section5List = [NSMutableArray array];
-    }
-    return _section5List;
 }
 
 - (MKBGFilterConditionModel *)dataModel {

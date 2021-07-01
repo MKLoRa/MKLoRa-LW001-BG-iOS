@@ -51,6 +51,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param content content
 + (NSDictionary *)fetchIndicatorSettings:(NSString *)content;
 
+/// 获取对应的命令字符串
+/// @param mode mode
++ (NSString *)fetchPHYTypeString:(mk_bg_PHYMode)mode;
+
 @end
 
 NS_ASSUME_NONNULL_END

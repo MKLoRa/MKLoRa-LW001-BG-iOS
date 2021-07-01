@@ -19,6 +19,7 @@
 #import "MKNormalTextCell.h"
 #import "MKTextSwitchCell.h"
 #import "MKTextButtonCell.h"
+#import "MKAlertController.h"
 
 #import "MKTableSectionLineHeader.h"
 
@@ -66,9 +67,6 @@ mk_textSwitchCellDelegate>
 
 @property (nonatomic, strong)UITextField *confirmTextField;
 
-/// 当前present的alert
-@property (nonatomic, strong)UIAlertController *currentAlert;
-
 @property (nonatomic, copy)NSString *passwordAsciiStr;
 
 @property (nonatomic, copy)NSString *confirmAsciiStr;
@@ -79,7 +77,6 @@ mk_textSwitchCellDelegate>
 
 - (void)dealloc {
     NSLog(@"MKBGDeviceController销毁");
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -91,10 +88,6 @@ mk_textSwitchCellDelegate>
     [super viewDidLoad];
     [self loadSubViews];
     [self loadSectionDatas];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(dismissAlert)
-                                                 name:@"mk_bg_settingPageNeedDismissAlert"
-                                               object:nil];
 }
 
 #pragma mark - super method
@@ -286,13 +279,6 @@ mk_textSwitchCellDelegate>
     }
 }
 
-#pragma mark - note
-- (void)dismissAlert {
-    if (self.currentAlert && (self.presentedViewController == self.currentAlert)) {
-        [self.currentAlert dismissViewControllerAnimated:NO completion:nil];
-    }
-}
-
 #pragma mark - interface
 - (void)readDataFromDevice {
     [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
@@ -385,20 +371,20 @@ mk_textSwitchCellDelegate>
 
 - (void)factoryReset{
     NSString *msg = @"After factory reset,all the data will be reseted to the factory values.";
-    self.currentAlert = nil;
-    self.currentAlert = [UIAlertController alertControllerWithTitle:@"Factory Reset"
-                                                            message:msg
-                                                     preferredStyle:UIAlertControllerStyleAlert];
+    MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@"Factory Reset"
+                                                                       message:msg
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    [self.currentAlert addAction:cancelAction];
+    [alertView addAction:cancelAction];
     @weakify(self);
     UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);
         [self sendResetCommandToDevice];
     }];
-    [self.currentAlert addAction:moreAction];
+    [alertView addAction:moreAction];
     
-    [self presentViewController:self.currentAlert animated:YES completion:nil];
+    [self presentViewController:alertView animated:YES completion:nil];
 }
 
 - (void)sendResetCommandToDevice{
@@ -417,12 +403,12 @@ mk_textSwitchCellDelegate>
 #pragma mark - 设置密码
 - (void)configPassword{
     @weakify(self);
-    self.currentAlert = nil;
     NSString *msg = @"Note:The password should be 8 characters.";
-    self.currentAlert = [UIAlertController alertControllerWithTitle:@"Change Password"
-                                                            message:msg
-                                                     preferredStyle:UIAlertControllerStyleAlert];
-    [self.currentAlert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+    MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@"Change Password"
+                                                                       message:msg
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
+    [alertView addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         @strongify(self);
         self.passwordTextField = nil;
         self.passwordTextField = textField;
@@ -432,7 +418,7 @@ mk_textSwitchCellDelegate>
                                    action:@selector(passwordTextFieldValueChanged:)
                          forControlEvents:UIControlEventEditingChanged];
     }];
-    [self.currentAlert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+    [alertView addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         @strongify(self);
         self.confirmTextField = nil;
         self.confirmTextField = textField;
@@ -443,14 +429,14 @@ mk_textSwitchCellDelegate>
                         forControlEvents:UIControlEventEditingChanged];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    [self.currentAlert addAction:cancelAction];
+    [alertView addAction:cancelAction];
     UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);
         [self setPasswordToDevice];
     }];
-    [self.currentAlert addAction:moreAction];
+    [alertView addAction:moreAction];
     
-    [self presentViewController:self.currentAlert animated:YES completion:nil];
+    [self presentViewController:alertView animated:YES completion:nil];
 }
 
 - (void)passwordTextFieldValueChanged:(UITextField *)textField{
@@ -520,23 +506,23 @@ mk_textSwitchCellDelegate>
 #pragma mark - 开关机
 - (void)powerOff{
     NSString *msg = @"Are you sure to turn off the device? Please make sure the device has a button to turn on!";
-    self.currentAlert = nil;
-    self.currentAlert = [UIAlertController alertControllerWithTitle:@"Warning!"
-                                                            message:msg
-                                                     preferredStyle:UIAlertControllerStyleAlert];
+    MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@"Warning!"
+                                                                       message:msg
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
     @weakify(self);
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);
         [self.tableView mk_reloadSection:8 withRowAnimation:UITableViewRowAnimationNone];
     }];
-    [self.currentAlert addAction:cancelAction];
+    [alertView addAction:cancelAction];
     UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);
         [self commandPowerOff];
     }];
-    [self.currentAlert addAction:moreAction];
+    [alertView addAction:moreAction];
     
-    [self presentViewController:self.currentAlert animated:YES completion:nil];
+    [self presentViewController:alertView animated:YES completion:nil];
 }
 
 - (void)commandPowerOff{

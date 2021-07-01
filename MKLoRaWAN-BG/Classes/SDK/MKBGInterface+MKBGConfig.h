@@ -368,18 +368,6 @@ NS_ASSUME_NONNULL_BEGIN
                                     sucBlock:(void (^)(void))sucBlock
                                  failedBlock:(void (^)(NSError *error))failedBlock;
 
-/// Configure filter by PHY.
-/// @param type rule1 or rule2
-/// @param isOn isOn
-/// @param phyMode Only for isOn = YES.
-/// @param sucBlock Success callback
-/// @param failedBlock Failure callback
-+ (void)bg_configBLEFilterDeviceByPHYWithType:(mk_bg_filterRulesType)type
-                                         isOn:(BOOL)isOn
-                                      phyMode:(mk_bg_filterByPHYMode)phyMode
-                                     sucBlock:(void (^)(void))sucBlock
-                                  failedBlock:(void (^)(NSError *error))failedBlock;
-
 #pragma mark ****************************************GPS定位参数************************************************
 
 /// Configure GPS cold start time.
@@ -697,6 +685,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)bg_configDeviceName:(NSString *)deviceName
                    sucBlock:(void (^)(void))sucBlock
                 failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Configure the Scanning Type/PHY.
+/// @param mode mode
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configScanningPHYType:(mk_bg_PHYMode)mode
+                        sucBlock:(void (^)(void))sucBlock
+                     failedBlock:(void (^)(NSError *error))failedBlock;
 
 #pragma mark ****************************************辅助功能参数配置************************************************
 

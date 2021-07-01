@@ -710,35 +710,6 @@
                    failedBlock:failedBlock];
 }
 
-+ (void)bg_configBLEFilterDeviceByPHYWithType:(mk_bg_filterRulesType)type
-                                         isOn:(BOOL)isOn
-                                      phyMode:(mk_bg_filterByPHYMode)phyMode
-                                     sucBlock:(void (^)(void))sucBlock
-                                  failedBlock:(void (^)(NSError *error))failedBlock {
-    NSString *data = @"";
-    NSString *lenString = @"";
-    if (isOn) {
-        if (phyMode == mk_bg_filterByPHYMode_1MPHY) {
-            data = @"0100";
-        }else if (phyMode == mk_bg_filterByPHYMode_2MPHY) {
-            data = @"0101";
-        }else {
-            data = @"0102";
-        }
-        lenString = @"02";
-    }else {
-        data = @"00";
-        lenString = @"01";
-    }
-    NSString *typeString = (type == mk_bg_filterRulesClassAType ? @"3d" : @"46");
-    mk_bg_taskOperationID taskID = (type == mk_bg_filterRulesClassAType ? mk_bg_taskConfigBLEFilterAByPHYOperation : mk_bg_taskConfigBLEFilterBByPHYOperation);
-    NSString *commandString = [NSString stringWithFormat:@"%@%@%@%@",@"ed01",typeString,lenString,data];
-    [self configDataWithTaskID:taskID
-                          data:commandString
-                      sucBlock:sucBlock
-                   failedBlock:failedBlock];
-}
-
 #pragma mark ****************************************GPS定位参数************************************************
 
 + (void)bg_configGpsColdStardTime:(NSInteger)time
@@ -1266,6 +1237,17 @@
     }
     NSString *commandString = [NSString stringWithFormat:@"ed0179%@%@",lenString,tempString];
     [self configDataWithTaskID:mk_bg_taskConfigDeviceNameOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configScanningPHYType:(mk_bg_PHYMode)mode
+                        sucBlock:(void (^)(void))sucBlock
+                     failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *type = [MKBGSDKDataAdopter fetchPHYTypeString:mode];
+    NSString *commandString = [@"ed017a01" stringByAppendingString:type];
+    [self configDataWithTaskID:mk_bg_taskConfigScanningPHYTypeOperation
                           data:commandString
                       sucBlock:sucBlock
                    failedBlock:failedBlock];

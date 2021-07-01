@@ -59,10 +59,6 @@
             [self operationFailedBlockWithMsg:@"Read raw data error" block:failedBlock];
             return;
         }
-        if (![self readPHY]) {
-            [self operationFailedBlockWithMsg:@"Read PHY data error" block:failedBlock];
-            return;
-        }
         if (![self readEnableFilterConditions]) {
             [self operationFailedBlockWithMsg:@"Read Enable Filter Condition Status Error" block:failedBlock];
             return;
@@ -109,10 +105,6 @@
         }
         if (![self configRawDataWithList:list]) {
             [self operationFailedBlockWithMsg:@"Config raw data error" block:failedBlock];
-            return;
-        }
-        if (![self configPHY]) {
-            [self operationFailedBlockWithMsg:@"Config PHY data error" block:failedBlock];
             return;
         }
         if (![self configEnableFilterConditions]) {
@@ -338,37 +330,6 @@
         rules = (self.rawDataWhiteListIson ? mk_bg_filterRules_reverse : mk_bg_filterRules_forward);
     }
     [MKBGInterface bg_configBLEFilterDeviceRawDataWithType:self.rulesType rules:rules rawDataList:list sucBlock:^{
-        success = YES;
-        dispatch_semaphore_signal(self.semaphore);
-    } failedBlock:^(NSError * _Nonnull error) {
-        dispatch_semaphore_signal(self.semaphore);
-    }];
-    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
-    return success;
-}
-
-- (BOOL)readPHY {
-    __block BOOL success = NO;
-    [MKBGInterface bg_readBLEFilterByPHYWithType:self.rulesType sucBlock:^(id  _Nonnull returnData) {
-        success = YES;
-        self.filterPHYIsOn = [returnData[@"result"][@"isOn"] boolValue];
-        if (self.filterPHYIsOn) {
-            self.phyType = [returnData[@"result"][@"type"] integerValue];
-        }
-        dispatch_semaphore_signal(self.semaphore);
-    } failedBlock:^(NSError * _Nonnull error) {
-        dispatch_semaphore_signal(self.semaphore);
-    }];
-    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
-    return success;
-}
-
-- (BOOL)configPHY {
-    __block BOOL success = NO;
-    [MKBGInterface bg_configBLEFilterDeviceByPHYWithType:self.rulesType
-                                                    isOn:self.filterPHYIsOn
-                                                 phyMode:self.phyType
-                                                sucBlock:^{
         success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {

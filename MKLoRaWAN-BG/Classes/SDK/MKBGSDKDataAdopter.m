@@ -309,6 +309,19 @@
     };
 }
 
++ (NSString *)fetchPHYTypeString:(mk_bg_PHYMode)mode {
+    switch (mode) {
+        case mk_bg_PHYMode_BLE4:
+            return @"00";
+        case mk_bg_PHYMode_BLE5:
+            return @"01";
+        case mk_bg_PHYMode_CodedBLE5:
+            return @"02";
+        case mk_bg_PHYMode_BLE4AndBLE5:
+            return @"03";
+    }
+}
+
 #pragma mark - private method
 + (NSArray *)dataTypeList {
     return @[@"01",@"02",@"03",@"04",@"05",

@@ -80,11 +80,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 过滤的原始数据
 @property (nonatomic, strong)NSMutableArray *rawDataList;
 
-@property (nonatomic, assign)BOOL filterPHYIsOn;
-
-/// 0 : 1M phy     1 : 2M phy    2 : Coded phy
-@property (nonatomic, assign)NSInteger phyType;
-
 @property (nonatomic, assign)BOOL enableFilterConditions;
 
 - (void)readWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;

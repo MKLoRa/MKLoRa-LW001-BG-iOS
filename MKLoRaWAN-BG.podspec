@@ -247,16 +247,10 @@ TODO: Add long description of the pod here.
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/FilterCondition/Controller/**'
         
         ssss.dependency 'MKLoRaWAN-BG/Functions/FilterCondition/Model'
-        ssss.dependency 'MKLoRaWAN-BG/Functions/FilterCondition/View'
-        
       end
       
       sss.subspec 'Model' do |ssss|
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/FilterCondition/Model/**'
-      end
-      
-      sss.subspec 'View' do |ssss|
-        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/FilterCondition/View/**'
       end
     end
     

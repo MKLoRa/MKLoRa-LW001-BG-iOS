@@ -19,6 +19,7 @@
 #import "MKHudManager.h"
 #import "MKTextFieldCell.h"
 #import "MKTextSwitchCell.h"
+#import "MKAlertController.h"
 
 #import "MKBGTextButtonCell.h"
 
@@ -40,7 +41,7 @@ MKBGTextButtonCellDelegate>
 
 @property (nonatomic, strong)MKBGManDownDataModel *dataModel;
 
-@property (nonatomic, strong)UIAlertController *alertView;
+@property (nonatomic, strong)MKAlertController *alertView;
 
 @end
 
@@ -48,9 +49,6 @@ MKBGTextButtonCellDelegate>
 
 - (void)dealloc {
     NSLog(@"MKBGManDownController销毁");
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"mk_bg_settingPageNeedDismissAlert"
-                                                  object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -62,10 +60,6 @@ MKBGTextButtonCellDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(dismissAlert)
-                                                 name:@"mk_bg_settingPageNeedDismissAlert"
-                                               object:nil];
     [self readDataFromDevice];
 }
 
@@ -149,13 +143,6 @@ MKBGTextButtonCellDelegate>
         //Idle Stutas
         [self presentViewController:self.alertView animated:YES completion:nil];
         return;
-    }
-}
-
-#pragma mark - note
-- (void)dismissAlert {
-    if (self.alertView && (self.presentedViewController == self.alertView)) {
-        [self.alertView dismissViewControllerAnimated:NO completion:nil];
     }
 }
 
@@ -290,11 +277,12 @@ MKBGTextButtonCellDelegate>
     return _dataModel;
 }
 
-- (UIAlertController *)alertView {
+- (MKAlertController *)alertView {
     if (!_alertView) {
-        _alertView = [UIAlertController alertControllerWithTitle:@"Reset Idle Status"
+        _alertView = [MKAlertController alertControllerWithTitle:@"Reset Idle Status"
                                                          message:@"Whether to confirm the reset"
                                                   preferredStyle:UIAlertControllerStyleAlert];
+        _alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             
         }];

@@ -460,21 +460,6 @@
                  failedBlock:failedBlock];
 }
 
-+ (void)bg_readBLEFilterByPHYWithType:(mk_bg_filterRulesType)type
-                             sucBlock:(void (^)(id returnData))sucBlock
-                          failedBlock:(void (^)(NSError *error))failedBlock {
-    NSString *cmd = @"3d";
-    mk_bg_taskOperationID taskID = mk_bg_taskReadBLEFilterAByPHYOperation;
-    if (type == mk_bg_filterRulesClassBType) {
-        cmd = @"46";
-        taskID = mk_bg_taskReadBLEFilterBByPHYOperation;
-    }
-    [self readDataWithTaskID:taskID
-                     cmdFlag:cmd
-                    sucBlock:sucBlock
-                 failedBlock:failedBlock];
-}
-
 #pragma mark ****************************************GPS定位参数************************************************
 
 + (void)bg_readGpsColdStardTimeWithSucBlock:(void (^)(id returnData))sucBlock
@@ -789,6 +774,14 @@
                           failedBlock:(void (^)(NSError *error))failedBlock {
     [self readDataWithTaskID:mk_bg_taskReadDeviceNameOperation
                      cmdFlag:@"79"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readScanningPHYTypeWithSucBlock:(void (^)(id returnData))sucBlock
+                               failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadScanningPHYTypeOperation
+                     cmdFlag:@"7a"
                     sucBlock:sucBlock
                  failedBlock:failedBlock];
 }

@@ -64,7 +64,6 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadBLEFilterARawDataOperation,       //读取蓝牙过滤规则1的过滤原始数据信息
     mk_bg_taskReadBLEFilterAUUIDOperation,          //读取蓝牙过滤规则1的过滤UUID信息
     mk_bg_taskReadBLEFilterARssiOperation,          //读取蓝牙过滤规则1的过滤rssi
-    mk_bg_taskReadBLEFilterAByPHYOperation,         //读取蓝牙过滤规则1的过滤PHY
     
     mk_bg_taskReadBLEFilterBStatusOperation,        //读取蓝牙过滤规则2的开关状态
     mk_bg_taskReadBLEFilterBDeviceNameOperation,    //读取蓝牙过滤规则2的过滤设备名字
@@ -74,7 +73,6 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadBLEFilterBRawDataOperation,       //读取蓝牙过滤规则2的过滤原始数据信息
     mk_bg_taskReadBLEFilterBUUIDOperation,          //读取蓝牙过滤规则2的过滤UUID信息
     mk_bg_taskReadBLEFilterBRssiOperation,          //读取蓝牙过滤规则2的过滤rssi
-    mk_bg_taskReadBLEFilterBByPHYOperation,         //读取蓝牙过滤规则2的过滤PHY
     
 #pragma mark - GPS定位参数读取
     mk_bg_taskReadGpsColdStardTimeOperation,        //读取GPS冷启动超时时间
@@ -120,6 +118,7 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadMeasuredPowerOperation,               //读取Measured Power (RSSI@1m)
     mk_bg_taskReadTxPowerOperation,                     //读取蓝牙TX power
     mk_bg_taskReadDeviceNameOperation,                  //读取广播名称
+    mk_bg_taskReadScanningPHYTypeOperation,             //读取蓝牙扫描phy选择
     
     
 #pragma mark - 辅助功能参数读取
@@ -184,7 +183,6 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigBLEFilterARawDataOperation,         //配置过滤规则1的raw data
     mk_bg_taskConfigBLEFilterAUUIDOperation,            //配置过滤规则1的UUID
     mk_bg_taskConfigBLEFilterARSSIOperation,            //配置过滤规则1的RSSI
-    mk_bg_taskConfigBLEFilterAByPHYOperation,           //配置蓝牙过滤规则1的过滤PHY
     
     mk_bg_taskConfigBLEFilterBStatusOperation,          //配置过滤规则2的开关状态
     mk_bg_taskConfigBLEFilterBDeviceNameOperation,      //配置过滤规则2的广播名称
@@ -194,7 +192,6 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigBLEFilterBRawDataOperation,         //配置过滤规则2的raw data
     mk_bg_taskConfigBLEFilterBUUIDOperation,            //配置过滤规则2的UUID
     mk_bg_taskConfigBLEFilterBRSSIOperation,            //配置过滤规则2的RSSI
-    mk_bg_taskConfigBLEFilterBByPHYOperation,           //配置蓝牙过滤规则2的过滤PHY
     
     
 #pragma mark - GPS定位参数设置
@@ -240,6 +237,7 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigMeasuredPowerOperation,             //配置Measured Power (RSSI@1m)
     mk_bg_taskConfigTxPowerOperation,                   //配置蓝牙TX power
     mk_bg_taskConfigDeviceNameOperation,                //配置广播名称
+    mk_bg_taskConfigScanningPHYTypeOperation,           //配置Scanning Type/PHY
     
 #pragma mark - 辅助功能参数设置
     mk_bg_taskConfigThreeAxisWakeupConditionsOperation,         //配置三轴唤醒条件

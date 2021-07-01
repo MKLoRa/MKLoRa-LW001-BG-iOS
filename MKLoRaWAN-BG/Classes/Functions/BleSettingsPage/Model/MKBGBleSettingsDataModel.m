@@ -41,6 +41,10 @@
             [self operationFailedBlockWithMsg:@"Read Broadcast Timeout Error" block:failedBlock];
             return;
         }
+        if (![self readPHYMode]) {
+            [self operationFailedBlockWithMsg:@"Read Scanning Type/PHY Error" block:failedBlock];
+            return;
+        }
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();
@@ -74,6 +78,10 @@
                 [self operationFailedBlockWithMsg:@"Config Broadcast Timeout Error" block:failedBlock];
                 return;
             }
+        }
+        if (![self configPHYMode]) {
+            [self operationFailedBlockWithMsg:@"Config Scanning Type/PHY Error" block:failedBlock];
+            return;
         }
         moko_dispatch_main_safe(^{
             if (sucBlock) {
@@ -175,6 +183,31 @@
 - (BOOL)configBroadcastTimeout {
     __block BOOL success = NO;
     [MKBGInterface bg_configDeviceBroadcastTimeout:[self.broadcastTimeout integerValue] sucBlock:^{
+        success = YES;
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)readPHYMode {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readScanningPHYTypeWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.phy = [returnData[@"result"][@"phyType"] integerValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configPHYMode {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configScanningPHYType:self.phy sucBlock:^{
         success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {

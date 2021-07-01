@@ -477,18 +477,6 @@
             @"rssi":rssi,
         };
         operationID = mk_bg_taskReadBLEFilterARssiOperation;
-    }else if ([cmd isEqualToString:@"3d"]) {
-        //读取蓝牙过滤规则1过滤PHY
-        BOOL isOn = [[content substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"01"];
-        NSString *type = @"";
-        if (isOn && content.length == 4) {
-            type = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(2, 2)];
-        }
-        resultDic = @{
-            @"isOn":@(isOn),
-            @"type":type,
-        };
-        operationID = mk_bg_taskReadBLEFilterAByPHYOperation;
     }else if ([cmd isEqualToString:@"3e"]) {
         //读取蓝牙过滤规则2开关
         BOOL isOn = ([content isEqualToString:@"01"]);
@@ -602,18 +590,6 @@
             @"rssi":rssi,
         };
         operationID = mk_bg_taskReadBLEFilterBRssiOperation;
-    }else if ([cmd isEqualToString:@"46"]) {
-        //读取蓝牙过滤规则2过滤PHY
-        BOOL isOn = [[content substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"01"];
-        NSString *type = @"";
-        if (isOn && content.length == 4) {
-            type = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(2, 2)];
-        }
-        resultDic = @{
-            @"isOn":@(isOn),
-            @"type":type,
-        };
-        operationID = mk_bg_taskReadBLEFilterBByPHYOperation;
     }else if ([cmd isEqualToString:@"47"]) {
         //读取GPS冷启动超时时间
         resultDic = @{
@@ -870,6 +846,19 @@
             @"deviceName":(MKValidStr(deviceName) ? deviceName : @""),
         };
         operationID = mk_bg_taskReadDeviceNameOperation;
+    }else if ([cmd isEqualToString:@"7a"]) {
+        //读取蓝牙扫描phy选择
+        NSInteger value = [MKBLEBaseSDKAdopter getDecimalWithHex:content range:NSMakeRange(0, content.length)];
+        NSString *phyType = @"0";
+        if (value == 1) {
+            phyType = @"1";
+        }else if (value == 2) {
+            phyType = @"3";
+        }else if (value == 3) {
+            phyType = @"2";
+        }
+        resultDic = @{@"phyType":phyType};
+        operationID = mk_bg_taskReadScanningPHYTypeOperation;
     }else if ([cmd isEqualToString:@"80"]) {
         //读取三轴唤醒条件
         NSString *threshold = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 2)];
@@ -1074,9 +1063,6 @@
     }else if ([cmd isEqualToString:@"3c"]) {
         //配置过滤规则1的RSSI
         operationID = mk_bg_taskConfigBLEFilterARSSIOperation;
-    }else if ([cmd isEqualToString:@"3d"]) {
-        //配置过滤规则1PHY
-        operationID = mk_bg_taskConfigBLEFilterAByPHYOperation;
     }else if ([cmd isEqualToString:@"3e"]) {
         //配置过滤规则2的开关状态
         operationID = mk_bg_taskConfigBLEFilterBStatusOperation;
@@ -1101,9 +1087,6 @@
     }else if ([cmd isEqualToString:@"45"]) {
         //配置过滤规则2的RSSI
         operationID = mk_bg_taskConfigBLEFilterBRSSIOperation;
-    }else if ([cmd isEqualToString:@"46"]) {
-        //配置过滤规则2PHY
-        operationID = mk_bg_taskConfigBLEFilterBByPHYOperation;
     }else if ([cmd isEqualToString:@"47"]) {
         //配置GPS冷启动超时时间
         operationID = mk_bg_taskConfigGpsColdStardTimeOperation;
@@ -1218,6 +1201,9 @@
     }else if ([cmd isEqualToString:@"79"]) {
         //配置蓝牙广播名称
         operationID = mk_bg_taskConfigDeviceNameOperation;
+    }else if ([cmd isEqualToString:@"7a"]) {
+        //配置Scanning Type/PHY
+        operationID = mk_bg_taskConfigScanningPHYTypeOperation;
     }else if ([cmd isEqualToString:@"80"]) {
         //配置三轴唤醒条件
         operationID = mk_bg_taskConfigThreeAxisWakeupConditionsOperation;

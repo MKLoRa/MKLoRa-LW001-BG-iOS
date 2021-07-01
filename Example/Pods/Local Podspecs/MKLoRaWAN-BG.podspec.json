@@ -388,19 +388,12 @@
               "dependencies": {
                 "MKLoRaWAN-BG/Functions/FilterCondition/Model": [
 
-                ],
-                "MKLoRaWAN-BG/Functions/FilterCondition/View": [
-
                 ]
               }
             },
             {
               "name": "Model",
               "source_files": "MKLoRaWAN-BG/Classes/Functions/FilterCondition/Model/**"
-            },
-            {
-              "name": "View",
-              "source_files": "MKLoRaWAN-BG/Classes/Functions/FilterCondition/View/**"
             }
           ]
         },

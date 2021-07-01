@@ -110,7 +110,7 @@
 - (UILabel *)rightMsgLabel {
     if (!_rightMsgLabel) {
         _rightMsgLabel = [[UILabel alloc] init];
-        _rightMsgLabel.textColor = DEFAULT_TEXT_COLOR;
+        _rightMsgLabel.textColor = UIColorFromRGB(0x808080);
         _rightMsgLabel.font = MKFont(13.f);
         _rightMsgLabel.textAlignment = NSTextAlignmentRight;
     }

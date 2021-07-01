@@ -21,6 +21,8 @@
 #import "MKTextFieldCell.h"
 #import "MKTextSwitchCell.h"
 #import "MKNormalTextCell.h"
+#import "MKTextButtonCell.h"
+#import "MKAlertController.h"
 
 #import "MKBGBleSettingsDataModel.h"
 
@@ -29,7 +31,8 @@
 @interface MKBGBleSettingsController ()<UITableViewDelegate,
 UITableViewDataSource,
 MKTextFieldCellDelegate,
-mk_textSwitchCellDelegate>
+mk_textSwitchCellDelegate,
+MKTextButtonCellDelegate>
 
 @property (nonatomic, strong)MKBaseTableView *tableView;
 
@@ -43,9 +46,9 @@ mk_textSwitchCellDelegate>
 
 @property (nonatomic, strong)NSMutableArray *section4List;
 
-@property (nonatomic, strong)MKBGBleSettingsDataModel *dataModel;
+@property (nonatomic, strong)NSMutableArray *section5List;
 
-@property (nonatomic, strong)UIAlertController *alertView;
+@property (nonatomic, strong)MKBGBleSettingsDataModel *dataModel;
 
 @end
 
@@ -53,9 +56,6 @@ mk_textSwitchCellDelegate>
 
 - (void)dealloc {
     NSLog(@"MKBGBleSettingsController销毁");
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:@"mk_bg_settingPageNeedDismissAlert"
-                                                  object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -69,10 +69,6 @@ mk_textSwitchCellDelegate>
     [super viewDidLoad];
     [self loadSubViews];
     [self loadSectionDatas];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(dismissAlert)
-                                                 name:@"mk_bg_settingPageNeedDismissAlert"
-                                               object:nil];
 }
 
 #pragma mark - super method
@@ -105,7 +101,7 @@ mk_textSwitchCellDelegate>
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 5;
+    return 6;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -121,7 +117,10 @@ mk_textSwitchCellDelegate>
     if (section == 3) {
         return (self.dataModel.beaconModeIsOn ? self.section3List.count : 0);
     }
-    return (self.dataModel.beaconModeIsOn ? 0 : self.section4List.count);
+    if (section == 4) {
+        return (self.dataModel.beaconModeIsOn ? 0 : self.section4List.count);
+    }
+    return self.section5List.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -148,8 +147,14 @@ mk_textSwitchCellDelegate>
         cell.delegate = self;
         return cell;
     }
-    MKTextFieldCell *cell = [MKTextFieldCell initCellWithTableView:tableView];
-    cell.dataModel = self.section4List[indexPath.row];
+    if (indexPath.section == 4) {
+        MKTextFieldCell *cell = [MKTextFieldCell initCellWithTableView:tableView];
+        cell.dataModel = self.section4List[indexPath.row];
+        cell.delegate = self;
+        return cell;
+    }
+    MKTextButtonCell *cell = [MKTextButtonCell initCellWithTableView:tableView];
+    cell.dataModel = self.section5List[indexPath.row];
     cell.delegate = self;
     return cell;
 }
@@ -195,10 +200,20 @@ mk_textSwitchCellDelegate>
     }
 }
 
-#pragma mark - note
-- (void)dismissAlert {
-    if (self.alertView && (self.presentedViewController == self.alertView)) {
-        [self.alertView dismissViewControllerAnimated:NO completion:nil];
+#pragma mark - MKTextButtonCellDelegate
+/// 右侧按钮点击触发的回调事件
+/// @param index 当前cell所在的index
+/// @param dataListIndex 点击按钮选中的dataList里面的index
+/// @param value dataList[dataListIndex]
+- (void)mk_loraTextButtonCellSelected:(NSInteger)index
+                        dataListIndex:(NSInteger)dataListIndex
+                                value:(NSString *)value {
+    if (index == 0) {
+        //Scanning Type/PHY
+        MKTextButtonCellModel *cellModel = self.section5List[0];
+        cellModel.dataListIndex = dataListIndex;
+        self.dataModel.phy = dataListIndex;
+        return;
     }
 }
 
@@ -218,25 +233,25 @@ mk_textSwitchCellDelegate>
 
 - (void)configConnectEnable:(BOOL)connect{
     NSString *msg = (connect ? @"Are you sure to make the device connectable?" : @"Are you sure to make the device unconnectable?");
-    self.alertView = nil;
-    self.alertView = [UIAlertController alertControllerWithTitle:@"Warning!"
-                                                         message:msg
-                                                  preferredStyle:UIAlertControllerStyleAlert];
+    MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@"Warning!"
+                                                                       message:msg
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
     @weakify(self);
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);
         [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
     }];
-    [self.alertView addAction:cancelAction];
+    [alertView addAction:cancelAction];
     UIAlertAction *moreAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);
         MKTextSwitchCellModel *cellModel = self.section2List[0];
         cellModel.isOn = connect;
         self.dataModel.connectable = connect;
     }];
-    [self.alertView addAction:moreAction];
+    [alertView addAction:moreAction];
     
-    [self presentViewController:self.alertView animated:YES completion:nil];
+    [self presentViewController:alertView animated:YES completion:nil];
 }
 
 #pragma mark - updateCellModels
@@ -253,6 +268,9 @@ mk_textSwitchCellDelegate>
     MKTextFieldCellModel *timeoutModel = self.section4List[0];
     timeoutModel.textFieldValue = self.dataModel.broadcastTimeout;
     
+    MKTextButtonCellModel *phyModel = self.section5List[0];
+    phyModel.dataListIndex = self.dataModel.phy;
+    
     [self.tableView reloadData];
 }
 
@@ -263,6 +281,7 @@ mk_textSwitchCellDelegate>
     [self loadSection2Datas];
     [self loadSection3Datas];
     [self loadSection4Datas];
+    [self loadSection5Datas];
     
     [self.tableView reloadData];
 }
@@ -308,6 +327,16 @@ mk_textSwitchCellDelegate>
     cellModel.maxLength = 2;
     cellModel.unit = @"Mins";
     [self.section4List addObject:cellModel];
+}
+
+- (void)loadSection5Datas {
+    MKTextButtonCellModel *cellModel = [[MKTextButtonCellModel alloc] init];
+    cellModel.index = 0;
+    cellModel.msg = @"Scanning Type/PHY";
+    cellModel.dataList = @[@"1M PHY (BLE 4.x)",@"1M PHY (BLE 5)",@"1M PHY(BLE4.x+BLE5)",
+                            @"Coded PHY(BLE 5)"];
+    cellModel.buttonLabelFont = MKFont(12.f);
+    [self.section5List addObject:cellModel];
 }
 
 #pragma mark - UI
@@ -367,6 +396,13 @@ mk_textSwitchCellDelegate>
         _section4List = [NSMutableArray array];
     }
     return _section4List;
+}
+
+- (NSMutableArray *)section5List {
+    if (!_section5List) {
+        _section5List = [NSMutableArray array];
+    }
+    return _section5List;
 }
 
 - (MKBGBleSettingsDataModel *)dataModel {

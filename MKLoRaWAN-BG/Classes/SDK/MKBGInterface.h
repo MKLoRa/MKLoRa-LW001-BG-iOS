@@ -437,14 +437,6 @@ NS_ASSUME_NONNULL_BEGIN
                                   sucBlock:(void (^)(id returnData))sucBlock
                                failedBlock:(void (^)(NSError *error))failedBlock;
 
-/// Read Filter by PHY.
-/// @param type type
-/// @param sucBlock Success callback
-/// @param failedBlock Failure callback
-+ (void)bg_readBLEFilterByPHYWithType:(mk_bg_filterRulesType)type
-                             sucBlock:(void (^)(id returnData))sucBlock
-                          failedBlock:(void (^)(NSError *error))failedBlock;
-
 #pragma mark ****************************************GPS定位参数************************************************
 
 /// Read GPS cold start time.(Unit:Min)
@@ -727,6 +719,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param failedBlock Failure callback
 + (void)bg_readDeviceNameWithSucBlock:(void (^)(id returnData))sucBlock
                           failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the Scanning Type/PHY.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readScanningPHYTypeWithSucBlock:(void (^)(id returnData))sucBlock
+                               failedBlock:(void (^)(NSError *error))failedBlock;
 
 #pragma mark ****************************************辅助功能参数读取************************************************
 

@@ -62,12 +62,6 @@ typedef NS_ENUM(NSInteger, mk_bg_filterRules) {
     mk_bg_filterRules_reverse,          //Filter data in reverse
 };
 
-typedef NS_ENUM(NSInteger, mk_bg_filterByPHYMode) {
-    mk_bg_filterByPHYMode_1MPHY,
-    mk_bg_filterByPHYMode_2MPHY,
-    mk_bg_filterByPHYMode_codedPHY,
-};
-
 typedef NS_ENUM(NSInteger, mk_bg_gpsFixMode) {
     mk_bg_gpsFixMode_2d,
     mk_bg_gpsFixMode_3d,
@@ -125,6 +119,13 @@ typedef NS_ENUM(NSInteger, mk_bg_txPower) {
     mk_bg_txPower6dBm,       //6dBm
     mk_bg_txPower7dBm,       //7dBm
     mk_bg_txPower8dBm,       //8dBm
+};
+
+typedef NS_ENUM(NSInteger, mk_bg_PHYMode) {
+    mk_bg_PHYMode_BLE4,                     //1M PHY (BLE 4.x)
+    mk_bg_PHYMode_BLE5,                     //1M PHY (BLE 5)
+    mk_bg_PHYMode_BLE4AndBLE5,              //1M PHY (BLE 4.x + BLE 5)
+    mk_bg_PHYMode_CodedBLE5,                //Coded PHY(BLE 5)
 };
 
 #pragma mark - Protocol
