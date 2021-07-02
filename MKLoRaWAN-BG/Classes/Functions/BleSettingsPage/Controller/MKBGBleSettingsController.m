@@ -236,7 +236,7 @@ MKTextButtonCellDelegate>
     MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@"Warning!"
                                                                        message:msg
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-    alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
+    alertView.notificationName = @"mk_bg_needDismissAlert";
     @weakify(self);
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);

@@ -28,6 +28,7 @@
         }
         NSString *subContent = [content substringWithRange:NSMakeRange(index, subLen * 2)];
         NSString *date = [self fetchCurrentDate];
+        index += subLen * 2;
         NSDictionary *dic = @{
             @"date":date,
             @"rawData":subContent,

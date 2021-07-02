@@ -330,6 +330,8 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
     [MKBGDatabaseManager clearDataTable];
     [self.dataList removeAllObjects];
     [self.tableView reloadData];
+    self.headerView.sumLabel.text = @"Sum:N/A";
+    self.headerView.countLabel.text = @"Count:0";
     
     //start按钮置灰、empty、export都不可用
     self.headerView.startButton.enabled = NO;

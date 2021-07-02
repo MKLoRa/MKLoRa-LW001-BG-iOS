@@ -374,7 +374,7 @@ mk_textSwitchCellDelegate>
     MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@"Factory Reset"
                                                                        message:msg
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-    alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
+    alertView.notificationName = @"mk_bg_needDismissAlert";
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
     [alertView addAction:cancelAction];
     @weakify(self);
@@ -407,7 +407,7 @@ mk_textSwitchCellDelegate>
     MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@"Change Password"
                                                                        message:msg
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-    alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
+    alertView.notificationName = @"mk_bg_needDismissAlert";
     [alertView addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         @strongify(self);
         self.passwordTextField = nil;
@@ -509,7 +509,7 @@ mk_textSwitchCellDelegate>
     MKAlertController *alertView = [MKAlertController alertControllerWithTitle:@"Warning!"
                                                                        message:msg
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-    alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
+    alertView.notificationName = @"mk_bg_needDismissAlert";
     @weakify(self);
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);

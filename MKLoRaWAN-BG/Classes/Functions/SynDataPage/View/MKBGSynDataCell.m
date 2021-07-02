@@ -96,7 +96,7 @@ static NSString *const MKBGSynDataCellIdenty = @"MKBGSynDataCellIdenty";
         return;
     }
     
-    if (ValidDict(dataModel[@"date"])) {
+    if (ValidStr(dataModel[@"date"])) {
         self.timeLabel.text = [@"Time: " stringByAppendingString:dataModel[@"date"]];
     }else {
         self.timeLabel.text = @"Time: N/A";

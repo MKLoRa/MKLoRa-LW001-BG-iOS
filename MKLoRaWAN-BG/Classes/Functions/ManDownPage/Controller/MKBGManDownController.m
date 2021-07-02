@@ -282,7 +282,7 @@ MKBGTextButtonCellDelegate>
         _alertView = [MKAlertController alertControllerWithTitle:@"Reset Idle Status"
                                                          message:@"Whether to confirm the reset"
                                                   preferredStyle:UIAlertControllerStyleAlert];
-        _alertView.notificationName = @"mk_bg_settingPageNeedDismissAlert";
+        _alertView.notificationName = @"mk_bg_needDismissAlert";
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             
         }];
