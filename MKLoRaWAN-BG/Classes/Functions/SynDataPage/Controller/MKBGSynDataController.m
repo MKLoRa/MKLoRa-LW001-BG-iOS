@@ -298,16 +298,8 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
         self.headerView.sumLabel.text = [NSString stringWithFormat:@"Sum:%@",self.totalSum];
     }
     
-    if (self.dataList.count > 0) {
-        //如果本地有数据存储，则start按钮不可用,sync按钮和empty、export按钮可用
-        self.headerView.startButton.enabled = NO;
-        [self.headerView.startButton setBackgroundColor:[UIColor grayColor]];
-        [self.headerView.startButton setTitleColor:DEFAULT_TEXT_COLOR forState:UIControlStateNormal];
-        
-    }else {
+    if (self.dataList.count == 0) {
         //本地没有存储数据，则start、empty、sync不可用
-        [self.headerView.startButton setBackgroundColor:NAVBAR_COLOR_MACROS];
-        [self.headerView.startButton setTitleColor:COLOR_WHITE_MACROS forState:UIControlStateNormal];
         
         self.headerView.synButton.enabled = NO;
         self.headerView.synButton.topIcon.image = LOADICON(@"MKLoRaWAN-BG", @"MKBGSynDataController", @"bg_sync_disableIcon.png");
@@ -317,6 +309,7 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
         
         self.headerView.exportButton.enabled = NO;
         self.headerView.exportButton.topIcon.image = LOADICON(@"MKLoRaWAN-BG", @"MKBGSynDataController", @"bg_export_disableIcon.png");
+        
     }
     
     [self.tableView reloadData];
@@ -327,10 +320,14 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
 - (void)startButtonMethod {
     //用户发送给设备开始读取数据了
     //清除数据库数据和数据列表数据
+    if (self.parseTimer) {
+        dispatch_cancel(self.parseTimer);
+    }
     [MKBGDatabaseManager clearDataTable];
     [self.dataList removeAllObjects];
+    [self.contentList removeAllObjects];
     [self.tableView reloadData];
-    self.headerView.sumLabel.text = @"Sum:N/A";
+    self.headerView.sumLabel.text = @"Sum:0";
     self.headerView.countLabel.text = @"Count:0";
     
     //start按钮置灰、empty、export都不可用

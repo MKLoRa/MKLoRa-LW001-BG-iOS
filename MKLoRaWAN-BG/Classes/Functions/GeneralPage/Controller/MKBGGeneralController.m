@@ -262,13 +262,13 @@ MKTextFieldCellDelegate>
 - (void)loadSection4Datas {
     MKNormalTextCellModel *cellModel = [[MKNormalTextCellModel alloc] init];
     cellModel.showRightIcon = YES;
-    cellModel.leftMsg = @"3-Axis Setting";
+    cellModel.leftMsg = @"3-Axis Settings";
     [self.section4List addObject:cellModel];
 }
 
 #pragma mark - UI
 - (void)loadSubViews {
-    self.defaultTitle = @"General Setting";
+    self.defaultTitle = @"General Settings";
     [self.rightButton setImage:LOADICON(@"MKLoRaWAN-BG", @"MKBGGeneralController", @"bg_slotSaveIcon.png") forState:UIControlStateNormal];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {

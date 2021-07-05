@@ -184,7 +184,6 @@ MKTextButtonCellDelegate>
 #pragma mark - UI
 - (void)loadSubViews {
     self.defaultTitle = @"On/off Settings";
-    [self.rightButton setImage:LOADICON(@"MKLoRaWAN-BG", @"MKBGOnOffSettingsController", @"bg_slotSaveIcon.png") forState:UIControlStateNormal];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);

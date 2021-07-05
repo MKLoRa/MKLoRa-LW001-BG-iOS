@@ -286,7 +286,15 @@
 
 - (NSArray <NSString *>*)DRHValueList {
     NSArray *drlList = [self DRLValueList];
-    return [drlList subarrayWithRange:NSMakeRange(self.DRL, drlList.count - self.DRL)];
+    NSInteger lowIndex = 0;
+    for (NSInteger i = 0; i < drlList.count; i ++) {
+        if (self.DRL == [drlList[i] integerValue]) {
+            lowIndex = i;
+            break;
+        }
+    }
+
+    return [drlList subarrayWithRange:NSMakeRange(lowIndex, drlList.count - lowIndex)];
 }
 
 #pragma mark - interface

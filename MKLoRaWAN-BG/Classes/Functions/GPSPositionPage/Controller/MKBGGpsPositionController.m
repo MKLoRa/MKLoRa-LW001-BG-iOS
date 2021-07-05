@@ -415,7 +415,7 @@ MKTextButtonCellDelegate>
 - (void)loadSection3Datas {
     MKTextFieldCellModel *cellModel1 = [[MKTextFieldCellModel alloc] init];
     cellModel1.index = 6;
-    cellModel1.msg = @"Ading Accuracy";
+    cellModel1.msg = @"Aiding Accuracy";
     cellModel1.textPlaceholder = @"5~1000";
     cellModel1.textFieldType = mk_realNumberOnly;
     cellModel1.maxLength = 4;

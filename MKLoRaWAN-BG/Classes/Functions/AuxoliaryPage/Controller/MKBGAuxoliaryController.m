@@ -58,7 +58,7 @@ mk_textSwitchCellDelegate>
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0 && indexPath.row == 0) {
-        //Donlink  For Position
+        //Downlink  For Position
         MKBGDownlinkController *vc = [[MKBGDownlinkController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
         return;
@@ -157,7 +157,7 @@ mk_textSwitchCellDelegate>
 - (void)loadSection0Datas {
     MKNormalTextCellModel *cellModel1 = [[MKNormalTextCellModel alloc] init];
     cellModel1.showRightIcon = YES;
-    cellModel1.leftMsg = @"Donlink For Position";
+    cellModel1.leftMsg = @"Downlink For Position";
     [self.section0List addObject:cellModel1];
     
     MKNormalTextCellModel *cellModel2 = [[MKNormalTextCellModel alloc] init];

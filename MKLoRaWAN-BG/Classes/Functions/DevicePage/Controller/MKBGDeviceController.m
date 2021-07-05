@@ -363,6 +363,7 @@ mk_textSwitchCellDelegate>
     
     MKTextButtonCellModel *promptModel = self.section5List[0];
     promptModel.dataListIndex = self.dataModel.prompt;
+    promptModel.noteMsg = [NSString stringWithFormat:@"*When the battery is less than or equal to %@, the red LED will flashe once every 30 seconds.",promptModel.dataList[self.dataModel.prompt]];
     
     [self.tableView reloadData];
 }

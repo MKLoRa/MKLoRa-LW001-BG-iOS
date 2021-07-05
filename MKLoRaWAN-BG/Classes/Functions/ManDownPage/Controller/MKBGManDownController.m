@@ -140,7 +140,7 @@ MKBGTextButtonCellDelegate>
 /// @param index cell所在序列号
 - (void)bg_textButtonCell_buttonAction:(NSInteger)index {
     if (index == 0) {
-        //Idle Stutas
+        //Idle Status
         [self presentViewController:self.alertView animated:YES completion:nil];
         return;
     }
@@ -220,7 +220,7 @@ MKBGTextButtonCellDelegate>
 - (void)loadSection2Datas {
     MKBGTextButtonCellModel *cellModel = [[MKBGTextButtonCellModel alloc] init];
     cellModel.index = 0;
-    cellModel.leftMsg = @"Idle Stutas";
+    cellModel.leftMsg = @"Idle Status";
     cellModel.rightButtonTitle = @"Reset";
     [self.section2List addObject:cellModel];
 }
