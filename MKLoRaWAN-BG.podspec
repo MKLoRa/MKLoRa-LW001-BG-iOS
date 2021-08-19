@@ -146,7 +146,6 @@ TODO: Add long description of the pod here.
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/BlePositionPage/Controller/**'
         
         ssss.dependency 'MKLoRaWAN-BG/Functions/BlePositionPage/Model'
-        ssss.dependency 'MKLoRaWAN-BG/Functions/BlePositionPage/View'
         
         ssss.dependency 'MKLoRaWAN-BG/Functions/FilterCondition/Controller'
       end
@@ -155,9 +154,6 @@ TODO: Add long description of the pod here.
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/BlePositionPage/Model/**'
       end
       
-      sss.subspec 'View' do |ssss|
-        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/BlePositionPage/View/**'
-      end
     end
     
     ss.subspec 'BleSettingsPage' do |sss|

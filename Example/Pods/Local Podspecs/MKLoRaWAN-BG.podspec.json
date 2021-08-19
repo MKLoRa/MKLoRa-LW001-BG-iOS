@@ -235,9 +235,6 @@
                 "MKLoRaWAN-BG/Functions/BlePositionPage/Model": [
 
                 ],
-                "MKLoRaWAN-BG/Functions/BlePositionPage/View": [
-
-                ],
                 "MKLoRaWAN-BG/Functions/FilterCondition/Controller": [
 
                 ]
@@ -246,10 +243,6 @@
             {
               "name": "Model",
               "source_files": "MKLoRaWAN-BG/Classes/Functions/BlePositionPage/Model/**"
-            },
-            {
-              "name": "View",
-              "source_files": "MKLoRaWAN-BG/Classes/Functions/BlePositionPage/View/**"
             }
           ]
         },

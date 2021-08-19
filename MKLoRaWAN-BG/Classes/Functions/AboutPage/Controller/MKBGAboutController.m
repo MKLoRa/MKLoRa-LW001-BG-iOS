@@ -112,7 +112,7 @@
         _appNameLabel.textColor = DEFAULT_TEXT_COLOR;
         _appNameLabel.textAlignment = NSTextAlignmentCenter;
         _appNameLabel.font = MKFont(20.f);
-        _appNameLabel.text = @"LW001-BG";
+        _appNameLabel.text = @"LW001-BG PRO";
     }
     return _appNameLabel;
 }
@@ -142,7 +142,7 @@
         _firmwareLabel.textColor = RGBCOLOR(189, 189, 189);
         _firmwareLabel.textAlignment = NSTextAlignmentCenter;
         _firmwareLabel.font = MKFont(16.f);
-        _firmwareLabel.text = @"FW Version:V2.0";
+        _firmwareLabel.text = @"FW Version:V1.0";
     }
     return _firmwareLabel;
 }

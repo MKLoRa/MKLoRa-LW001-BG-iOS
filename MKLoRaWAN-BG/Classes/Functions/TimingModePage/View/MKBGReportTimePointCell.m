@@ -240,10 +240,6 @@ static CGFloat const hourButtonHeight = 25.f;
     [self.contentPanel addGestureRecognizer:swipeRight];
 }
 
-- (void)processTapAction {
-    
-}
-
 #pragma mark - getter
 - (UIView *)contentPanel {
     if (!_contentPanel) {

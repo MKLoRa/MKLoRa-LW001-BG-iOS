@@ -173,7 +173,7 @@ MKTextFieldCellDelegate>
     MKTextFieldCellModel *cellModel4 = [[MKTextFieldCellModel alloc] init];
     cellModel4.index = 3;
     cellModel4.msg = @"Motion  Duration";
-    cellModel4.textPlaceholder = @"1~15";
+    cellModel4.textPlaceholder = @"1~50";
     cellModel4.textFieldType = mk_realNumberOnly;
     cellModel4.maxLength = 2;
     cellModel4.unit = @"x5mg";

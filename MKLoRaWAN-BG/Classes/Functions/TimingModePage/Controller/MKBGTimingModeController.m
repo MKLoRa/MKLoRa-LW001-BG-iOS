@@ -102,6 +102,7 @@ MKBGReportTimePointCellDelegate>
     MKBGReportTimePointCell *cell = [MKBGReportTimePointCell initCellWithTableView:tableView];
     cell.dataModel = self.section2List[indexPath.row];
     cell.delegate = self;
+    [cell resetFlagForFrame];
     return cell;
 }
 

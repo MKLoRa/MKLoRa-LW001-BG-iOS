@@ -1,12 +1,12 @@
 //
-//  MKBGFilterConditionCell.m
-//  MKLoRaWAN-BG_Example
+//  MKFilterConditionCell.m
+//  MKCustomUIModule_Example
 //
-//  Created by aa on 2021/5/21.
+//  Created by aa on 2021/7/29.
 //  Copyright © 2021 aadyx2007@163.com. All rights reserved.
 //
 
-#import "MKBGFilterConditionCell.h"
+#import "MKFilterConditionCell.h"
 
 #import "Masonry.h"
 
@@ -15,10 +15,10 @@
 #import "MKCustomUIAdopter.h"
 #import "MKPickerView.h"
 
-@implementation MKBGFilterConditionCellModel
+@implementation MKFilterConditionCellModel
 @end
 
-@interface MKBGFilterConditionCell ()
+@interface MKFilterConditionCell ()
 
 @property (nonatomic, strong)UILabel *leftMsgLabel;
 
@@ -28,12 +28,12 @@
 
 @end
 
-@implementation MKBGFilterConditionCell
+@implementation MKFilterConditionCell
 
-+ (MKBGFilterConditionCell *)initCellWithTableView:(UITableView *)tableView {
-    MKBGFilterConditionCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MKBGFilterConditionCellIdenty"];
++ (MKFilterConditionCell *)initCellWithTableView:(UITableView *)tableView {
+    MKFilterConditionCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MKFilterConditionCellIdenty"];
     if (!cell) {
-        cell = [[MKBGFilterConditionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MKBGFilterConditionCellIdenty"];
+        cell = [[MKFilterConditionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MKFilterConditionCellIdenty"];
     }
     return cell;
 }
@@ -89,7 +89,7 @@
 }
 
 #pragma mark - setter
-- (void)setDataModel:(MKBGFilterConditionCellModel *)dataModel {
+- (void)setDataModel:(MKFilterConditionCellModel *)dataModel {
     _dataModel = nil;
     _dataModel = dataModel;
     if (!_dataModel) {

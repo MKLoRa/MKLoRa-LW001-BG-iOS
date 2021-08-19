@@ -24,8 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol MKBGReportTimePointCellDelegate <NSObject>
 
-@optional
-
 /**
  删除
  

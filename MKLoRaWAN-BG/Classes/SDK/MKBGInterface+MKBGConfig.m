@@ -54,7 +54,7 @@
                  sucBlock:(void (^)(void))sucBlock
               failedBlock:(void (^)(NSError *error))failedBlock {
     if (timeZone < -12 || timeZone > 12) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *zoneValue = [MKBLEBaseSDKAdopter hexStringFromSignedNumber:timeZone];
@@ -69,7 +69,7 @@
                  sucBlock:(void (^)(void))sucBlock
               failedBlock:(void (^)(NSError *error))failedBlock {
     if (!MKValidStr(password) || password.length != 8) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *commandData = @"";
@@ -113,7 +113,7 @@
                           sucBlock:(void (^)(void))sucBlock
                        failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 300 || interval > 86400) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:4];
@@ -215,7 +215,7 @@
                                    sucBlock:(void (^)(void))sucBlock
                                 failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 30 || interval > 86400) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:4];
@@ -242,7 +242,7 @@
                                   failedBlock:(void (^)(NSError *error))failedBlock {
     NSString *dataString = [MKBGSDKDataAdopter fetchTimingModeReportingTimePoint:dataList];
     if (!MKValidStr(dataString)) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *commandString = [@"ed0123" stringByAppendingString:dataString];
@@ -274,7 +274,7 @@
                                      sucBlock:(void (^)(void))sucBlock
                                   failedBlock:(void (^)(NSError *error))failedBlock {
     if (number < 1 || number > 255) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:number byteLen:1];
@@ -300,7 +300,7 @@
                                        sucBlock:(void (^)(void))sucBlock
                                     failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 10 || interval > 86400) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:4];
@@ -326,7 +326,7 @@
                                  sucBlock:(void (^)(void))sucBlock
                               failedBlock:(void (^)(NSError *error))failedBlock {
     if (time < 3 || time > 180) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:1];
@@ -341,7 +341,7 @@
                                    sucBlock:(void (^)(void))sucBlock
                                 failedBlock:(void (^)(NSError *error))failedBlock {
     if (number < 1 || number > 255) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:number byteLen:1];
@@ -356,7 +356,7 @@
                                       sucBlock:(void (^)(void))sucBlock
                                    failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 10 || interval > 300) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:2];
@@ -396,7 +396,7 @@
                                sucBlock:(void (^)(void))sucBlock
                             failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 1 || interval > 5) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
@@ -411,7 +411,7 @@
                           sucBlock:(void (^)(void))sucBlock
                        failedBlock:(void (^)(NSError *error))failedBlock {
     if (number < 1 || number > 5) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:number byteLen:1];
@@ -426,7 +426,7 @@
                               sucBlock:(void (^)(void))sucBlock
                            failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 1 || interval > 10) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
@@ -441,7 +441,7 @@
                        sucBlock:(void (^)(void))sucBlock
                     failedBlock:(void (^)(NSError *error))failedBlock {
     if (number < 1 || number > 5) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:number byteLen:1];
@@ -494,7 +494,7 @@
         return;
     }
     if (!MKValidStr(deviceName) || deviceName.length > 29) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *tempString = @"";
@@ -507,10 +507,7 @@
     NSString *rulesString = (rules == mk_bg_filterRules_forward ? @"01" : @"02");
     mk_bg_taskOperationID taskID = (type == mk_bg_filterRulesClassAType ? mk_bg_taskConfigBLEFilterADeviceNameOperation : mk_bg_taskConfigBLEFilterBDeviceNameOperation);
     
-    NSString *lenString = [NSString stringWithFormat:@"%1lx",(long)(deviceName.length + 1)];
-    if (lenString.length == 1) {
-        lenString = [@"0" stringByAppendingString:lenString];
-    }
+    NSString *lenString = [MKBLEBaseSDKAdopter fetchHexValue:(deviceName.length + 1) byteLen:1];
     NSString *commandString = [NSString stringWithFormat:@"%@%@%@%@%@",@"ed01",typeString,lenString,rulesString,tempString];
     [self configDataWithTaskID:taskID
                           data:commandString
@@ -536,7 +533,7 @@
     mac = [mac stringByReplacingOccurrencesOfString:@":" withString:@""];
     mac = [mac stringByReplacingOccurrencesOfString:@"-" withString:@""];
     if (!MKValidStr(mac) || mac.length > 12 || ![MKBLEBaseSDKAdopter checkHexCharacter:mac] || mac.length % 2 != 0) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *typeString = (type == mk_bg_filterRulesClassAType ? @"37" : @"40");
@@ -571,7 +568,7 @@
         return;
     }
     if (majorMin < 0 || majorMin > 65535 || majorMax < majorMin || majorMax > 65535) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *minString = [MKBLEBaseSDKAdopter fetchHexValue:majorMin byteLen:2];
@@ -604,7 +601,7 @@
         return;
     }
     if (minorMin < 0 || minorMin > 65535 || minorMax < minorMin || minorMax > 65535) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *minString = [MKBLEBaseSDKAdopter fetchHexValue:minorMin byteLen:2];
@@ -636,13 +633,13 @@
         return;
     }
     if (!MKValidArray(rawDataList) || rawDataList.count > 5) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *contentData = @"";
     for (id <mk_bg_BLEFilterRawDataProtocol>protocol in rawDataList) {
         if (![MKBGSDKDataAdopter isConfirmRawFilterProtocol:protocol]) {
-            [self operationParamsErrorBlock:failedBlock];
+            [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
             return;
         }
         NSString *minIndex = [MKBLEBaseSDKAdopter fetchHexValue:protocol.minIndex byteLen:1];
@@ -678,7 +675,7 @@
         return;
     }
     if (![MKBLEBaseSDKAdopter checkHexCharacter:uuid] || uuid.length > 32 || uuid.length % 2 != 0) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *lenString = [MKBLEBaseSDKAdopter fetchHexValue:((uuid.length / 2) + 1) byteLen:1];
@@ -697,7 +694,7 @@
                                     sucBlock:(void (^)(void))sucBlock
                                  failedBlock:(void (^)(NSError *error))failedBlock {
     if (rssi < -127 || rssi > 0) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *rssiValue = [MKBLEBaseSDKAdopter hexStringFromSignedNumber:rssi];
@@ -716,7 +713,7 @@
                          sucBlock:(void (^)(void))sucBlock
                       failedBlock:(void (^)(NSError *error))failedBlock {
     if (time < 3 || time > 15) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:1];
@@ -731,7 +728,7 @@
                               sucBlock:(void (^)(void))sucBlock
                            failedBlock:(void (^)(NSError *error))failedBlock {
     if (value < 5 || value > 100) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *valueString = [MKBLEBaseSDKAdopter fetchHexValue:value byteLen:1];
@@ -746,7 +743,7 @@
                               sucBlock:(void (^)(void))sucBlock
                            failedBlock:(void (^)(NSError *error))failedBlock {
     if (value < 5 || value > 100) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *valueString = [MKBLEBaseSDKAdopter fetchHexValue:value byteLen:1];
@@ -761,7 +758,7 @@
                       sucBlock:(void (^)(void))sucBlock
                    failedBlock:(void (^)(NSError *error))failedBlock {
     if (time < 1 || time > 7620) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:2];
@@ -776,7 +773,7 @@
                     sucBlock:(void (^)(void))sucBlock
                  failedBlock:(void (^)(NSError *error))failedBlock {
     if (time < 0 || time > 76200) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:4];
@@ -791,7 +788,7 @@
                      sucBlock:(void (^)(void))sucBlock
                   failedBlock:(void (^)(NSError *error))failedBlock {
     if (value < 25 || value > 100) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *valueString = [MKBLEBaseSDKAdopter fetchHexValue:value byteLen:1];
@@ -828,7 +825,7 @@
                       sucBlock:(void (^)(void))sucBlock
                    failedBlock:(void (^)(NSError *error))failedBlock {
     if (time < 0 || time > 76200) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:4];
@@ -853,7 +850,7 @@
                          sucBlock:(void (^)(void))sucBlock
                       failedBlock:(void (^)(NSError *error))failedBlock {
     if (value < 5 || value > 1000) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *valueString = [MKBLEBaseSDKAdopter fetchHexValue:value byteLen:2];
@@ -868,7 +865,7 @@
                       sucBlock:(void (^)(void))sucBlock
                    failedBlock:(void (^)(NSError *error))failedBlock {
     if (time < 1 || time > 7620) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *timeString = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:2];
@@ -915,7 +912,7 @@
                sucBlock:(void (^)(void))sucBlock
             failedBlock:(void (^)(NSError *error))failedBlock {
     if (!MKValidStr(devEUI) || devEUI.length != 16 || ![MKBLEBaseSDKAdopter checkHexCharacter:devEUI]) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *commandString = [@"ed016308" stringByAppendingString:devEUI];
@@ -929,7 +926,7 @@
                sucBlock:(void (^)(void))sucBlock
             failedBlock:(void (^)(NSError *error))failedBlock {
     if (!MKValidStr(appEUI) || appEUI.length != 16 || ![MKBLEBaseSDKAdopter checkHexCharacter:appEUI]) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *commandString = [@"ed016408" stringByAppendingString:appEUI];
@@ -943,7 +940,7 @@
                sucBlock:(void (^)(void))sucBlock
             failedBlock:(void (^)(NSError *error))failedBlock {
     if (!MKValidStr(appKey) || appKey.length != 32 || ![MKBLEBaseSDKAdopter checkHexCharacter:appKey]) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *commandString = [@"ed016510" stringByAppendingString:appKey];
@@ -957,7 +954,7 @@
                 sucBlock:(void (^)(void))sucBlock
              failedBlock:(void (^)(NSError *error))failedBlock {
     if (!MKValidStr(devAddr) || devAddr.length != 8 || ![MKBLEBaseSDKAdopter checkHexCharacter:devAddr]) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *commandString = [@"ed016604" stringByAppendingString:devAddr];
@@ -971,7 +968,7 @@
                 sucBlock:(void (^)(void))sucBlock
              failedBlock:(void (^)(NSError *error))failedBlock {
     if (!MKValidStr(appSkey) || appSkey.length != 32 || ![MKBLEBaseSDKAdopter checkHexCharacter:appSkey]) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *commandString = [@"ed016710" stringByAppendingString:appSkey];
@@ -985,7 +982,7 @@
                 sucBlock:(void (^)(void))sucBlock
              failedBlock:(void (^)(NSError *error))failedBlock {
     if (!MKValidStr(nwkSkey) || nwkSkey.length != 32 || ![MKBLEBaseSDKAdopter checkHexCharacter:nwkSkey]) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *commandString = [@"ed016810" stringByAppendingString:nwkSkey];
@@ -1010,7 +1007,7 @@
             sucBlock:(void (^)(void))sucBlock
          failedBlock:(void (^)(NSError *error))failedBlock {
     if (chlValue < 0 || chlValue > 95 || chhValue < chlValue || chhValue > 95) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *lowValue = [MKBLEBaseSDKAdopter fetchHexValue:chlValue byteLen:1];
@@ -1026,7 +1023,7 @@
            sucBlock:(void (^)(void))sucBlock
         failedBlock:(void (^)(NSError *error))failedBlock {
     if (drValue < 0 || drValue > 15) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:drValue byteLen:1];
@@ -1044,7 +1041,7 @@
                        sucBlock:(void (^)(void))sucBlock
                     failedBlock:(void (^)(NSError *error))failedBlock {
     if (DRL < 0 || DRL > 15 || DRH < DRL || DRH > 15) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *lowValue = [MKBLEBaseSDKAdopter fetchHexValue:DRL byteLen:1];
@@ -1070,7 +1067,7 @@
                          sucBlock:(void (^)(void))sucBlock
                       failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 0 || interval > 255) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
@@ -1085,7 +1082,7 @@
                           sucBlock:(void (^)(void))sucBlock
                        failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 0 || interval > 30) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
@@ -1112,7 +1109,7 @@
                           sucBlock:(void (^)(void))sucBlock
                        failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 1 || interval > 100) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
@@ -1137,7 +1134,7 @@
                                sucBlock:(void (^)(void))sucBlock
                             failedBlock:(void (^)(NSError *error))failedBlock {
     if (time < 1 || time > 60) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:time byteLen:1];
@@ -1152,7 +1149,7 @@
                             sucBlock:(void (^)(void))sucBlock
                          failedBlock:(void (^)(NSError *error))failedBlock {
     if (![MKBLEBaseSDKAdopter isUUIDString:uuid]) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     uuid = [uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
@@ -1167,7 +1164,7 @@
               sucBlock:(void (^)(void))sucBlock
            failedBlock:(void (^)(NSError *error))failedBlock {
     if (major < 0 || major > 65535) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:major byteLen:2];
@@ -1182,7 +1179,7 @@
               sucBlock:(void (^)(void))sucBlock
            failedBlock:(void (^)(NSError *error))failedBlock {
     if (minor < 0 || minor > 65535) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:minor byteLen:2];
@@ -1197,7 +1194,7 @@
                       sucBlock:(void (^)(void))sucBlock
                    failedBlock:(void (^)(NSError *error))failedBlock {
     if (measuredPower > 0 || measuredPower < -127) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *power = [MKBLEBaseSDKAdopter hexStringFromSignedNumber:measuredPower];
@@ -1223,7 +1220,7 @@
                    sucBlock:(void (^)(void))sucBlock
                 failedBlock:(void (^)(NSError *error))failedBlock {
     if (![deviceName isKindOfClass:NSString.class] || deviceName.length > 13) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *tempString = @"";
@@ -1260,7 +1257,7 @@
                                   sucBlock:(void (^)(void))sucBlock
                                failedBlock:(void (^)(NSError *error))failedBlock {
     if (threshold < 1 || threshold > 20 || duration < 1 || duration > 10) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *thresholdString = [MKBLEBaseSDKAdopter fetchHexValue:threshold byteLen:1];
@@ -1276,8 +1273,8 @@
                                   duration:(NSInteger)duration
                                   sucBlock:(void (^)(void))sucBlock
                                failedBlock:(void (^)(NSError *error))failedBlock {
-    if (threshold < 10 || threshold > 250 || duration < 1 || duration > 15) {
-        [self operationParamsErrorBlock:failedBlock];
+    if (threshold < 10 || threshold > 250 || duration < 1 || duration > 50) {
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *thresholdString = [MKBLEBaseSDKAdopter fetchHexValue:threshold byteLen:1];
@@ -1303,7 +1300,7 @@
                             sucBlock:(void (^)(void))sucBlock
                          failedBlock:(void (^)(NSError *error))failedBlock {
     if (threshold < 10 || threshold > 255) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *thresholdString = [MKBLEBaseSDKAdopter fetchHexValue:threshold byteLen:1];
@@ -1318,7 +1315,7 @@
                                          sucBlock:(void (^)(void))sucBlock
                                       failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 3 || interval > 255) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *intervalString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
@@ -1333,7 +1330,7 @@
                          sucBlock:(void (^)(void))sucBlock
                       failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 1 || interval > 20) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *intervalString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:1];
@@ -1358,7 +1355,7 @@
                              sucBlock:(void (^)(void))sucBlock
                           failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 1 || interval > 8760) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *intervalString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:2];
@@ -1393,7 +1390,7 @@
                            sucBlock:(void (^)(void))sucBlock
                         failedBlock:(void (^)(NSError *error))failedBlock {
     if (interval < 1 || interval > 86400) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *intervalString = [MKBLEBaseSDKAdopter fetchHexValue:interval byteLen:4];
@@ -1419,7 +1416,7 @@
                              sucBlock:(void (^)(void))sucBlock
                           failedBlock:(void (^)(NSError *error))failedBlock {
     if (days < 1 || days > 65535) {
-        [self operationParamsErrorBlock:failedBlock];
+        [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
     NSString *value = [MKBLEBaseSDKAdopter fetchHexValue:days byteLen:2];
@@ -1457,31 +1454,13 @@
     [centralManager addTaskWithTaskID:taskID characteristic:centralManager.peripheral.bg_custom commandData:data successBlock:^(id  _Nonnull returnData) {
         BOOL success = [returnData[@"result"][@"success"] boolValue];
         if (!success) {
-            [self operationSetParamsErrorBlock:failedBlock];
+            [MKBLEBaseSDKAdopter operationSetParamsErrorBlock:failedBlock];
             return ;
         }
         if (sucBlock) {
             sucBlock();
         }
     } failureBlock:failedBlock];
-}
-
-+ (void)operationParamsErrorBlock:(void (^)(NSError *error))block {
-    MKBLEBase_main_safe(^{
-        if (block) {
-            NSError *error = [MKBLEBaseSDKAdopter getErrorWithCode:-999 message:@"Params error"];
-            block(error);
-        }
-    });
-}
-
-+ (void)operationSetParamsErrorBlock:(void (^)(NSError *error))block{
-    MKBLEBase_main_safe(^{
-        if (block) {
-            NSError *error = [MKBLEBaseSDKAdopter getErrorWithCode:-10001 message:@"Set parameter error"];
-            block(error);
-        }
-    });
 }
 
 @end

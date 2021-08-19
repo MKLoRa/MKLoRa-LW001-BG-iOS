@@ -168,7 +168,7 @@
     if (!ValidStr(self.motionThreshold) || [self.motionThreshold integerValue] < 10 || [self.motionThreshold integerValue] > 250) {
         return NO;
     }
-    if (!ValidStr(self.motionDuration) || [self.motionDuration integerValue] < 1 || [self.motionDuration integerValue] > 15) {
+    if (!ValidStr(self.motionDuration) || [self.motionDuration integerValue] < 1 || [self.motionDuration integerValue] > 50) {
         return NO;
     }
     if (!ValidStr(self.vibrationThresholds) || [self.vibrationThresholds integerValue] < 10 || [self.vibrationThresholds integerValue] > 255) {

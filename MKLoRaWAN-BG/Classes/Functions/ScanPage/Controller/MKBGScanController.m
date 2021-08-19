@@ -66,9 +66,6 @@ MKBGTabBarControllerDelegate>
 
 @property (nonatomic, strong)dispatch_source_t scanTimer;
 
-/// 当左侧按钮停止扫描的时候,currentScanStatus = NO,开始扫描的时候currentScanStatus=YES
-@property (nonatomic, assign)BOOL currentScanStatus;
-
 /// 定时刷新
 @property (nonatomic, assign)CFRunLoopObserverRef observerRef;
 //扫描到新的设备不能立即刷新列表，降低刷新频率
@@ -139,7 +136,6 @@ MKBGTabBarControllerDelegate>
         self.searchButton.dataModel = self.buttonModel;
         
         self.refreshButton.selected = NO;
-        self.currentScanStatus = NO;
         [self refreshButtonPressed];
     }];
 }
@@ -148,7 +144,6 @@ MKBGTabBarControllerDelegate>
     self.buttonModel.searchRssi = -127;
     self.buttonModel.searchKey = @"";
     self.refreshButton.selected = NO;
-    self.currentScanStatus = NO;
     [self refreshButtonPressed];
 }
 
@@ -186,7 +181,6 @@ MKBGTabBarControllerDelegate>
         return;
     }
     self.refreshButton.selected = !self.refreshButton.selected;
-    self.currentScanStatus = self.refreshButton.selected;
     [self.refreshIcon.layer removeAnimationForKey:@"mk_refreshAnimationKey"];
     if (!self.refreshButton.isSelected) {
         //停止扫描
@@ -224,7 +218,6 @@ MKBGTabBarControllerDelegate>
 #pragma mark - 刷新
 - (void)startScanDevice {
     self.refreshButton.selected = NO;
-    self.currentScanStatus = NO;
     [self refreshButtonPressed];
 }
 
@@ -385,7 +378,6 @@ MKBGTabBarControllerDelegate>
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);
         self.refreshButton.selected = NO;
-        self.currentScanStatus = NO;
         [self refreshButtonPressed];
     }];
     [alertController addAction:cancelAction];
@@ -440,7 +432,6 @@ MKBGTabBarControllerDelegate>
 
 - (void)connectFailed {
     self.refreshButton.selected = NO;
-    self.currentScanStatus = NO;
     [self refreshButtonPressed];
 }
 

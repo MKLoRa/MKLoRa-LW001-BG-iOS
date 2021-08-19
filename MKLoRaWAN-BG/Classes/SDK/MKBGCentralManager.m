@@ -27,6 +27,18 @@ NSString *const mk_bg_deviceDisconnectTypeNotification = @"mk_bg_deviceDisconnec
 static MKBGCentralManager *manager = nil;
 static dispatch_once_t onceToken;
 
+@interface NSObject (MKBGCentralManager)
+
+@end
+
+@implementation NSObject (MKBGCentralManager)
+
++ (void)load{
+    [MKBGCentralManager shared];
+}
+
+@end
+
 @interface MKBGCentralManager ()
 
 @property (nonatomic, copy)NSString *password;
@@ -389,7 +401,7 @@ static dispatch_once_t onceToken;
     NSDictionary *manuParams = advDic[CBAdvertisementDataServiceDataKey];
     NSData *manufacturerData = manuParams[[CBUUID UUIDWithString:@"AA02"]];
     if (manufacturerData.length != 11) {
-        return nil;
+        return @{};
     }
     
     NSString *content = [MKBLEBaseSDKAdopter hexStringFromData:manufacturerData];

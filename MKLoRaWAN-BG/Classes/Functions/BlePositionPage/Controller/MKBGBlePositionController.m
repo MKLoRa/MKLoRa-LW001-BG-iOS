@@ -21,19 +21,18 @@
 #import "MKTextFieldCell.h"
 #import "MKNormalTextCell.h"
 #import "MKTableSectionLineHeader.h"
+#import "MKFilterConditionCell.h"
 
 #import "MKBGNormalAdopter.h"
 
 #import "MKBGBlePositionDataModel.h"
-
-#import "MKBGFilterConditionCell.h"
 
 #import "MKBGFilterConditionController.h"
 
 @interface MKBGBlePositionController ()<UITableViewDelegate,
 UITableViewDataSource,
 MKTextFieldCellDelegate,
-MKBGFilterConditionCellDelegate>
+MKFilterConditionCellDelegate>
 
 @property (nonatomic, strong)MKBaseTableView *tableView;
 
@@ -130,7 +129,7 @@ MKBGFilterConditionCellDelegate>
         cell.dataModel = self.section1List[indexPath.row];
         return cell;
     }
-    MKBGFilterConditionCell *cell = [MKBGFilterConditionCell initCellWithTableView:tableView];
+    MKFilterConditionCell *cell = [MKFilterConditionCell initCellWithTableView:tableView];
     cell.dataModel = self.section2List[indexPath.row];
     cell.delegate = self;
     return cell;
@@ -157,12 +156,12 @@ MKBGFilterConditionCellDelegate>
     }
 }
 
-#pragma mark - MKBGFilterConditionCellDelegate
+#pragma mark - MKFilterConditionCellDelegate
 /// 关于发生改变
 /// @param conditionIndex 0:And,1:Or
 - (void)mk_filterConditionsChanged:(NSInteger)conditionIndex {
     self.dataModel.ABIsOr = (conditionIndex == 1);
-    MKBGFilterConditionCellModel *cellModel = self.section2List[0];
+    MKFilterConditionCellModel *cellModel = self.section2List[0];
     cellModel.conditionIndex = conditionIndex;
 }
 
@@ -208,7 +207,7 @@ MKBGFilterConditionCellDelegate>
     MKNormalTextCellModel *cellModel4 = self.section1List[1];
     cellModel4.rightMsg = (self.dataModel.conditionBIsOn ? @"ON" : @"OFF");
     
-    MKBGFilterConditionCellModel *cellModel5 = self.section2List[0];
+    MKFilterConditionCellModel *cellModel5 = self.section2List[0];
     cellModel5.enable = (self.dataModel.conditionAIsOn && self.dataModel.conditionBIsOn);
     cellModel5.conditionIndex = (self.dataModel.ABIsOr ? 1 : 0);
     
@@ -257,7 +256,7 @@ MKBGFilterConditionCellDelegate>
 }
 
 - (void)loadSection2Datas {
-    MKBGFilterConditionCellModel *cellModel = [[MKBGFilterConditionCellModel alloc] init];
+    MKFilterConditionCellModel *cellModel = [[MKFilterConditionCellModel alloc] init];
     [self.section2List addObject:cellModel];
 }
 

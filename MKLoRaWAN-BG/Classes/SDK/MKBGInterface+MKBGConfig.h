@@ -708,7 +708,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Configure three-axis data motion detection judgment parameters.
 /// @param threshold 10 x 2mg ~ 250 x 2mg
-/// @param duration 1 x 5ms ~ 15 x 5ms
+/// @param duration 1 x 5ms ~ 50 x 5ms
 /// @param sucBlock Success callback
 /// @param failedBlock Failure callback
 + (void)bg_configThreeAxisMotionParameters:(NSInteger)threshold
