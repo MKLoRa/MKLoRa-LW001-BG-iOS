@@ -448,7 +448,8 @@ MKTextButtonCellDelegate>
     cellModel.msg = @"GPS Model";
     cellModel.dataList = @[@"Portable",@"Stationary",@"Pedestrian",
                             @"Automotive",@"At sea",@"Airborne<1g",
-                            @"Airborne<2g",@"Airborne<4g",@"Wrist"];
+                            @"Airborne<2g",@"Airborne<4g",@"Wrist",
+                           @"Bike"];
     cellModel.dataListIndex = self.dataModel.gpsMode;
     [self.section5List addObject:cellModel];
 }

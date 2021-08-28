@@ -156,7 +156,7 @@ MKTextFieldCellDelegate>
     cellModel2.textPlaceholder = @"1~10";
     cellModel2.textFieldType = mk_realNumberOnly;
     cellModel2.maxLength = 2;
-    cellModel2.unit = @"x10mg";
+    cellModel2.unit = @"x10ms";
     cellModel2.textFieldValue = self.dataModel.wakeupDuration;
     [self.section0List addObject:cellModel2];
     
@@ -176,7 +176,7 @@ MKTextFieldCellDelegate>
     cellModel4.textPlaceholder = @"1~50";
     cellModel4.textFieldType = mk_realNumberOnly;
     cellModel4.maxLength = 2;
-    cellModel4.unit = @"x5mg";
+    cellModel4.unit = @"x5ms";
     cellModel4.textFieldValue = self.dataModel.motionDuration;
     [self.section0List addObject:cellModel4];
     

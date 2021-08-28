@@ -307,7 +307,7 @@
     if (self.advName.length > 13) {
         return NO;
     }
-    if (![self.uuid isUUIDNumber]) {
+    if (!ValidStr(self.uuid) || ![self.uuid regularExpressions:isHexadecimal] || self.uuid.length != 32) {
         return NO;
     }
     if (!ValidStr(self.major) || [self.major integerValue] < 0 || [self.major integerValue] > 65535) {

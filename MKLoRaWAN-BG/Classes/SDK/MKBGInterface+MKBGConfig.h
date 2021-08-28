@@ -639,7 +639,7 @@ NS_ASSUME_NONNULL_BEGIN
                             failedBlock:(void (^)(NSError *error))failedBlock;
 
 /// Configure the UUID of iBeacon.
-/// @param uuid uuid
+/// @param uuid 32 Bytes
 /// @param sucBlock Success callback
 /// @param failedBlock Failure callback
 + (void)bg_configBeaconProximityUUID:(NSString *)uuid

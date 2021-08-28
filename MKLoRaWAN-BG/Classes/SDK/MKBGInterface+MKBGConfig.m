@@ -1148,11 +1148,10 @@
 + (void)bg_configBeaconProximityUUID:(NSString *)uuid
                             sucBlock:(void (^)(void))sucBlock
                          failedBlock:(void (^)(NSError *error))failedBlock {
-    if (![MKBLEBaseSDKAdopter isUUIDString:uuid]) {
+    if (!MKValidStr(uuid) || uuid.length != 32 || ![MKBLEBaseSDKAdopter checkHexCharacter:uuid]) {
         [MKBLEBaseSDKAdopter operationParamsErrorBlock:failedBlock];
         return;
     }
-    uuid = [uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
     NSString *commandString = [@"ed017410" stringByAppendingString:uuid];
     [self configDataWithTaskID:mk_bg_taskConfigBeaconProximityUUIDOperation
                           data:commandString

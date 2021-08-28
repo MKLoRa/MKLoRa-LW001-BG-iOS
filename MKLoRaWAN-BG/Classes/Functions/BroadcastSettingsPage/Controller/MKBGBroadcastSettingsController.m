@@ -193,7 +193,7 @@ MKBGBroadcastTxPowerCellDelegate>
     advNameModel.textFieldValue = self.dataModel.advName;
     
     MKTextFieldCellModel *uuidModel = self.section0List[1];
-    uuidModel.textFieldValue = self.dataModel.uuid;
+    uuidModel.textFieldValue = [self.dataModel.uuid stringByReplacingOccurrencesOfString:@"-" withString:@""];
     
     MKTextFieldCellModel *majorModel = self.section0List[2];
     majorModel.textFieldValue = self.dataModel.major;
@@ -232,7 +232,8 @@ MKBGBroadcastTxPowerCellDelegate>
     MKTextFieldCellModel *uuidModel = [[MKTextFieldCellModel alloc] init];
     uuidModel.msg = @"Proximity UUID";
     uuidModel.textPlaceholder = @"16 Bytes";
-    uuidModel.textFieldType = mk_uuidMode;
+    uuidModel.maxLength = 32;
+    uuidModel.textFieldType = mk_hexCharOnly;
     uuidModel.index = 1;
     [self.section0List addObject:uuidModel];
     

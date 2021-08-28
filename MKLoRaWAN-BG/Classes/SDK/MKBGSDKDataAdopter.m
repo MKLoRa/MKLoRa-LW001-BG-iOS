@@ -125,7 +125,7 @@
         }
         return YES;
     }
-    if (protocol.minIndex < 0 || protocol.minIndex > 29 || protocol.maxIndex < 0 || protocol.maxIndex > 29) {
+    if (protocol.minIndex < 0 || protocol.minIndex > 62 || protocol.maxIndex < 0 || protocol.maxIndex > 62) {
         return NO;
     }
     

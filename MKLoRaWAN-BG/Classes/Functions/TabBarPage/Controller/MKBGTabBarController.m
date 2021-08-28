@@ -110,7 +110,7 @@
         return;
     }
     if ([type isEqualToString:@"04"]) {
-        [self showAlertWithMsg:@"Factry reset successfully!Please reconnect the device." title:@"Dismiss"];
+        [self showAlertWithMsg:@"Reboot successfully!Please reconnect the device." title:@"Dismiss"];
         return;
     }
 }

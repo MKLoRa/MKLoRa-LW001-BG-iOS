@@ -91,8 +91,9 @@
                 return;
             }
         }
-        if (self.region == 0 || self.region == 2 || self.region == 3
-            || self.region == 4 || self.region == 5 || self.region == 6 || self.region == 7) {
+        if (self.region == 2 || self.region == 3
+            || self.region == 4 || self.region == 5 || self.region == 6
+            || self.region == 7 || self.region == 9) {
             //CN470, CN779, EU433, EU868,KR920, IN865, RU864
             if (![self readJoinValue]) {
                 [self operationFailedBlockWithMsg:@"Read Dr For Join Error" block:failedBlock];
@@ -172,6 +173,7 @@
             return;
         }
         if (self.region == 1 || self.region == 2 || self.region == 8) {
+            //AU915、CN470、US915
             if (![self configCHValue]) {
                 [self operationFailedBlockWithMsg:@"Config CH Error" block:failedBlock];
                 return;
@@ -185,8 +187,9 @@
             }
         }
         
-        if (self.region == 0 || self.region == 2 || self.region == 3
-            || self.region == 4 || self.region == 5 || self.region == 6 || self.region == 7) {
+        if (self.region == 2 || self.region == 3
+            || self.region == 4 || self.region == 5 || self.region == 6
+            || self.region == 7 || self.region == 9) {
             //CN470, CN779, EU433, EU868,KR920, IN865, RU864
             if (![self configJoinValue]) {
                 [self operationFailedBlockWithMsg:@"Config DR For Join Error" block:failedBlock];

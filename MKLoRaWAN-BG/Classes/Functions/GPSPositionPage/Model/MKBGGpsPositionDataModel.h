@@ -43,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
  6:Airborne<2g
  7:Airborne<4g
  8:Wrist
+ 9:Bike
  */
 @property (nonatomic, assign)NSInteger gpsMode;
 

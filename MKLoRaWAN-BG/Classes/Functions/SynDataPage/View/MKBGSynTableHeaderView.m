@@ -271,7 +271,7 @@ static CGFloat const buttonSpace = 10.f;
         _countLabel.textColor = DEFAULT_TEXT_COLOR;
         _countLabel.textAlignment = NSTextAlignmentLeft;
         _countLabel.font = MKFont(13.f);
-        _countLabel.text = @"Count:50";
+        _countLabel.text = @"Count:N/A";
     }
     return _countLabel;
 }

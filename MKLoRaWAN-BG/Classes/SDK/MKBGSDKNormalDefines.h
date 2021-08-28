@@ -135,10 +135,10 @@ typedef NS_ENUM(NSInteger, mk_bg_PHYMode) {
 /// The currently filtered data type, refer to the definition of different Bluetooth data types by the International Bluetooth Organization, 1 byte of hexadecimal data
 @property (nonatomic, copy)NSString *dataType;
 
-/// Data location to start filtering.
+/// Data location to start filtering.0~62
 @property (nonatomic, assign)NSInteger minIndex;
 
-/// Data location to end filtering.
+/// Data location to end filtering.minIndex~62
 @property (nonatomic, assign)NSInteger maxIndex;
 
 /// The currently filtered content. The data length should be maxIndex-minIndex, if maxIndex=0&&minIndex==0, the item length is not checked whether it meets the requirements.MAX length:29 Bytes

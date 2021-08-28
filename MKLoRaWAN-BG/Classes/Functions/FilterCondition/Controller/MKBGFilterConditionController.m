@@ -17,6 +17,7 @@
 #import "UIView+MKAdd.h"
 #import "UITableView+MKAdd.h"
 #import "NSObject+MKModel.h"
+#import "NSString+MKAdd.h"
 
 #import "MKHudManager.h"
 #import "MKFilterDataCell.h"
@@ -87,7 +88,7 @@ MKFilterRawAdvDataCellDelegate>
     if (self.dataModel.rawDataIson) {
         for (NSInteger i = 0; i < self.section3List.count; i ++) {
             MKFilterRawAdvDataCellModel *cellModel = self.section3List[i];
-            if (![cellModel validParamsSuccess]) {
+            if (![self validRawDataModel:cellModel]) {
                 [self.view showCentralToast:@"Filter by Raw Adv Data Params Error"];
                 return;
             }
@@ -309,8 +310,8 @@ MKFilterRawAdvDataCellDelegate>
     }
     MKFilterRawAdvDataCellModel *cellModel = [[MKFilterRawAdvDataCellModel alloc] init];
     cellModel.index = self.section3List.count;
-    cellModel.dataTypePlaceHolder = @"00-FF";
-    cellModel.rawTextFieldPlaceHolder = @"00-FF";
+    cellModel.dataTypePlaceHolder = @"Data Type";
+    cellModel.rawTextFieldPlaceHolder = @"Raw data field";
     [self.section3List addObject:cellModel];
     [self.tableView mk_reloadSection:3 withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -400,6 +401,67 @@ MKFilterRawAdvDataCellDelegate>
     }];
 }
 
+#pragma mark - private method
+- (BOOL)validRawDataModel:(MKFilterRawAdvDataCellModel *)cellModel {
+    if (!ValidStr(cellModel.dataType) || cellModel.dataType.length != 2) {
+        return NO;
+    }
+    NSArray *typeList = [self dataTypeList];
+    if (![typeList containsObject:[cellModel.dataType uppercaseString]]) {
+        return NO;
+    }
+    if (!ValidStr(cellModel.minIndex) && !ValidStr(cellModel.maxIndex)) {
+        //
+        return [self validRawDatas:cellModel];
+    }
+    if (!ValidStr(cellModel.minIndex) || cellModel.minIndex.length > 2 || ![cellModel.minIndex regularExpressions:isRealNumbers] || [cellModel.minIndex integerValue] < 0 || [cellModel.minIndex integerValue] > 62) {
+        return NO;
+    }
+    if ([cellModel.minIndex integerValue] == 0) {
+        //可以不填写maxIndex或者maxIndex只能写0
+        if ((!ValidStr(cellModel.maxIndex) || [cellModel.maxIndex integerValue] == 0) && [self validRawDatas:cellModel]) {
+            return YES;
+        }
+        return NO;
+    }
+    if (!ValidStr(cellModel.maxIndex) || cellModel.maxIndex.length > 2 || ![cellModel.maxIndex regularExpressions:isRealNumbers] || [cellModel.maxIndex integerValue] < 0 || [cellModel.maxIndex integerValue] > 62) {
+        return NO;
+    }
+    if ([cellModel.maxIndex integerValue] < [cellModel.minIndex integerValue]) {
+        return NO;
+    }
+    if (!ValidStr(cellModel.rawData) || cellModel.rawData.length > 58 || ![cellModel.rawData regularExpressions:isHexadecimal]) {
+        return NO;
+    }
+    NSInteger totalLen = ([cellModel.maxIndex integerValue] - [cellModel.minIndex integerValue] + 1) * 2;
+    if (cellModel.rawData.length != totalLen) {
+        return NO;
+    }
+    return YES;
+}
+
+- (BOOL)validRawDatas:(MKFilterRawAdvDataCellModel *)cellModel {
+    if (!ValidStr(cellModel.rawData) || cellModel.rawData.length > 58 || ![cellModel.rawData regularExpressions:isHexadecimal]) {
+        return NO;
+    }
+    if (cellModel.rawData.length % 2 != 0) {
+        return NO;
+    }
+    return YES;
+}
+
+- (NSArray *)dataTypeList {
+    return @[@"01",@"02",@"03",@"04",@"05",
+             @"06",@"07",@"08",@"09",@"0A",
+             @"0D",@"0E",@"0F",@"10",@"11",
+             @"12",@"14",@"15",@"16",@"17",
+             @"18",@"19",@"1A",@"1B",@"1C",
+             @"1D",@"1E",@"1F",@"20",@"21",
+             @"22",@"23",@"24",@"25",@"26",
+             @"27",@"28",@"29",@"2A",@"2B",
+             @"2C",@"2D",@"3D",@"FF"];
+}
+
 #pragma mark - loadSectionDatas
 - (void)loadSectionDatas {
     [self loadSection0Datas];
@@ -440,9 +502,9 @@ MKFilterRawAdvDataCellDelegate>
     MKFilterDataCellModel *advNameModel = [[MKFilterDataCellModel alloc] init];
     advNameModel.index = 1;
     advNameModel.msg = @"Filter by ADV Name";
-    advNameModel.textFieldPlaceholder = @"1 ~ 10 Characters";
+    advNameModel.textFieldPlaceholder = @"1 ~ 29 Characters";
     advNameModel.textFieldType = mk_normal;
-    advNameModel.maxLength = 10;
+    advNameModel.maxLength = 29;
     advNameModel.isOn = self.dataModel.advNameIson;
     advNameModel.selected = self.dataModel.advNameWhiteListIson;
     advNameModel.textFieldValue = self.dataModel.advNameValue;

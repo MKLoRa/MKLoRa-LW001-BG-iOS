@@ -24,8 +24,6 @@
 
 #import "MKBLEBaseSDKAdopter.h"
 
-#import "MKBGDatabaseManager.h"
-
 #import "MKBGInterface.h"
 #import "MKBGInterface+MKBGConfig.h"
 #import "MKBGCentralManager.h"
@@ -52,14 +50,8 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
 /// 定时解析数据
 @property (nonatomic, strong)dispatch_source_t parseTimer;
 
-/// 返回延时定时器
-@property (nonatomic, strong)dispatch_source_t backTimer;
-
 /// 是否解析完成
 @property (nonatomic, assign)BOOL parseComplete;
-
-/// 点击了返回按钮，先发送暂停命令给设备，然后2s中没有需要解析的数据了，认为可用返回了
-@property (nonatomic, assign)NSInteger backCount;
 
 /// 为65535时，最近的数据在最上面；为1时，最早的数据在最上面；
 @property (nonatomic, assign)BOOL isMaxCount;
@@ -74,47 +66,22 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
 - (void)dealloc {
     NSLog(@"MKBGSynDataController销毁");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    if (self.parseTimer) {
-        dispatch_cancel(self.parseTimer);
-    }
-    if (self.backTimer) {
-        dispatch_cancel(self.backTimer);
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     self.view.shiftHeightAsDodgeViewForMLInputDodger = 50.0f;
     [self.view registerAsDodgeViewForMLInputDodgerWithOriginalY:self.view.frame.origin.y];
-    //本页面禁止右划退出手势
-    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadSubViews];
-    [self readDataFromLocal];
+    [self processStatus];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveTrackerDatas:)
                                                  name:mk_bg_receiveStorageDataNotification
                                                object:nil];
-}
-
-#pragma mark - super method
-- (void)leftButtonMethod {
-    [self.headerView.synButton.topIcon.layer removeAnimationForKey:synIconAnimationKey];
-    self.headerView.synButton.msgLabel.text = @"SYNC";
-    [[MKHudManager share] showHUDWithTitle:@"Waiting..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_pauseSendLocalData:YES sucBlock:^{
-        [self startBackTimer];
-    } failedBlock:^(NSError * _Nonnull error) {
-        [self startBackTimer];
-    }];
 }
 
 #pragma mark - UITableViewDelegate
@@ -171,6 +138,9 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
         //最后一条数据
         self.totalSum = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(10, 4)];
         self.headerView.sumLabel.text = [NSString stringWithFormat:@"Sum:%@",self.totalSum];
+        if ([self.totalSum integerValue] == 0) {
+            self.headerView.countLabel.text = @"Count:0";
+        }
         return;
     }
     [self.contentList addObject:content];
@@ -218,7 +188,6 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
         }
         self.headerView.sumLabel.text = @"Sum:0";
         self.headerView.countLabel.text = @"Count:0";
-        [MKBGDatabaseManager clearDataTable];
         [self.tableView reloadData];
         [self emptyButtonMethod];
     } failedBlock:^(NSError * _Nonnull error) {
@@ -278,25 +247,11 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
 }
 
 #pragma mark - 数据库
-- (void)readDataFromLocal {
-    [[MKHudManager share] showHUDWithTitle:@"Reading..." inView:self.view isPenetration:NO];
-    [MKBGDatabaseManager readDataListWithSucBlock:^(NSArray<NSDictionary *> * _Nonnull dataList) {
-        [[MKHudManager share] hide];
-        [self.dataList addObjectsFromArray:dataList];
-        [self processStatus];
-    } failedBlock:^(NSError * _Nonnull error) {
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-    }];
-}
 
 - (void)processStatus {
-    self.headerView.countLabel.text = [NSString stringWithFormat:@"%@ %ld",@"Count:",(long)self.dataList.count];
+    self.headerView.countLabel.text = @"Count:N/A";
     self.headerView.textField.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"bg_readRecordDataDayNumKey"];
-    self.totalSum = [[NSUserDefaults standardUserDefaults] objectForKey:@"bg_recordDataTotalSumKey"];
-    if (ValidStr(self.totalSum)) {
-        self.headerView.sumLabel.text = [NSString stringWithFormat:@"Sum:%@",self.totalSum];
-    }
+    self.headerView.sumLabel.text = @"Sum:N/A";
     
     if (self.dataList.count == 0) {
         //本地没有存储数据，则start、empty、sync不可用
@@ -323,12 +278,9 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
     if (self.parseTimer) {
         dispatch_cancel(self.parseTimer);
     }
-    [MKBGDatabaseManager clearDataTable];
     [self.dataList removeAllObjects];
     [self.contentList removeAllObjects];
     [self.tableView reloadData];
-    self.headerView.sumLabel.text = @"Sum:0";
-    self.headerView.countLabel.text = @"Count:0";
     
     //start按钮置灰、empty、export都不可用
     self.headerView.startButton.enabled = NO;
@@ -404,44 +356,6 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
     self.headerView.exportButton.topIcon.image = LOADICON(@"MKLoRaWAN-BG", @"MKBGSynDataController", @"bg_export_enableIcon.png");
 }
 
-- (void)startBackTimer {
-    self.backTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,dispatch_get_global_queue(0, 0));
-    dispatch_source_set_timer(self.backTimer, dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC),  0.5 * NSEC_PER_SEC, 0);
-    @weakify(self);
-    dispatch_source_set_event_handler(self.backTimer, ^{
-        @strongify(self);
-        self.backCount ++;
-        if (self.backCount == 4) {
-            //数据全部解析完成,把所有数据缓存到本地
-            moko_dispatch_main_safe(^{
-                dispatch_cancel(self.backTimer);
-                [self saveDataToLocal];
-            });
-            return;
-        }
-    });
-    dispatch_resume(self.backTimer);
-}
-
-- (void)saveDataToLocal {
-    [MKBGDatabaseManager clearDataTable];
-    if (ValidStr(self.totalSum)) {
-        [[NSUserDefaults standardUserDefaults] setValue:self.totalSum forKey:@"bg_recordDataTotalSumKey"];
-    }
-    if (self.dataList.count == 0) {
-        [[MKHudManager share] hide];
-        [super leftButtonMethod];
-        return;
-    }
-    [MKBGDatabaseManager insertDataList:self.dataList sucBlock:^{
-        [[MKHudManager share] hide];
-        [super leftButtonMethod];
-    } failedBlock:^(NSError * _Nonnull error) {
-        [[MKHudManager share] hide];
-        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
-    }];
-}
-
 #pragma mark - 刷新
 - (void)addTimerForRefresh {
     self.parseTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,dispatch_get_global_queue(0, 0));
@@ -462,7 +376,6 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
         return;
     }
     self.parseComplete = NO;
-    self.backCount = 0;
     NSString *firstContent = self.contentList[0];
     NSArray *tempList = [MKBGSynDataParser parseSynData:firstContent];
     [self.contentList removeObjectAtIndex:0];
