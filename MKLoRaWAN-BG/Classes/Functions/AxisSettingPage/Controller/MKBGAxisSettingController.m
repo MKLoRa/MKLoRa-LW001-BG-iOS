@@ -182,7 +182,7 @@ MKTextFieldCellDelegate>
     
     MKTextFieldCellModel *cellModel5 = [[MKTextFieldCellModel alloc] init];
     cellModel5.index = 4;
-    cellModel5.msg = @"Vibration Thresholds";
+    cellModel5.msg = @"Shock Thresholds";
     cellModel5.textPlaceholder = @"10~255";
     cellModel5.textFieldType = mk_realNumberOnly;
     cellModel5.maxLength = 3;

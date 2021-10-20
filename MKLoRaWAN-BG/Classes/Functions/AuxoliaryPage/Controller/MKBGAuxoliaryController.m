@@ -162,7 +162,7 @@ mk_textSwitchCellDelegate>
     
     MKNormalTextCellModel *cellModel2 = [[MKNormalTextCellModel alloc] init];
     cellModel2.showRightIcon = YES;
-    cellModel2.leftMsg = @"Vibration Detection";
+    cellModel2.leftMsg = @"Shock Detection";
     [self.section0List addObject:cellModel2];
     
     MKNormalTextCellModel *cellModel3 = [[MKNormalTextCellModel alloc] init];

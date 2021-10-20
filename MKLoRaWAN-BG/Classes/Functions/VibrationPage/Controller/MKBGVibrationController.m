@@ -165,7 +165,7 @@ MKTextFieldCellDelegate>
 - (void)loadSection0Datas {
     MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 0;
-    cellModel.msg = @"Vibration Detection";
+    cellModel.msg = @"Shock Detection";
     cellModel.isOn = self.dataModel.isOn;
     [self.section0List addObject:cellModel];
 }
@@ -183,7 +183,7 @@ MKTextFieldCellDelegate>
     
     MKTextFieldCellModel *cellModel2 = [[MKTextFieldCellModel alloc] init];
     cellModel2.index = 1;
-    cellModel2.msg = @"Vibration Timeout";
+    cellModel2.msg = @"Shock Timeout";
     cellModel2.textPlaceholder = @"1~20";
     cellModel2.textFieldType = mk_realNumberOnly;
     cellModel2.maxLength = 2;
@@ -194,7 +194,7 @@ MKTextFieldCellDelegate>
 
 #pragma mark - UI
 - (void)loadSubViews {
-    self.defaultTitle = @"Vibration Detection";
+    self.defaultTitle = @"Shock Detection";
     [self.rightButton setImage:LOADICON(@"MKLoRaWAN-BG", @"MKBGVibrationController", @"bg_slotSaveIcon.png") forState:UIControlStateNormal];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
