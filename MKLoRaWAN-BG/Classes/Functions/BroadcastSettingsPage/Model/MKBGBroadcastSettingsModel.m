@@ -126,7 +126,7 @@
     __block BOOL success = NO;
     [MKBGInterface bg_readBeaconProximityUUIDWithSucBlock:^(id  _Nonnull returnData) {
         success = YES;
-        self.uuid = returnData[@"result"][@"uuid"];
+        self.uuid = [returnData[@"result"][@"uuid"] stringByReplacingOccurrencesOfString:@"-" withString:@""];
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {
         dispatch_semaphore_signal(self.semaphore);

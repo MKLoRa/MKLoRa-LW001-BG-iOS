@@ -327,7 +327,7 @@ mk_textSwitchCellDelegate>
         [[MKHudManager share] hide];
         MKTextButtonCellModel *cellModel = self.section5List[0];
         cellModel.dataListIndex = prompt;
-        cellModel.noteMsg = [NSString stringWithFormat:@"*When the battery is less than or equal to %@, the red LED will flashe once every 30 seconds.",cellModel.dataList[prompt]];
+        cellModel.noteMsg = [NSString stringWithFormat:@"*When the battery is less than or equal to %@, the green LED will flashe once every 10 seconds.",cellModel.dataList[prompt]];
         self.dataModel.prompt = prompt;
         [self.tableView mk_reloadRow:0 inSection:5 withRowAnimation:UITableViewRowAnimationNone];
     } failedBlock:^(NSError * _Nonnull error) {

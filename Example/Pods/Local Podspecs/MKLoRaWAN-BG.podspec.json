@@ -18,7 +18,6 @@
   "platforms": {
     "ios": "12.0"
   },
-  "source_files": "MKLoRaWAN-BG/Classes/**/*",
   "resource_bundles": {
     "MKLoRaWAN-BG": [
       "MKLoRaWAN-BG/Assets/*.png"

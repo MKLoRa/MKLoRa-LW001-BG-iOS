@@ -301,6 +301,7 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
     //开始旋转
     [self.headerView.synButton.topIcon.layer addAnimation:[MKCustomUIAdopter refreshAnimation:2.f] forKey:synIconAnimationKey];
     self.headerView.synButton.msgLabel.text = @"STOP";
+    self.headerView.sumLabel.text = @"Sum:N/A";
     [self addTimerForRefresh];
 }
 
