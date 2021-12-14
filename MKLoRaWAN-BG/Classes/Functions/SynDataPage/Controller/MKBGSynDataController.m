@@ -31,13 +31,15 @@
 #import "MKBGSynTableHeaderView.h"
 #import "MKBGSynDataCell.h"
 
-#import "MKBGSynDataParser.h"
-
-static NSTimeInterval const parseDataInterval = 0.04;
+static NSTimeInterval const parseDataInterval = 0.5;
+static NSTimeInterval const dataTimerInterval = 30.f;
 
 static NSString *synIconAnimationKey = @"synIconAnimationKey";
 
-@interface MKBGSynDataController ()<UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate>
+@interface MKBGSynDataController ()<UITableViewDelegate,
+UITableViewDataSource,
+MFMailComposeViewControllerDelegate,
+mk_bg_storageDataDelegate>
 
 @property (nonatomic, strong)MKBaseTableView *tableView;
 
@@ -50,14 +52,16 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
 /// 定时解析数据
 @property (nonatomic, strong)dispatch_source_t parseTimer;
 
-/// 是否解析完成
-@property (nonatomic, assign)BOOL parseComplete;
-
 /// 为65535时，最近的数据在最上面；为1时，最早的数据在最上面；
 @property (nonatomic, assign)BOOL isMaxCount;
 
 /// 最新业务需求，当用户点击返回按钮时，如果接收到了存储数据的总条数，则需要存储总条数到本地，断开连接会清除本地缓存的这个记录
 @property (nonatomic, copy)NSString *totalSum;
+
+@property (nonatomic, strong)NSDateFormatter *formatter;
+
+/// 定时通信，防止三分钟不同信断开连接
+@property (nonatomic, strong)dispatch_source_t dataTimer;
 
 @end
 
@@ -65,7 +69,12 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
 
 - (void)dealloc {
     NSLog(@"MKBGSynDataController销毁");
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (self.dataTimer) {
+        dispatch_cancel(self.dataTimer);
+    }
+    if (self.parseTimer) {
+        dispatch_cancel(self.parseTimer);
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -78,23 +87,15 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
     [super viewDidLoad];
     [self loadSubViews];
     [self processStatus];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveTrackerDatas:)
-                                                 name:mk_bg_receiveStorageDataNotification
-                                               object:nil];
+    [MKBGCentralManager shared].dataDelegate = self;
 }
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *pageModel = self.dataList[indexPath.row];
-    return [MKBGSynDataCell fetchCellHeight:pageModel];
+    return [MKBGSynDataCell fetchCellHeight:self.dataList[indexPath.row]];
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataList.count;
 }
@@ -123,16 +124,8 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - note
-- (void)receiveTrackerDatas:(NSNotification *)note {
-    NSDictionary *dic = note.userInfo;
-    if (!ValidDict(dic)) {
-        return;
-    }
-    NSString *content = dic[@"content"];
-    if (!ValidStr(content)) {
-        return;
-    }
+#pragma mark - mk_bg_storageDataDelegate
+- (void)mk_bg_receiveStorageData:(NSString *)content {
     NSInteger number = [MKBLEBaseSDKAdopter getDecimalWithHex:content range:NSMakeRange(8, 2)];
     if (number == 0) {
         //最后一条数据
@@ -141,6 +134,8 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
         if ([self.totalSum integerValue] == 0) {
             self.headerView.countLabel.text = @"Count:0";
         }
+        //开启防无通信断开连接
+        [self addDataTimer];
         return;
     }
     [self.contentList addObject:content];
@@ -357,6 +352,20 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
     self.headerView.exportButton.topIcon.image = LOADICON(@"MKLoRaWAN-BG", @"MKBGSynDataController", @"bg_export_enableIcon.png");
 }
 
+#pragma mark - 维持通信
+- (void)addDataTimer {
+    self.dataTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,dispatch_get_global_queue(0, 0));
+    dispatch_source_set_timer(self.dataTimer, dispatch_walltime(NULL, 0),  dataTimerInterval * NSEC_PER_SEC, 0);
+    @weakify(self);
+    dispatch_source_set_event_handler(self.dataTimer, ^{
+        @strongify(self);
+        moko_dispatch_main_safe(^{
+            [MKBGInterface bg_readThreeAxisWakeupConditionsWithSucBlock:nil failedBlock:nil];
+        });
+    });
+    dispatch_resume(self.dataTimer);
+}
+
 #pragma mark - 刷新
 - (void)addTimerForRefresh {
     self.parseTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,dispatch_get_global_queue(0, 0));
@@ -373,28 +382,32 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
 
 - (void)parseContentDatas {
     if (self.contentList.count == 0) {
-        self.parseComplete = YES;
+        if (self.parseTimer) {
+            dispatch_cancel(self.parseTimer);
+        }
+        NSInteger number = self.dataList.count;
+        if (ValidStr(self.totalSum) && [self.totalSum integerValue] != number) {
+            number = [self.totalSum integerValue];
+            self.headerView.countLabel.text = [NSString stringWithFormat:@"Count: %ld",(long)number];
+        }
         return;
     }
-    self.parseComplete = NO;
     NSString *firstContent = self.contentList[0];
-    NSArray *tempList = [MKBGSynDataParser parseSynData:firstContent];
+    NSArray *tempList = [self parseSynData:firstContent];
     [self.contentList removeObjectAtIndex:0];
     //业务需求最近的数据在最上面
-    if (self.dataList.count == 0) {
-        [self.dataList addObjectsFromArray:tempList];
-    }else {
-        if (self.isMaxCount) {
-            for (NSDictionary *dic in tempList) {
-                [self.dataList insertObject:dic atIndex:0];
-            }
-        }else {
-            for (NSDictionary *dic in tempList) {
-                [self.dataList addObject:dic];
-            }
+    if (self.isMaxCount && self.dataList.count > 0) {
+        for (NSDictionary *dic in tempList) {
+            [self.dataList insertObject:dic atIndex:0];
         }
+    }else {
+        [self.dataList addObjectsFromArray:tempList];
     }
-    self.headerView.countLabel.text = [NSString stringWithFormat:@"Count: %ld",(long)self.dataList.count];
+    NSInteger number = self.dataList.count;
+    if (ValidStr(self.totalSum) && [self.totalSum integerValue] < number) {
+        number = [self.totalSum integerValue];
+    }
+    self.headerView.countLabel.text = [NSString stringWithFormat:@"Count: %ld",(long)number];
     [self.tableView reloadData];
 }
 
@@ -414,6 +427,7 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
 - (MKBaseTableView *)tableView {
     if (!_tableView) {
         _tableView = [[MKBaseTableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView.backgroundColor = COLOR_WHITE_MACROS;
         _tableView.delegate = self;
         _tableView.dataSource = self;
         
@@ -453,6 +467,40 @@ static NSString *synIconAnimationKey = @"synIconAnimationKey";
                            forControlEvents:UIControlEventTouchUpInside];
     }
     return _headerView;
+}
+
+- (NSDateFormatter *)formatter {
+    if (!_formatter) {
+        _formatter = [[NSDateFormatter alloc] init];
+        _formatter.dateFormat = @"YYYY/MM/dd hh:mm:ss";
+    }
+    return _formatter;
+}
+
+- (NSArray *)parseSynData:(NSString *)content {
+    content = [content substringFromIndex:10];
+    
+    NSInteger index = 0;
+    NSMutableArray *dataList = [NSMutableArray array];
+    NSString *date = [self.formatter stringFromDate:[NSDate date]];
+    for (NSInteger i = 0; i < content.length; i ++) {
+        if (index >= content.length) {
+            break;
+        }
+        NSInteger subLen = [MKBLEBaseSDKAdopter getDecimalWithHex:content range:NSMakeRange(index, 2)];
+        index += 2;
+        if (content.length < (index + subLen * 2)) {
+            break;
+        }
+        NSString *subContent = [content substringWithRange:NSMakeRange(index, subLen * 2)];
+        index += subLen * 2;
+        NSDictionary *dic = @{
+            @"date":date,
+            @"rawData":subContent,
+        };
+        [dataList addObject:dic];
+    }
+    return dataList;
 }
 
 @end

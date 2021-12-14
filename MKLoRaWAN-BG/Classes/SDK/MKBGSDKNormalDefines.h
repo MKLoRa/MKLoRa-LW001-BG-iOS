@@ -209,3 +209,10 @@ typedef NS_ENUM(NSInteger, mk_bg_PHYMode) {
 - (void)mk_bg_stopScan;
 
 @end
+
+
+@protocol mk_bg_storageDataDelegate <NSObject>
+
+- (void)mk_bg_receiveStorageData:(NSString *)content;
+
+@end

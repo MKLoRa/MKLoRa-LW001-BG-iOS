@@ -423,12 +423,7 @@ TODO: Add long description of the pod here.
       sss.subspec 'Controller' do |ssss|
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/SynDataPage/Controller/**'
         
-        ssss.dependency 'MKLoRaWAN-BG/Functions/SynDataPage/Parser'
         ssss.dependency 'MKLoRaWAN-BG/Functions/SynDataPage/View'
-      end
-      
-      sss.subspec 'Parser' do |ssss|
-        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/SynDataPage/Parser/**'
       end
       
       sss.subspec 'View' do |ssss|

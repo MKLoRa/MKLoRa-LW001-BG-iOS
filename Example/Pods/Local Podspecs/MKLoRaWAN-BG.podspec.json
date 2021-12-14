@@ -647,17 +647,10 @@
               "name": "Controller",
               "source_files": "MKLoRaWAN-BG/Classes/Functions/SynDataPage/Controller/**",
               "dependencies": {
-                "MKLoRaWAN-BG/Functions/SynDataPage/Parser": [
-
-                ],
                 "MKLoRaWAN-BG/Functions/SynDataPage/View": [
 
                 ]
               }
-            },
-            {
-              "name": "Parser",
-              "source_files": "MKLoRaWAN-BG/Classes/Functions/SynDataPage/Parser/**"
             },
             {
               "name": "View",

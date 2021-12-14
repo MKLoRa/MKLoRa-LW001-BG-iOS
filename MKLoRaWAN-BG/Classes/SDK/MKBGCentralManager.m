@@ -21,7 +21,6 @@
 NSString *const mk_bg_peripheralConnectStateChangedNotification = @"mk_bg_peripheralConnectStateChangedNotification";
 NSString *const mk_bg_centralManagerStateChangedNotification = @"mk_bg_centralManagerStateChangedNotification";
 
-NSString *const mk_bg_receiveStorageDataNotification = @"mk_bg_receiveStorageDataNotification";
 NSString *const mk_bg_deviceDisconnectTypeNotification = @"mk_bg_deviceDisconnectTypeNotification";
 
 static MKBGCentralManager *manager = nil;
@@ -149,9 +148,12 @@ static dispatch_once_t onceToken;
     if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"AA03"]]) {
         //设备存储的数据
         NSString *content = [MKBLEBaseSDKAdopter hexStringFromData:characteristic.value];
-        [[NSNotificationCenter defaultCenter] postNotificationName:mk_bg_receiveStorageDataNotification
-                                                            object:nil
-                                                          userInfo:@{@"content":content}];
+        if (!MKValidStr(content)) {
+            return;
+        }
+        if ([self.dataDelegate respondsToSelector:@selector(mk_bg_receiveStorageData:)]) {
+            [self.dataDelegate mk_bg_receiveStorageData:content];
+        }
         return;
     }
 }
