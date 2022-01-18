@@ -224,7 +224,7 @@ static dispatch_once_t onceToken;
     [[MKBLEBaseCentralManager shared] disconnect];
 }
 
-- (BOOL)notifyStorageDataData:(BOOL)notify {
+- (BOOL)notifyStorageData:(BOOL)notify {
     if (self.connectStatus != mk_bg_centralConnectStatusConnected || [MKBLEBaseCentralManager shared].peripheral == nil || [MKBLEBaseCentralManager shared].peripheral.bg_storageData == nil) {
         return NO;
     }

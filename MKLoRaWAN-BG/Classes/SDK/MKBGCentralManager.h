@@ -77,7 +77,7 @@ extern NSString *const mk_bg_deviceDisconnectTypeNotification;
  @param notify BOOL
  @return result
  */
-- (BOOL)notifyStorageDataData:(BOOL)notify;
+- (BOOL)notifyStorageData:(BOOL)notify;
 
 /// Start a task for data communication with the device
 /// @param operationID operation id
