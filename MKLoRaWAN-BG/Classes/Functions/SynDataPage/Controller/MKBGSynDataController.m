@@ -75,6 +75,7 @@ mk_bg_storageDataDelegate>
     if (self.parseTimer) {
         dispatch_cancel(self.parseTimer);
     }
+    [[MKBGCentralManager shared] notifyStorageData:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -87,6 +88,7 @@ mk_bg_storageDataDelegate>
     [super viewDidLoad];
     [self loadSubViews];
     [self processStatus];
+    [[MKBGCentralManager shared] notifyStorageData:YES];
     [MKBGCentralManager shared].dataDelegate = self;
 }
 
