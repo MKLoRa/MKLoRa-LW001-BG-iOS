@@ -301,6 +301,7 @@
     if ([txPower isEqualToString:@"8dBm"]) {
         return 13;
     }
+    return 5;
 }
 
 - (BOOL)checkParams {
