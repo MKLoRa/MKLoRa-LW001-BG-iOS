@@ -73,6 +73,7 @@ MKTextButtonCellDelegate>
         //Motion Mode
         MKBGMotionModeController *vc = [[MKBGMotionModeController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
 }
 

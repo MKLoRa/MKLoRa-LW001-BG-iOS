@@ -26,17 +26,17 @@ NSString *const mk_bg_deviceDisconnectTypeNotification = @"mk_bg_deviceDisconnec
 static MKBGCentralManager *manager = nil;
 static dispatch_once_t onceToken;
 
-@interface NSObject (MKBGCentralManager)
-
-@end
-
-@implementation NSObject (MKBGCentralManager)
-
-+ (void)load{
-    [MKBGCentralManager shared];
-}
-
-@end
+//@interface NSObject (MKBGCentralManager)
+//
+//@end
+//
+//@implementation NSObject (MKBGCentralManager)
+//
+//+ (void)load{
+//    [MKBGCentralManager shared];
+//}
+//
+//@end
 
 @interface MKBGCentralManager ()
 

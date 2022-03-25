@@ -84,7 +84,10 @@
     }
     NSString *flag = [readString substringWithRange:NSMakeRange(2, 2)];
     NSString *cmd = [readString substringWithRange:NSMakeRange(4, 2)];
-    NSString *content = [readString substringWithRange:NSMakeRange(8, dataLen * 2)];
+    NSString *content = @"";
+    if (dataLen > 0) {
+        content = [readString substringWithRange:NSMakeRange(8, dataLen * 2)];
+    }
     if ([flag isEqualToString:@"00"]) {
         //读取
         return [self parseCustomReadData:content cmd:cmd data:readData];

@@ -70,6 +70,7 @@
         //Application Settings
         MKBGLoRaAppSettingController *vc = [[MKBGLoRaAppSettingController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+        return;
     }
 }
 

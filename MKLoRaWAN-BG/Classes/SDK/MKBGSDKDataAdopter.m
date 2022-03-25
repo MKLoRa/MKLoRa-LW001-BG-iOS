@@ -169,6 +169,9 @@
 }
 
 + (NSArray <NSDictionary *>*)parseTimingModeReportingTimePoint:(NSString *)content {
+    if (!MKValidStr(content) || content.length < 2) {
+        return @[];
+    }
     if ([content isEqualToString:@"00"]) {
         return @[];
     }
