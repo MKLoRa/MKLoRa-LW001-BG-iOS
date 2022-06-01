@@ -43,6 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// N
 @property (nonatomic, strong, readonly)CBCharacteristic *bg_storageData;
 
+/// N  V1.0.7
+@property (nonatomic, strong, readonly)CBCharacteristic *bg_logData;
+
 - (void)bg_updateCharacterWithService:(CBService *)service;
 
 - (void)bg_updateCurrentNotifySuccess:(CBCharacteristic *)characteristic;

@@ -29,6 +29,9 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadCurrentSystemTimeZoneTimeOperation,   //读取当前系统时区时间
     mk_bg_taskReadBatteryLevelOperation,              //读取电池电量
     mk_bg_taskReadMacAddressOperation,                  //读取设备Mac地址
+    mk_bg_taskReadPCBAStatusOperation,                  //读取产测标志
+    mk_bg_taskReadSelftestStatusOperation,              //读取自检故障
+    mk_bg_taskReadOnOffMethodOperation,                 //读取磁簧开关机方式
     
     
 #pragma mark - 模式相关参数
@@ -148,6 +151,7 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigOfflineFixStatusOperation,          //配置离线定位功能
     mk_bg_taskConfigLowPowerPayloadOperation,           //配置低电参数
     mk_bg_taskConfigIndicatorSettingsOperation,         //配置指示灯功能
+    mk_bg_taskConfigOnOffMethodOperation,               //配置磁簧开关机方式
     
 #pragma mark - 配置模式相关参数
     mk_bg_taskConfigPeriodicModePositioningStrategyOperation,       //配置定期模式定位策略

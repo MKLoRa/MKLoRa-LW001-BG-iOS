@@ -227,6 +227,27 @@
         NSString *macAddress = [NSString stringWithFormat:@"%@:%@:%@:%@:%@:%@",[content substringWithRange:NSMakeRange(0, 2)],[content substringWithRange:NSMakeRange(2, 2)],[content substringWithRange:NSMakeRange(4, 2)],[content substringWithRange:NSMakeRange(6, 2)],[content substringWithRange:NSMakeRange(8, 2)],[content substringWithRange:NSMakeRange(10, 2)]];
         resultDic = @{@"macAddress":[macAddress uppercaseString]};
         operationID = mk_bg_taskReadMacAddressOperation;
+    }else if ([cmd isEqualToString:@"13"]) {
+        //读取产测状态
+        NSString *status = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"status":status,
+        };
+        operationID = mk_bg_taskReadPCBAStatusOperation;
+    }else if ([cmd isEqualToString:@"14"]) {
+        //读取自检故障原因
+        NSString *status = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"status":status,
+        };
+        operationID = mk_bg_taskReadSelftestStatusOperation;
+    }else if ([cmd isEqualToString:@"15"]) {
+        //读取磁簧开关机方式
+        NSString *method = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
+        resultDic = @{
+            @"method":method,
+        };
+        operationID = mk_bg_taskReadOnOffMethodOperation;
     }else if ([cmd isEqualToString:@"20"]) {
         //读取定期模式定位策略
         NSString *strategy = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
@@ -985,6 +1006,9 @@
     }else if ([cmd isEqualToString:@"0d"]) {
         //设置指示灯功能
         operationID = mk_bg_taskConfigIndicatorSettingsOperation;
+    }else if ([cmd isEqualToString:@"15"]) {
+        //设置磁簧开关机方式
+        operationID = mk_bg_taskConfigOnOffMethodOperation;
     }else if ([cmd isEqualToString:@"20"]) {
         //设置定期模式定位策略
         operationID = mk_bg_taskConfigPeriodicModePositioningStrategyOperation;

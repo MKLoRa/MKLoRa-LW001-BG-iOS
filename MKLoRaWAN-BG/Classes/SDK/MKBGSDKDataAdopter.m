@@ -272,6 +272,15 @@
     }
 }
 
++ (NSString *)fetchOnOffMethodString:(mk_bg_OnOffMethod)method {
+    switch (method) {
+        case mk_bg_OnOffMethod_multipleApproaches:
+            return @"00";
+        case mk_bg_OnOffMethod_continuousApproach:
+            return @"01";
+    }
+}
+
 #pragma mark - private method
 + (NSArray *)dataTypeList {
     return @[@"01",@"02",@"03",@"04",@"05",

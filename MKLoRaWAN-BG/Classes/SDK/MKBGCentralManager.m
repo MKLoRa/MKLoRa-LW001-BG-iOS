@@ -156,6 +156,17 @@ static dispatch_once_t onceToken;
         }
         return;
     }
+    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"AA05"]]) {
+        //日志
+        NSString *content = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
+        if (!MKValidStr(content)) {
+            return;
+        }
+        if ([self.logDelegate respondsToSelector:@selector(mk_bg_receiveLog:)]) {
+            [self.logDelegate mk_bg_receiveLog:content];
+        }
+        return;
+    }
 }
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
     if (error) {
@@ -230,6 +241,15 @@ static dispatch_once_t onceToken;
     }
     [[MKBLEBaseCentralManager shared].peripheral setNotifyValue:notify
                                               forCharacteristic:[MKBLEBaseCentralManager shared].peripheral.bg_storageData];
+    return YES;
+}
+
+- (BOOL)notifyLogData:(BOOL)notify {
+    if (self.connectStatus != mk_bg_centralConnectStatusConnected || [MKBLEBaseCentralManager shared].peripheral == nil || [MKBLEBaseCentralManager shared].peripheral.bg_logData == nil) {
+        return NO;
+    }
+    [[MKBLEBaseCentralManager shared].peripheral setNotifyValue:notify
+                                              forCharacteristic:[MKBLEBaseCentralManager shared].peripheral.bg_logData];
     return YES;
 }
 

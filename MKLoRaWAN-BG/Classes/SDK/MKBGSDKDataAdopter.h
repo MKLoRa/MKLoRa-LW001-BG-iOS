@@ -55,6 +55,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param mode mode
 + (NSString *)fetchPHYTypeString:(mk_bg_PHYMode)mode;
 
+/// 磁簧开关机方式
+/// @param mode mode
++ (NSString *)fetchOnOffMethodString:(mk_bg_OnOffMethod)method;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -114,6 +114,14 @@ NS_ASSUME_NONNULL_BEGIN
                           sucBlock:(void (^)(void))sucBlock
                        failedBlock:(void (^)(NSError *error))failedBlock;
 
+/// ON/Off Method.
+/// @param method method
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configOnOffMethod:(mk_bg_OnOffMethod)method
+                    sucBlock:(void (^)(void))sucBlock
+                 failedBlock:(void (^)(NSError *error))failedBlock;
+
 #pragma mark ****************************************模式相关参数************************************************
 
 /// Configure Periodic Mode positioning strategy.

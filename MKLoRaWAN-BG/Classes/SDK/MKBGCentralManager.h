@@ -34,6 +34,8 @@ extern NSString *const mk_bg_deviceDisconnectTypeNotification;
 
 @property (nonatomic, weak)id <mk_bg_storageDataDelegate>dataDelegate;
 
+@property (nonatomic, weak)id <mk_bg_centralManagerLogDelegate>logDelegate;
+
 /// Current connection status
 @property (nonatomic, assign, readonly)mk_bg_centralConnectStatus connectStatus;
 
@@ -78,6 +80,10 @@ extern NSString *const mk_bg_deviceDisconnectTypeNotification;
  @return result
  */
 - (BOOL)notifyStorageData:(BOOL)notify;
+
+/// Whether to open log data monitoring.
+/// @param notify notify
+- (BOOL)notifyLogData:(BOOL)notify;
 
 /// Start a task for data communication with the device
 /// @param operationID operation id

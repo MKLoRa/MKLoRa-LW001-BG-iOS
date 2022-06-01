@@ -62,6 +62,8 @@
 #import "MKBGScanController.h"
 #import "MKBGScanPageModel.h"
 #import "MKBGScanPageCell.h"
+#import "MKBGSelftestController.h"
+#import "MKBGSelftestModel.h"
 #import "MKBGSynDataController.h"
 #import "MKBGSynDataCell.h"
 #import "MKBGSynTableHeaderView.h"

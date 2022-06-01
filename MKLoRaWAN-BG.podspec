@@ -51,7 +51,14 @@ TODO: Add long description of the pod here.
   end
   
   s.subspec 'DatabaseManager' do |ss|
-    ss.source_files = 'MKLoRaWAN-BG/Classes/DatabaseManager/**'
+    
+    ss.subspec 'SyncDatabase' do |sss|
+      sss.source_files = 'MKLoRaWAN-BG/Classes/DatabaseManager/SyncDatabase/**'
+    end
+    
+    ss.subspec 'LogDatabase' do |sss|
+      sss.source_files = 'MKLoRaWAN-BG/Classes/DatabaseManager/LogDatabase/**'
+    end
     
     ss.dependency 'MKBaseModuleLibrary'
     
@@ -189,6 +196,19 @@ TODO: Add long description of the pod here.
       end
     end
     
+    ss.subspec 'DebuggerPage' do |sss|
+      sss.subspec 'Controller' do |ssss|
+        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/DebuggerPage/Controller/**'
+        
+        ssss.dependency 'MKLoRaWAN-BG/Functions/DebuggerPage/View'
+      end
+      
+      sss.subspec 'View' do |ssss|
+        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/DebuggerPage/View/**'
+      end
+      
+    end
+    
     ss.subspec 'DeviceInfoPage' do |sss|
       sss.subspec 'Controller' do |ssss|
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/DeviceInfoPage/Controller/**'
@@ -196,6 +216,8 @@ TODO: Add long description of the pod here.
         ssss.dependency 'MKLoRaWAN-BG/Functions/DeviceInfoPage/Model'
         
         ssss.dependency 'MKLoRaWAN-BG/Functions/UpdatePage/Controller'
+        ssss.dependency 'MKLoRaWAN-BG/Functions/SelftestPage/Controller'
+        ssss.dependency 'MKLoRaWAN-BG/Functions/DebuggerPage/Controller'
       end
       
       sss.subspec 'Model' do |ssss|
@@ -416,6 +438,18 @@ TODO: Add long description of the pod here.
       sss.subspec 'View' do |ssss|
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/ScanPage/View/**'
         ssss.dependency 'MKLoRaWAN-BG/Functions/ScanPage/Model'
+      end
+    end
+    
+    ss.subspec 'SelftestPage' do |sss|
+      sss.subspec 'Controller' do |ssss|
+        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/SelftestPage/Controller/**'
+        
+        ssss.dependency 'MKLoRaWAN-BG/Functions/SelftestPage/Model'
+      end
+      
+      sss.subspec 'Model' do |ssss|
+        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/SelftestPage/Model/**'
       end
     end
     

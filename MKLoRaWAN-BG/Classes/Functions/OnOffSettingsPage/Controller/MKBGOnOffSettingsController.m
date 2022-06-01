@@ -19,6 +19,8 @@
 #import "MKTextSwitchCell.h"
 #import "MKTextButtonCell.h"
 
+#import "MKBGConnectModel.h"
+
 #import "MKBGInterface+MKBGConfig.h"
 
 #import "MKBGOnOffDataModel.h"
@@ -33,6 +35,8 @@ MKTextButtonCellDelegate>
 @property (nonatomic, strong)NSMutableArray *section0List;
 
 @property (nonatomic, strong)NSMutableArray *section1List;
+
+@property (nonatomic, strong)NSMutableArray *section2List;
 
 @property (nonatomic, strong)MKBGOnOffDataModel *dataModel;
 
@@ -52,34 +56,43 @@ MKTextButtonCellDelegate>
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        return 44.f;
+    if (indexPath.section == 2) {
+        MKTextButtonCellModel *cellModel = self.section2List[indexPath.row];
+        return [cellModel cellHeightWithContentWidth:kViewWidth];
     }
-    MKTextButtonCellModel *cellModel = self.section1List[indexPath.row];
-    return [cellModel cellHeightWithContentWidth:kViewWidth];
+    return 44.f;
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return self.section0List.count;
+        return ([[MKBGConnectModel shared] firmwareVersion107] ? self.section0List.count : 0);
     }
-    return self.section1List.count;
+    if (section == 1) {
+        return self.section1List.count;
+    }
+    return self.section2List.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        MKTextSwitchCell *cell = [MKTextSwitchCell initCellWithTableView:tableView];
+        MKTextButtonCell *cell = [MKTextButtonCell initCellWithTableView:tableView];
         cell.dataModel = self.section0List[indexPath.row];
         cell.delegate = self;
         return cell;
     }
+    if (indexPath.section == 1) {
+        MKTextSwitchCell *cell = [MKTextSwitchCell initCellWithTableView:tableView];
+        cell.dataModel = self.section1List[indexPath.row];
+        cell.delegate = self;
+        return cell;
+    }
     MKTextButtonCell *cell = [MKTextButtonCell initCellWithTableView:tableView];
-    cell.dataModel = self.section1List[indexPath.row];
+    cell.dataModel = self.section2List[indexPath.row];
     cell.delegate = self;
     return cell;
 }
@@ -105,6 +118,11 @@ MKTextButtonCellDelegate>
                         dataListIndex:(NSInteger)dataListIndex
                                 value:(NSString *)value {
     if (index == 0) {
+        //ON/Off Method
+        [self configOnOffMethod:dataListIndex];
+        return;
+    }
+    if (index == 1) {
         //Default  Mode
         [self configDefaultMode:dataListIndex];
         return;
@@ -125,13 +143,13 @@ MKTextButtonCellDelegate>
     }];
 }
 
-- (void)configOffByMagnet:(BOOL)isOn {
+- (void)configOnOffMethod:(NSInteger)method {
     [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_configOffByMagnetStatus:isOn sucBlock:^{
+    [MKBGInterface bg_configOnOffMethod:method sucBlock:^{
         [[MKHudManager share] hide];
-        MKTextSwitchCellModel *cellModel = self.section0List[0];
-        cellModel.isOn = isOn;
-        self.dataModel.isOn = isOn;
+        MKTextButtonCellModel *cellModel = self.section0List[0];
+        cellModel.dataListIndex = method;
+        self.dataModel.method = method;
     } failedBlock:^(NSError * _Nonnull error) {
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
@@ -139,13 +157,13 @@ MKTextButtonCellDelegate>
     }];
 }
 
-- (void)configDefaultMode:(NSInteger)mode {
+- (void)configOffByMagnet:(BOOL)isOn {
     [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
-    [MKBGInterface bg_configRepoweredDefaultMode:mode sucBlock:^{
+    [MKBGInterface bg_configOffByMagnetStatus:isOn sucBlock:^{
         [[MKHudManager share] hide];
-        MKTextButtonCellModel *cellModel = self.section1List[0];
-        cellModel.dataListIndex = mode;
-        self.dataModel.mode = mode;
+        MKTextSwitchCellModel *cellModel = self.section1List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.isOn = isOn;
     } failedBlock:^(NSError * _Nonnull error) {
         [[MKHudManager share] hide];
         [self.view showCentralToast:error.userInfo[@"errorInfo"]];
@@ -153,32 +171,57 @@ MKTextButtonCellDelegate>
     }];
 }
 
+- (void)configDefaultMode:(NSInteger)mode {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configRepoweredDefaultMode:mode sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextButtonCellModel *cellModel = self.section2List[0];
+        cellModel.dataListIndex = mode;
+        self.dataModel.mode = mode;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+
 #pragma mark - loadSectionDatas
 - (void)loadSectionDatas {
     [self loadSection0Datas];
     [self loadSection1Datas];
+    [self loadSection2Datas];
     
     [self.tableView reloadData];
 }
 
 - (void)loadSection0Datas {
-    MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
+    MKTextButtonCellModel *cellModel = [[MKTextButtonCellModel alloc] init];
     cellModel.index = 0;
-    cellModel.msg = @"Off By Magnet";
-    cellModel.isOn = self.dataModel.isOn;
+    cellModel.msg = @"ON/Off Method";
+    cellModel.dataList = @[@"Multiple approaches",@"Continuous approach"];
+    cellModel.buttonLabelFont = MKFont(13.f);
+    cellModel.dataListIndex = self.dataModel.method;
     [self.section0List addObject:cellModel];
 }
 
 - (void)loadSection1Datas {
-    MKTextButtonCellModel *cellModel = [[MKTextButtonCellModel alloc] init];
+    MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
     cellModel.index = 0;
+    cellModel.msg = @"Off By Magnet";
+    cellModel.isOn = self.dataModel.isOn;
+    [self.section1List addObject:cellModel];
+}
+
+- (void)loadSection2Datas {
+    MKTextButtonCellModel *cellModel = [[MKTextButtonCellModel alloc] init];
+    cellModel.index = 1;
     cellModel.msg = @"Default  Mode";
     cellModel.dataList = @[@"OFF",@"Revert to last mode"];
     cellModel.dataListIndex = self.dataModel.mode;
     cellModel.buttonLabelFont = MKFont(13.f);
     cellModel.noteMsg = @"*Default Operating mode after the device is repowered.";
     cellModel.noteMsgColor = RGBCOLOR(102, 102, 102);
-    [self.section1List addObject:cellModel];
+    [self.section2List addObject:cellModel];
 }
 
 #pragma mark - UI
@@ -216,6 +259,13 @@ MKTextButtonCellDelegate>
         _section1List = [NSMutableArray array];
     }
     return _section1List;
+}
+
+- (NSMutableArray *)section2List {
+    if (!_section2List) {
+        _section2List = [NSMutableArray array];
+    }
+    return _section2List;
 }
 
 - (MKBGOnOffDataModel *)dataModel {

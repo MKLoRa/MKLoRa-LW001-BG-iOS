@@ -156,6 +156,24 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)bg_readMacAddressWithSucBlock:(void (^)(id returnData))sucBlock
                           failedBlock:(void (^)(NSError *error))failedBlock;
 
+/// Read the PCBA Status of the device.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readPCBAStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                          failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Read the Selftest Status of the device.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readSelftestStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// ON/Off Method.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readOnOffMethodWithSucBlock:(void (^)(id returnData))sucBlock
+                           failedBlock:(void (^)(NSError *error))failedBlock;
+
 #pragma mark ****************************************模式相关参数************************************************
 
 /// Read Periodic Mode positioning strategy.

@@ -10,6 +10,8 @@
 
 #import "MKMacroDefines.h"
 
+#import "MKBGConnectModel.h"
+
 #import "MKBGInterface.h"
 
 @interface MKBGOnOffDataModel ()
@@ -24,6 +26,12 @@
 
 - (void)readWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock {
     dispatch_async(self.readQueue, ^{
+        if ([[MKBGConnectModel shared] firmwareVersion107]) {
+            if (![self readOnOffMethod]) {
+                [self operationFailedBlockWithMsg:@"Read On/Off Method Error" block:failedBlock];
+                return;
+            }
+        }
         if (![self readOffByMagnet]) {
             [self operationFailedBlockWithMsg:@"Read Off By Magnet Error" block:failedBlock];
             return;
@@ -40,6 +48,19 @@
             }
         });
     });
+}
+
+- (BOOL)readOnOffMethod {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readOnOffMethodWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.method = [returnData[@"result"][@"method"] integerValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
 }
 
 - (BOOL)readOffByMagnet {

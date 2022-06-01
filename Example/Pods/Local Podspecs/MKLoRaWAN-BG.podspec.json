@@ -1,6 +1,6 @@
 {
   "name": "MKLoRaWAN-BG",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "summary": "A short description of MKLoRaWAN-BG.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/aadyx2007@163.com/MKLoRaWAN-BG",
@@ -12,8 +12,8 @@
     "aadyx2007@163.com": "aadyx2007@163.com"
   },
   "source": {
-    "git": "https://github.com/aadyx2007@163.com/MKLoRaWAN-BG.git",
-    "tag": "1.0.0"
+    "git": "https://github.com/MKLoRa/MKLoRa-LW001-BG-iOS.git",
+    "tag": "1.0.1"
   },
   "platforms": {
     "ios": "12.0"
@@ -302,6 +302,9 @@
 
                 ],
                 "MKLoRaWAN-BG/Functions/UpdatePage/Controller": [
+
+                ],
+                "MKLoRaWAN-BG/Functions/SelftestPage/Controller": [
 
                 ]
               }
@@ -637,6 +640,24 @@
 
                 ]
               }
+            }
+          ]
+        },
+        {
+          "name": "SelftestPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/SelftestPage/Controller/**",
+              "dependencies": {
+                "MKLoRaWAN-BG/Functions/SelftestPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/SelftestPage/Model/**"
             }
           ]
         },

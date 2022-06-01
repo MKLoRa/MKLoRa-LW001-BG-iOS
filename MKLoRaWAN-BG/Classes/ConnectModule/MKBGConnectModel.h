@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class CBPeripheral;
 @interface MKBGConnectModel : NSObject
 
+@property (nonatomic, copy, readonly)NSString *firmware;
+
 + (MKBGConnectModel *)shared;
 
 /// 连接设备
@@ -24,6 +26,14 @@ NS_ASSUME_NONNULL_BEGIN
              password:(NSString *)password
              sucBlock:(void (^)(void))sucBlock
           failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// 判断设备固件版本是否是V1.0.7以上，V1.0.7新增功能如下
+/*
+ 1、debugger功能
+ 2、自检状态功能
+ 3、新增弹簧开关机方式选择
+ */
+- (BOOL)firmwareVersion107;
 
 @end
 

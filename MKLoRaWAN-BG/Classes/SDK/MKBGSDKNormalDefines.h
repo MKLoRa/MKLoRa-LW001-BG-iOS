@@ -128,6 +128,11 @@ typedef NS_ENUM(NSInteger, mk_bg_PHYMode) {
     mk_bg_PHYMode_CodedBLE5,                //Coded PHY(BLE 5)
 };
 
+typedef NS_ENUM(NSInteger, mk_bg_OnOffMethod) {
+    mk_bg_OnOffMethod_multipleApproaches,
+    mk_bg_OnOffMethod_continuousApproach,
+};
+
 #pragma mark - Protocol
 
 @protocol mk_bg_BLEFilterRawDataProtocol <NSObject>
@@ -214,5 +219,12 @@ typedef NS_ENUM(NSInteger, mk_bg_PHYMode) {
 @protocol mk_bg_storageDataDelegate <NSObject>
 
 - (void)mk_bg_receiveStorageData:(NSString *)content;
+
+@end
+
+
+@protocol mk_bg_centralManagerLogDelegate <NSObject>
+
+- (void)mk_bg_receiveLog:(NSString *)deviceLog;
 
 @end

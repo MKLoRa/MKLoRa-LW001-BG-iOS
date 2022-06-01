@@ -12,13 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MKBGOnOffDataModel : NSObject
 
+/// 0:Multiple approaches   1:Continuous approach
+@property (nonatomic, assign)NSInteger method;
+
 @property (nonatomic, assign)BOOL isOn;
 
 @property (nonatomic, assign)BOOL mode;
 
 - (void)readWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
-
-- (void)configWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
 
 @end
 

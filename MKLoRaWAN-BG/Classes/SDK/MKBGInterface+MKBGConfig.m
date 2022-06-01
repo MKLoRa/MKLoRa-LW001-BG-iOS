@@ -198,6 +198,17 @@
                    failedBlock:failedBlock];
 }
 
++ (void)bg_configOnOffMethod:(mk_bg_OnOffMethod)method
+                    sucBlock:(void (^)(void))sucBlock
+                 failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *methodValue = [MKBGSDKDataAdopter fetchOnOffMethodString:method];
+    NSString *commandString = [@"ed011501" stringByAppendingString:methodValue];
+    [self configDataWithTaskID:mk_bg_taskConfigOnOffMethodOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
 #pragma mark ****************************************模式相关参数************************************************
 
 + (void)bg_configPeriodicModePositioningStrategy:(mk_bg_positioningStrategy)strategy

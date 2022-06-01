@@ -16,6 +16,8 @@
 
 @interface MKBGConnectModel ()
 
+@property (nonatomic, copy)NSString *firmware;
+
 @property (nonatomic, strong)dispatch_queue_t connectQueue;
 
 @property (nonatomic, strong)dispatch_semaphore_t semaphore;
@@ -49,12 +51,41 @@
             [self operationFailedMsg:@"Config Date Error" completeBlock:failedBlock];
             return;
         }
+        if (![self readFirmware]) {
+            [self operationFailedMsg:@"Read Firmware Error" completeBlock:failedBlock];
+            return;
+        }
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();
             }
         });
     });
+}
+
+- (BOOL)firmwareVersion107 {
+    if (!ValidStr(self.firmware)) {
+        return NO;
+    }
+    NSString *tempVersion = [self.firmware stringByReplacingOccurrencesOfString:@"V" withString:@""];
+    tempVersion = [tempVersion stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSArray *versionList = [tempVersion componentsSeparatedByString:@"."];
+    if (!ValidArray(versionList) || versionList.count != 3) {
+        return NO;
+    }
+    NSInteger highVersion = [versionList[0] integerValue];
+    if (highVersion > 1) {
+        return YES;
+    }
+    NSInteger centerVersion = [versionList[1] integerValue];
+    if (highVersion == 1 && centerVersion > 0) {
+        return YES;
+    }
+    NSInteger lowVersion = [versionList[2] integerValue];
+    if (highVersion == 1 && centerVersion == 0 && lowVersion >= 7) {
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark - interface
@@ -74,6 +105,19 @@
     }];
     dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
     return connectResult;
+}
+
+- (BOOL)readFirmware {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readFirmwareWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.firmware = returnData[@"result"][@"firmware"];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
 }
 
 - (BOOL)configDate {

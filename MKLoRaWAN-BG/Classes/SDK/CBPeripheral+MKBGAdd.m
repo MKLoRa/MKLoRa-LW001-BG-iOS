@@ -21,6 +21,7 @@ static const char *bg_passwordKey = "bg_passwordKey";
 static const char *bg_disconnectTypeKey = "bg_disconnectTypeKey";
 static const char *bg_customKey = "bg_customKey";
 static const char *bg_storageDataKey = "bg_storageDataKey";
+static const char *bg_logDataKey = "bg_logDataKey";
 
 static const char *bg_passwordNotifySuccessKey = "bg_passwordNotifySuccessKey";
 static const char *bg_disconnectTypeNotifySuccessKey = "bg_disconnectTypeNotifySuccessKey";
@@ -63,14 +64,19 @@ static const char *bg_storageDataNotifySuccessKey = "bg_storageDataNotifySuccess
         for (CBCharacteristic *characteristic in characteristicList) {
             if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"AA00"]]) {
                 objc_setAssociatedObject(self, &bg_passwordKey, characteristic, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                [self setNotifyValue:YES forCharacteristic:characteristic];
             }else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"AA01"]]) {
                 objc_setAssociatedObject(self, &bg_disconnectTypeKey, characteristic, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                [self setNotifyValue:YES forCharacteristic:characteristic];
             }else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"AA02"]]) {
                 objc_setAssociatedObject(self, &bg_customKey, characteristic, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                [self setNotifyValue:YES forCharacteristic:characteristic];
             }else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"AA03"]]) {
                 objc_setAssociatedObject(self, &bg_storageDataKey, characteristic, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                [self setNotifyValue:YES forCharacteristic:characteristic];
+            }else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"AA05"]]) {
+                objc_setAssociatedObject(self, &bg_logDataKey, characteristic, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             }
-            [self setNotifyValue:YES forCharacteristic:characteristic];
         }
         return;
     }
@@ -120,6 +126,7 @@ static const char *bg_storageDataNotifySuccessKey = "bg_storageDataNotifySuccess
     objc_setAssociatedObject(self, &bg_disconnectTypeKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(self, &bg_customKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(self, &bg_storageDataKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &bg_logDataKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     objc_setAssociatedObject(self, &bg_passwordNotifySuccessKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(self, &bg_disconnectTypeNotifySuccessKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -167,6 +174,10 @@ static const char *bg_storageDataNotifySuccessKey = "bg_storageDataNotifySuccess
 
 - (CBCharacteristic *)bg_storageData {
     return objc_getAssociatedObject(self, &bg_storageDataKey);
+}
+
+- (CBCharacteristic *)bg_logData {
+    return objc_getAssociatedObject(self, &bg_logDataKey);
 }
 
 @end

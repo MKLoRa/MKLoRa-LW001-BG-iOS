@@ -19,6 +19,8 @@
 
 #import "MKTableSectionLineHeader.h"
 
+#import "MKBGConnectModel.h"
+
 #import "MKBGTextButtonCell.h"
 
 #import "MKBGNormalAdopter.h"
@@ -26,6 +28,8 @@
 #import "MKBGDeviceInfoModel.h"
 
 #import "MKBGUpdateController.h"
+#import "MKBGSelftestController.h"
+#import "MKBGDebuggerController.h"
 
 @interface MKBGDeviceInfoController ()<UITableViewDelegate,
 UITableViewDataSource,
@@ -42,6 +46,8 @@ MKBGTextButtonCellDelegate>
 @property (nonatomic, strong)NSMutableArray *section3List;
 
 @property (nonatomic, strong)NSMutableArray *section4List;
+
+@property (nonatomic, strong)NSMutableArray *section5List;
 
 @property (nonatomic, strong)NSMutableArray *headerList;
 
@@ -85,7 +91,7 @@ MKBGTextButtonCellDelegate>
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0 || section == 3 || section == 4) {
+    if (section == 0 || section == 3 || section == 4 || section == 5) {
         return 10.f;
     }
     return 0.f;
@@ -97,9 +103,19 @@ MKBGTextButtonCellDelegate>
     return headerView;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 5 && indexPath.row == 0) {
+        //Debugger Mode
+        MKBGDebuggerController *vc = [[MKBGDebuggerController alloc] init];
+        vc.macAddress = self.dataModel.macAddress;
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 5;
+    return 6;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -115,7 +131,10 @@ MKBGTextButtonCellDelegate>
     if (section == 3) {
         return self.section3List.count;
     }
-    return self.section4List.count;
+    if (section == 4) {
+        return self.section4List.count;
+    }
+    return ([[MKBGConnectModel shared] firmwareVersion107] ? self.section5List.count : 0);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -140,8 +159,13 @@ MKBGTextButtonCellDelegate>
         cell.dataModel =  self.section3List[indexPath.row];
         return cell;
     }
+    if (indexPath.section == 4) {
+        MKNormalTextCell *cell = [MKNormalTextCell initCellWithTableView:tableView];
+        cell.dataModel =  self.section4List[indexPath.row];
+        return cell;
+    }
     MKNormalTextCell *cell = [MKNormalTextCell initCellWithTableView:tableView];
-    cell.dataModel =  self.section4List[indexPath.row];
+    cell.dataModel =  self.section5List[indexPath.row];
     return cell;
 }
 
@@ -160,6 +184,12 @@ MKBGTextButtonCellDelegate>
 #pragma mark - note
 - (void)deviceStartDFUProcess {
     self.isDfuModel = YES;
+}
+
+#pragma mark - event method
+- (void)pushSelftestInterface {
+    MKBGSelftestController *vc = [[MKBGSelftestController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - interface
@@ -223,6 +253,7 @@ MKBGTextButtonCellDelegate>
     [self loadSection2Datas];
     [self loadSection3Datas];
     [self loadSection4Datas];
+    [self loadSection5Datas];
         
     [self.tableView reloadData];
 }
@@ -267,6 +298,13 @@ MKBGTextButtonCellDelegate>
     [self.section4List addObject:cellModel3];
 }
 
+- (void)loadSection5Datas {
+    MKNormalTextCellModel *cellModel = [[MKNormalTextCellModel alloc] init];
+    cellModel.showRightIcon = YES;
+    cellModel.leftMsg = @"Debugger Mode";
+    [self.section5List addObject:cellModel];
+}
+
 #pragma mark - UI
 - (void)loadSubViews {
     self.defaultTitle = @"Device Information";
@@ -277,6 +315,12 @@ MKBGTextButtonCellDelegate>
         make.top.mas_equalTo(defaultTopInset);
         make.bottom.mas_equalTo(-VirtualHomeHeight);
     }];
+    if ([[MKBGConnectModel shared] firmwareVersion107]) {
+        //V1.0.7版本之后支持自检页面
+        UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pushSelftestInterface)];
+        gesture.numberOfTapsRequired = 3;
+        [self.view addGestureRecognizer:gesture];
+    }
 }
 
 #pragma mark - getter
@@ -325,10 +369,17 @@ MKBGTextButtonCellDelegate>
     return _section4List;
 }
 
+- (NSMutableArray *)section5List {
+    if (!_section5List) {
+        _section5List = [NSMutableArray array];
+    }
+    return _section5List;
+}
+
 - (NSMutableArray *)headerList {
     if (!_headerList) {
         _headerList = [NSMutableArray array];
-        [_headerList addObjectsFromArray:[MKBGNormalAdopter loadSectionHeaderListWithNumber:5]];
+        [_headerList addObjectsFromArray:[MKBGNormalAdopter loadSectionHeaderListWithNumber:6]];
     }
     return _headerList;
 }
