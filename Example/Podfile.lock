@@ -437,6 +437,14 @@ PODS:
   - MKLoRaWAN-BG/DatabaseManager (1.0.1):
     - FMDB
     - MKBaseModuleLibrary
+    - MKLoRaWAN-BG/DatabaseManager/LogDatabase (= 1.0.1)
+    - MKLoRaWAN-BG/DatabaseManager/SyncDatabase (= 1.0.1)
+  - MKLoRaWAN-BG/DatabaseManager/LogDatabase (1.0.1):
+    - FMDB
+    - MKBaseModuleLibrary
+  - MKLoRaWAN-BG/DatabaseManager/SyncDatabase (1.0.1):
+    - FMDB
+    - MKBaseModuleLibrary
   - MKLoRaWAN-BG/Expand (1.0.1):
     - MKLoRaWAN-BG/Expand/Cell (= 1.0.1)
     - MKLoRaWAN-BG/Expand/MKBGNormalAdopter (= 1.0.1)
@@ -464,6 +472,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/BlePositionPage (= 1.0.1)
     - MKLoRaWAN-BG/Functions/BleSettingsPage (= 1.0.1)
     - MKLoRaWAN-BG/Functions/BroadcastSettingsPage (= 1.0.1)
+    - MKLoRaWAN-BG/Functions/DebuggerPage (= 1.0.1)
     - MKLoRaWAN-BG/Functions/DeviceInfoPage (= 1.0.1)
     - MKLoRaWAN-BG/Functions/DeviceModePage (= 1.0.1)
     - MKLoRaWAN-BG/Functions/DevicePage (= 1.0.1)
@@ -735,6 +744,42 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
+  - MKLoRaWAN-BG/Functions/DebuggerPage (1.0.1):
+    - HHTransition
+    - iOSDFULibrary
+    - MKBaseModuleLibrary
+    - MKCustomUIModule
+    - MKLoRaWAN-BG/ConnectModule
+    - MKLoRaWAN-BG/CTMediator
+    - MKLoRaWAN-BG/DatabaseManager
+    - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/Functions/DebuggerPage/Controller (= 1.0.1)
+    - MKLoRaWAN-BG/Functions/DebuggerPage/View (= 1.0.1)
+    - MKLoRaWAN-BG/SDK
+    - MLInputDodger
+  - MKLoRaWAN-BG/Functions/DebuggerPage/Controller (1.0.1):
+    - HHTransition
+    - iOSDFULibrary
+    - MKBaseModuleLibrary
+    - MKCustomUIModule
+    - MKLoRaWAN-BG/ConnectModule
+    - MKLoRaWAN-BG/CTMediator
+    - MKLoRaWAN-BG/DatabaseManager
+    - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/Functions/DebuggerPage/View
+    - MKLoRaWAN-BG/SDK
+    - MLInputDodger
+  - MKLoRaWAN-BG/Functions/DebuggerPage/View (1.0.1):
+    - HHTransition
+    - iOSDFULibrary
+    - MKBaseModuleLibrary
+    - MKCustomUIModule
+    - MKLoRaWAN-BG/ConnectModule
+    - MKLoRaWAN-BG/CTMediator
+    - MKLoRaWAN-BG/DatabaseManager
+    - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/SDK
+    - MLInputDodger
   - MKLoRaWAN-BG/Functions/DeviceInfoPage (1.0.1):
     - HHTransition
     - iOSDFULibrary
@@ -757,6 +802,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/Functions/DebuggerPage/Controller
     - MKLoRaWAN-BG/Functions/DeviceInfoPage/Model
     - MKLoRaWAN-BG/Functions/SelftestPage/Controller
     - MKLoRaWAN-BG/Functions/UpdatePage/Controller
@@ -1352,6 +1398,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/SelftestPage/Controller (= 1.0.1)
     - MKLoRaWAN-BG/Functions/SelftestPage/Model (= 1.0.1)
+    - MKLoRaWAN-BG/Functions/SelftestPage/View (= 1.0.1)
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/SelftestPage/Controller (1.0.1):
@@ -1364,9 +1411,21 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/SelftestPage/Model
+    - MKLoRaWAN-BG/Functions/SelftestPage/View
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/SelftestPage/Model (1.0.1):
+    - HHTransition
+    - iOSDFULibrary
+    - MKBaseModuleLibrary
+    - MKCustomUIModule
+    - MKLoRaWAN-BG/ConnectModule
+    - MKLoRaWAN-BG/CTMediator
+    - MKLoRaWAN-BG/DatabaseManager
+    - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/SDK
+    - MLInputDodger
+  - MKLoRaWAN-BG/Functions/SelftestPage/View (1.0.1):
     - HHTransition
     - iOSDFULibrary
     - MKBaseModuleLibrary
@@ -1643,7 +1702,7 @@ SPEC CHECKSUMS:
   MKBaseBleModule: 6019b69cf3c5a220b1cfe18e71e1e5e63f4757da
   MKBaseModuleLibrary: 859013194f81daa5f8a7a777ce88bf58cd3b5919
   MKCustomUIModule: 91646517fc7a90d94dd5578d119fec38d67d6a90
-  MKLoRaWAN-BG: 03314eba59be8709da0e5dc824c5fd7d3aaad16d
+  MKLoRaWAN-BG: f8bcb9c2621b619b82db5bb281d07a872d9edd66
   MLInputDodger: 79a0e420a80d0d3bba122bf2639603cc76609ba8
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   WRNavigationBar: 10bfdf96addf14d640d07c2ef08a029c18d8af10

@@ -236,9 +236,8 @@
         operationID = mk_bg_taskReadPCBAStatusOperation;
     }else if ([cmd isEqualToString:@"14"]) {
         //读取自检故障原因
-        NSString *status = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
         resultDic = @{
-            @"status":status,
+            @"status":content,
         };
         operationID = mk_bg_taskReadSelftestStatusOperation;
     }else if ([cmd isEqualToString:@"15"]) {

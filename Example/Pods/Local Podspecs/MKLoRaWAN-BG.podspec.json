@@ -47,7 +47,6 @@
     },
     {
       "name": "DatabaseManager",
-      "source_files": "MKLoRaWAN-BG/Classes/DatabaseManager/**",
       "dependencies": {
         "MKBaseModuleLibrary": [
 
@@ -55,7 +54,17 @@
         "FMDB": [
 
         ]
-      }
+      },
+      "subspecs": [
+        {
+          "name": "SyncDatabase",
+          "source_files": "MKLoRaWAN-BG/Classes/DatabaseManager/SyncDatabase/**"
+        },
+        {
+          "name": "LogDatabase",
+          "source_files": "MKLoRaWAN-BG/Classes/DatabaseManager/LogDatabase/**"
+        }
+      ]
     },
     {
       "name": "SDK",
@@ -292,6 +301,24 @@
           ]
         },
         {
+          "name": "DebuggerPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/DebuggerPage/Controller/**",
+              "dependencies": {
+                "MKLoRaWAN-BG/Functions/DebuggerPage/View": [
+
+                ]
+              }
+            },
+            {
+              "name": "View",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/DebuggerPage/View/**"
+            }
+          ]
+        },
+        {
           "name": "DeviceInfoPage",
           "subspecs": [
             {
@@ -305,6 +332,9 @@
 
                 ],
                 "MKLoRaWAN-BG/Functions/SelftestPage/Controller": [
+
+                ],
+                "MKLoRaWAN-BG/Functions/DebuggerPage/Controller": [
 
                 ]
               }
@@ -650,10 +680,17 @@
               "name": "Controller",
               "source_files": "MKLoRaWAN-BG/Classes/Functions/SelftestPage/Controller/**",
               "dependencies": {
+                "MKLoRaWAN-BG/Functions/SelftestPage/View": [
+
+                ],
                 "MKLoRaWAN-BG/Functions/SelftestPage/Model": [
 
                 ]
               }
+            },
+            {
+              "name": "View",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/SelftestPage/View/**"
             },
             {
               "name": "Model",
