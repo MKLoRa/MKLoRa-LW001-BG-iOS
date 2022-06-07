@@ -403,11 +403,7 @@ MKFilterRawAdvDataCellDelegate>
 
 #pragma mark - private method
 - (BOOL)validRawDataModel:(MKFilterRawAdvDataCellModel *)cellModel {
-    if (!ValidStr(cellModel.dataType) || cellModel.dataType.length != 2) {
-        return NO;
-    }
-    NSArray *typeList = [self dataTypeList];
-    if (![typeList containsObject:[cellModel.dataType uppercaseString]]) {
+    if (!ValidStr(cellModel.dataType) || cellModel.dataType.length != 2 || ![cellModel.dataType regularExpressions:isHexadecimal]) {
         return NO;
     }
     if (!ValidStr(cellModel.minIndex) && !ValidStr(cellModel.maxIndex)) {
@@ -448,18 +444,6 @@ MKFilterRawAdvDataCellDelegate>
         return NO;
     }
     return YES;
-}
-
-- (NSArray *)dataTypeList {
-    return @[@"01",@"02",@"03",@"04",@"05",
-             @"06",@"07",@"08",@"09",@"0A",
-             @"0D",@"0E",@"0F",@"10",@"11",
-             @"12",@"14",@"15",@"16",@"17",
-             @"18",@"19",@"1A",@"1B",@"1C",
-             @"1D",@"1E",@"1F",@"20",@"21",
-             @"22",@"23",@"24",@"25",@"26",
-             @"27",@"28",@"29",@"2A",@"2B",
-             @"2C",@"2D",@"3D",@"FF"];
 }
 
 #pragma mark - loadSectionDatas
