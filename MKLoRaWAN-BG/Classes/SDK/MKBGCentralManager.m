@@ -17,6 +17,7 @@
 #import "MKBGOperation.h"
 #import "CBPeripheral+MKBGAdd.h"
 
+static NSString *const mk_bg_logName = @"mk_bg_bleLog";
 
 NSString *const mk_bg_peripheralConnectStateChangedNotification = @"mk_bg_peripheralConnectStateChangedNotification";
 NSString *const mk_bg_centralManagerStateChangedNotification = @"mk_bg_centralManagerStateChangedNotification";
@@ -52,8 +53,14 @@ static dispatch_once_t onceToken;
 
 @implementation MKBGCentralManager
 
+- (void)dealloc {
+    NSLog(@"MKBGCentralManager销毁");
+    [self logToLocal:@"MKBGCentralManager销毁"];
+}
+
 - (instancetype)init {
     if (self = [super init]) {
+        [self logToLocal:@"MKBGCentralManager初始化"];
         [[MKBLEBaseCentralManager shared] loadDataManager:self];
     }
     return self;
@@ -99,12 +106,14 @@ static dispatch_once_t onceToken;
 }
 
 - (void)MKBLEBaseCentralManagerStartScan {
+    [self logToLocal:@"开始扫描"];
     if ([self.delegate respondsToSelector:@selector(mk_bg_startScan)]) {
         [self.delegate mk_bg_startScan];
     }
 }
 
 - (void)MKBLEBaseCentralManagerStopScan {
+    [self logToLocal:@"停止扫描"];
     if ([self.delegate respondsToSelector:@selector(mk_bg_stopScan)]) {
         [self.delegate mk_bg_stopScan];
     }
@@ -113,6 +122,8 @@ static dispatch_once_t onceToken;
 #pragma mark - MKBLEBaseCentralManagerStateProtocol
 - (void)MKBLEBaseCentralManagerStateChanged:(MKCentralManagerState)centralManagerState {
     NSLog(@"蓝牙中心改变");
+    NSString *string = [NSString stringWithFormat:@"蓝牙中心改变:%@",@(centralManagerState)];
+    [self logToLocal:string];
     [[NSNotificationCenter defaultCenter] postNotificationName:mk_bg_centralManagerStateChangedNotification object:nil];
 }
 
@@ -128,14 +139,22 @@ static dispatch_once_t onceToken;
         self.connectStatus = mk_bg_centralConnectStatusDisconnect;
     }
     NSLog(@"当前连接状态发生改变了:%@",@(connectState));
+    NSString *string = [NSString stringWithFormat:@"连接状态发生改变:%@",@(connectState)];
+    [self logToLocal:string];
     [[NSNotificationCenter defaultCenter] postNotificationName:mk_bg_peripheralConnectStateChangedNotification object:nil];
 }
 
 #pragma mark - MKBLEBaseCentralManagerProtocol
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
+        [self logToLocal:@"+++++++++++++++++接收数据出错"];
         NSLog(@"+++++++++++++++++接收数据出错");
         return;
+    }
+    if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:@"AA05"]]) {
+        //非日志
+        NSString *string = [MKBLEBaseSDKAdopter hexStringFromData:characteristic.value];
+        [self saveToLogData:string appToDevice:NO];
     }
     if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:@"AA01"]]) {
         //引起设备断开连接的类型
@@ -162,6 +181,7 @@ static dispatch_once_t onceToken;
         if (!MKValidStr(content)) {
             return;
         }
+        [self saveToLogData:content appToDevice:NO];
         if ([self.logDelegate respondsToSelector:@selector(mk_bg_receiveLog:)]) {
             [self.logDelegate mk_bg_receiveLog:content];
         }
@@ -171,6 +191,7 @@ static dispatch_once_t onceToken;
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(nullable NSError *)error {
     if (error) {
         NSLog(@"+++++++++++++++++发送数据出错");
+        [self logToLocal:@"发送数据出错"];
         return;
     }
     
@@ -305,6 +326,8 @@ static dispatch_once_t onceToken;
     }
     __weak typeof(self) weakSelf = self;
     MKBGOperation *operation = [[MKBGOperation alloc] initOperationWithID:mk_bg_connectPasswordOperation commandBlock:^{
+        __strong typeof(self) sself = weakSelf;
+        [sself saveToLogData:commandData appToDevice:YES];
         [[MKBLEBaseCentralManager shared] sendDataToPeripheral:commandData characteristic:[MKBLEBaseCentralManager shared].peripheral.bg_password type:CBCharacteristicWriteWithResponse];
     } completeBlock:^(NSError * _Nullable error, id  _Nullable returnData) {
         __strong typeof(self) sself = weakSelf;
@@ -345,6 +368,8 @@ static dispatch_once_t onceToken;
     }
     __weak typeof(self) weakSelf = self;
     MKBGOperation <MKBLEBaseOperationProtocol>*operation = [[MKBGOperation alloc] initOperationWithID:operationID commandBlock:^{
+        __strong typeof(self) sself = weakSelf;
+        [sself saveToLogData:commandData appToDevice:YES];
         [[MKBLEBaseCentralManager shared] sendDataToPeripheral:commandData characteristic:characteristic type:CBCharacteristicWriteWithResponse];
     } completeBlock:^(NSError * _Nullable error, id  _Nullable returnData) {
         __strong typeof(self) sself = weakSelf;
@@ -457,6 +482,8 @@ static dispatch_once_t onceToken;
     [tempMac substringWithRange:NSMakeRange(8, 2)],
     [tempMac substringWithRange:NSMakeRange(10, 2)]];
     
+    [self logToLocal:[@"扫描到设备:" stringByAppendingString:content]];
+    
     return @{
         @"rssi":rssi,
         @"peripheral":peripheral,
@@ -483,6 +510,22 @@ static dispatch_once_t onceToken;
             failedBlock(error);
         }
     });
+}
+
+- (void)saveToLogData:(NSString *)string appToDevice:(BOOL)app {
+    if (!MKValidStr(string)) {
+        return;
+    }
+    NSString *fuction = (app ? @"App To Device" : @"Device To App");
+    NSString *recordString = [NSString stringWithFormat:@"%@---->%@",fuction,string];
+    [self logToLocal:recordString];
+}
+
+- (void)logToLocal:(NSString *)string {
+    if (!MKValidStr(string)) {
+        return;
+    }
+    [MKBLEBaseLogManager saveDataWithFileName:mk_bg_logName dataList:@[string]];
 }
 
 @end
