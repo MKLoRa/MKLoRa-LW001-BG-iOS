@@ -299,6 +299,7 @@ mk_bg_storageDataDelegate>
     [self.headerView.synButton.topIcon.layer addAnimation:[MKCustomUIAdopter refreshAnimation:2.f] forKey:synIconAnimationKey];
     self.headerView.synButton.msgLabel.text = @"STOP";
     self.headerView.sumLabel.text = @"Sum:N/A";
+    self.totalSum = @"";
     [self addTimerForRefresh];
 }
 
@@ -316,6 +317,7 @@ mk_bg_storageDataDelegate>
         //开始旋转
         [self.headerView.synButton.topIcon.layer addAnimation:[MKCustomUIAdopter refreshAnimation:2.f] forKey:synIconAnimationKey];
         self.headerView.synButton.msgLabel.text = @"STOP";
+        self.totalSum = @"";
         [self addTimerForRefresh];
     }else {
         //停止监听数据，start按钮恢复正常状态,本地如果有数据,empty、export都可用，如果没有则empty、export都不可用
@@ -384,14 +386,14 @@ mk_bg_storageDataDelegate>
 
 - (void)parseContentDatas {
     if (self.contentList.count == 0) {
-        NSInteger number = self.dataList.count;
-        if (ValidStr(self.totalSum) && [self.totalSum integerValue] == number) {
+        NSInteger tempNumber = self.dataList.count;
+        if (ValidStr(self.totalSum) && [self.totalSum integerValue] == tempNumber) {
             //解析完成
             if (self.parseTimer) {
                 dispatch_cancel(self.parseTimer);
             }
         }
-        self.headerView.countLabel.text = [NSString stringWithFormat:@"Count: %ld",(long)number];
+        self.headerView.countLabel.text = [NSString stringWithFormat:@"Count: %ld",(long)tempNumber];
         return;
     }
     NSString *firstContent = self.contentList[0];
