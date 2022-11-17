@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, readonly)NSString *firmware;
 
+/// 0:LW001-BG PRO (L)   1:LW001-BG PRO (M)
+@property (nonatomic, assign)NSInteger proType;
+
 + (MKBGConnectModel *)shared;
 
 /// 连接设备

@@ -1,6 +1,6 @@
 {
   "name": "MKLoRaWAN-BG",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "summary": "A short description of MKLoRaWAN-BG.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/aadyx2007@163.com/MKLoRaWAN-BG",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/MKLoRa/MKLoRa-LW001-BG-iOS.git",
-    "tag": "1.0.1"
+    "tag": "1.1.1"
   },
   "platforms": {
     "ios": "12.0"
@@ -171,6 +171,20 @@
             {
               "name": "Controller",
               "source_files": "MKLoRaWAN-BG/Classes/Functions/AboutPage/Controller/**"
+            }
+          ]
+        },
+        {
+          "name": "OptionsPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/OptionsPage/Controller/**",
+              "dependencies": {
+                "MKLoRaWAN-BG/Functions/ScanPage/Controller": [
+
+                ]
+              }
             }
           ]
         },
@@ -471,6 +485,24 @@
           ]
         },
         {
+          "name": "LGpsFixPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/LGpsFixPage/Controller/**",
+              "dependencies": {
+                "MKLoRaWAN-BG/Functions/LGpsFixPage/Model": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/LGpsFixPage/Model/**"
+            }
+          ]
+        },
+        {
           "name": "IndicatorSettingsPage",
           "subspecs": [
             {
@@ -634,6 +666,9 @@
 
                 ],
                 "MKLoRaWAN-BG/Functions/GPSPositionPage/Controller": [
+
+                ],
+                "MKLoRaWAN-BG/Functions/LGpsFixPage/Controller": [
 
                 ]
               }

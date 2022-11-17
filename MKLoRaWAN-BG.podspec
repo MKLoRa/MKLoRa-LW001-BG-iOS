@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MKLoRaWAN-BG'
-  s.version          = '1.0.1'
+  s.version          = '1.1.1'
   s.summary          = 'A short description of MKLoRaWAN-BG.'
 
 # This description is used to generate tags and improve search results.
@@ -110,6 +110,14 @@ TODO: Add long description of the pod here.
     ss.subspec 'AboutPage' do |sss|
       sss.subspec 'Controller' do |ssss|
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/AboutPage/Controller/**'
+      end
+    end
+    
+    ss.subspec 'OptionsPage' do |sss|
+      sss.subspec 'Controller' do |ssss|
+        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/OptionsPage/Controller/**'
+        
+        ssss.dependency 'MKLoRaWAN-BG/Functions/ScanPage/Controller'
       end
     end
     
@@ -303,6 +311,19 @@ TODO: Add long description of the pod here.
       
     end
     
+    ss.subspec 'LGpsFixPage' do |sss|
+      sss.subspec 'Controller' do |ssss|
+        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/LGpsFixPage/Controller/**'
+        
+        ssss.dependency 'MKLoRaWAN-BG/Functions/LGpsFixPage/Model'
+      end
+      
+      sss.subspec 'Model' do |ssss|
+        ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/LGpsFixPage/Model/**'
+      end
+      
+    end
+    
     ss.subspec 'IndicatorSettingsPage' do |sss|
       sss.subspec 'Controller' do |ssss|
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/IndicatorSettingsPage/Controller/**'
@@ -417,6 +438,8 @@ TODO: Add long description of the pod here.
         ssss.dependency 'MKLoRaWAN-BG/Functions/WifiPositionPage/Controller'
         ssss.dependency 'MKLoRaWAN-BG/Functions/BlePositionPage/Controller'
         ssss.dependency 'MKLoRaWAN-BG/Functions/GPSPositionPage/Controller'
+        ssss.dependency 'MKLoRaWAN-BG/Functions/LGpsFixPage/Controller'
+        
       end
       
     end

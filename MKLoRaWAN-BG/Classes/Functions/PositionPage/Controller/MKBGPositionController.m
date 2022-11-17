@@ -19,12 +19,15 @@
 #import "MKNormalTextCell.h"
 #import "MKTextSwitchCell.h"
 
+#import "MKBGConnectModel.h"
+
 #import "MKBGInterface.h"
 #import "MKBGInterface+MKBGConfig.h"
 
 #import "MKBGWifiPositionController.h"
 #import "MKBGBlePositionController.h"
 #import "MKBGGpsPositionController.h"
+#import "MKBGLGpsFixController.h"
 
 @interface MKBGPositionController ()<UITableViewDelegate,
 UITableViewDataSource,
@@ -83,7 +86,13 @@ mk_textSwitchCellDelegate>
         return;
     }
     if (indexPath.section == 0 && indexPath.row == 2) {
-        //
+        if ([MKBGConnectModel shared].proType == 0) {
+            //LW001-BG PRO L
+            MKBGLGpsFixController *vc = [[MKBGLGpsFixController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+            return;
+        }
+        //LW001-BG PRO M
         MKBGGpsPositionController *vc = [[MKBGGpsPositionController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
         return;
