@@ -10,7 +10,6 @@
 #endif
 #endif
 
-#import "MKBGApplicationModule.h"
 #import "CTMediator+MKBGAdd.h"
 #import "MKLoRaWANBGModuleKey.h"
 #import "MKBGConnectModel.h"
