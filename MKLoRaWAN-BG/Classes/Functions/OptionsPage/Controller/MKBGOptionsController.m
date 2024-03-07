@@ -69,12 +69,12 @@
 - (void)loadSectionDatas {
     MKNormalTextCellModel *cellModel1 = [[MKNormalTextCellModel alloc] init];
     cellModel1.showRightIcon = YES;
-    cellModel1.leftMsg = @"LW001-BG PRO(L)";
+    cellModel1.leftMsg = @"LW001-BG PRO-B";
     [self.dataList addObject:cellModel1];
     
     MKNormalTextCellModel *cellModel2 = [[MKNormalTextCellModel alloc] init];
     cellModel2.showRightIcon = YES;
-    cellModel2.leftMsg = @"LW001-BG PRO(M)";
+    cellModel2.leftMsg = @"LW001-BG PRO-A";
     [self.dataList addObject:cellModel2];
     
     [self.tableView reloadData];
