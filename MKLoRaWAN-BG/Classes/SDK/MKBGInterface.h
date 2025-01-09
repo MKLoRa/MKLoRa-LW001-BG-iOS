@@ -174,6 +174,93 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)bg_readOnOffMethodWithSucBlock:(void (^)(id returnData))sucBlock
                            failedBlock:(void (^)(NSError *error))failedBlock;
 
+/// Current Cycle Battery Information.
+/*
+ @{
+     @"workTimes":@"65535",         //Device working times.(Unit:s)
+     @"advCount":@"65535",          //The number of Bluetooth broadcasts by the device.
+     @"axisWakeupTimes":@"11111",       //Three-axis sensor wake-up times.(Unit:s)
+     @"blePostionTimes":@"11111",       //Bluetooth positioning times.(Unit:s)
+     @"gpsPostionTimes":@"11111",       //GPS positioning times.(Unit:s)
+     @"loraPowerConsumption":@"50000",      //Power consumption of LoRaWAN sending and receiving data.(Unit:mAS)
+     @"loraSendCount":@"10000",     //Number of LoRaWAN transmissions.
+     @"batteryPower":@"33500"       //Total battery power consumption.(Unit:0.001mAH)
+ };
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readBatteryInformationWithSucBlock:(void (^)(id returnData))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Last Cycle Battery Information.
+/*
+ @{
+     @"workTimes":@"65535",         //Device working times.(Unit:s)
+     @"advCount":@"65535",          //The number of Bluetooth broadcasts by the device.
+     @"axisWakeupTimes":@"11111",       //Three-axis sensor wake-up times.(Unit:s)
+     @"blePostionTimes":@"11111",       //Bluetooth positioning times.(Unit:s)
+     @"gpsPostionTimes":@"11111",       //GPS positioning times.(Unit:s)
+     @"loraPowerConsumption":@"50000",      //Power consumption of LoRaWAN sending and receiving data.(Unit:mAS)
+     @"loraSendCount":@"10000",     //Number of LoRaWAN transmissions.
+     @"batteryPower":@"33500"       //Total battery power consumption.(Unit:0.001mAH)
+ };
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readLastCycleBatteryInformationWithSucBlock:(void (^)(id returnData))sucBlock
+                                           failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// All Cycles Battery Information.
+/*
+ @{
+     @"workTimes":@"65535",         //Device working times.(Unit:s)
+     @"advCount":@"65535",          //The number of Bluetooth broadcasts by the device.
+     @"axisWakeupTimes":@"11111",       //Three-axis sensor wake-up times.(Unit:s)
+     @"blePostionTimes":@"11111",       //Bluetooth positioning times.(Unit:s)
+     @"gpsPostionTimes":@"11111",       //GPS positioning times.(Unit:s)
+     @"loraPowerConsumption":@"50000",      //Power consumption of LoRaWAN sending and receiving data.(Unit:mAS)
+     @"loraSendCount":@"10000",     //Number of LoRaWAN transmissions.
+     @"batteryPower":@"33500"       //Total battery power consumption.(Unit:0.001mAH)
+ };
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readAllCycleBatteryInformationWithSucBlock:(void (^)(id returnData))sucBlock
+                                          failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Whether to trigger a heartbeat when the device is low on battery.
+/*
+    @{
+    @"isOn":@(YES),
+ }
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readLowPowerPayloadStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                     failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// When the power of the device is lower than how much, it is judged as a low power state.
+/*
+    @{
+    @"prompt":@"0",         //@"0":10%   @"1":20%   @"2":30%    @"3":40%    @"4":50%    @"5":60%
+ }
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readLowPowerPromptWithSucBlock:(void (^)(id returnData))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Automatically power on after charging.
+/*
+ @{
+ @"isOn":@(YES)
+ }
+ */
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_readAutoPowerOnAfterChargingWithSucBlock:(void (^)(id returnData))sucBlock
+                                        failedBlock:(void (^)(NSError *error))failedBlock;
+
 #pragma mark ****************************************模式相关参数************************************************
 
 /// Read Periodic Mode positioning strategy.

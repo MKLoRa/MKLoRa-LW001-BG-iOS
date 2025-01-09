@@ -239,6 +239,31 @@
           ]
         },
         {
+          "name": "BatteryConsumptionPage",
+          "subspecs": [
+            {
+              "name": "Controller",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/BatteryConsumptionPage/Controller/**",
+              "dependencies": {
+                "MKLoRaWAN-BG/Functions/BatteryConsumptionPage/Model": [
+
+                ],
+                "MKLoRaWAN-BG/Functions/BatteryConsumptionPage/View": [
+
+                ]
+              }
+            },
+            {
+              "name": "Model",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/BatteryConsumptionPage/Model/**"
+            },
+            {
+              "name": "View",
+              "source_files": "MKLoRaWAN-BG/Classes/Functions/BatteryConsumptionPage/View/**"
+            }
+          ]
+        },
+        {
           "name": "BlePositionPage",
           "subspecs": [
             {
@@ -390,6 +415,9 @@
 
                 ],
                 "MKLoRaWAN-BG/Functions/DeviceInfoPage/Controller": [
+
+                ],
+                "MKLoRaWAN-BG/Functions/BatteryConsumptionPage/Controller": [
 
                 ]
               }

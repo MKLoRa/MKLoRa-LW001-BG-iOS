@@ -55,8 +55,9 @@ extern NSString *const mk_bg_deviceDisconnectTypeNotification;
 /// Current Bluetooth center status
 - (mk_bg_centralManagerStatus )centralStatus;
 
-/// Bluetooth Center starts scanning
-- (void)startScan;
+/// Bluetooth Center starts scanning.
+/// - Parameter needCharging: YES: Need charging edition of V2.  NO:Without charging edition of V2.
+- (void)startScan:(BOOL)needCharging;
 
 /// Bluetooth center stops scanning
 - (void)stopScan;

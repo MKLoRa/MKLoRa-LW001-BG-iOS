@@ -8,7 +8,7 @@
 
 #import "MKAppDelegate.h"
 
-#import "MKBGScanController.h"
+#import "MKBGOptionsController.h"
 
 @implementation MKAppDelegate
 
@@ -16,7 +16,7 @@
 {
     _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _window.backgroundColor = [UIColor whiteColor];
-    MKBGScanController *vc = [[MKBGScanController alloc] init];
+    MKBGOptionsController *vc = [[MKBGOptionsController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     _window.rootViewController = nav;
     [_window makeKeyAndVisible];

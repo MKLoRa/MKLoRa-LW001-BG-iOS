@@ -38,6 +38,8 @@ MKTextButtonCellDelegate>
 
 @property (nonatomic, strong)NSMutableArray *section2List;
 
+@property (nonatomic, strong)NSMutableArray *section3List;
+
 @property (nonatomic, strong)MKBGOnOffDataModel *dataModel;
 
 @end
@@ -60,12 +62,16 @@ MKTextButtonCellDelegate>
         MKTextButtonCellModel *cellModel = self.section2List[indexPath.row];
         return [cellModel cellHeightWithContentWidth:kViewWidth];
     }
+    if (indexPath.section == 3) {
+        MKTextSwitchCellModel *cellModel = self.section3List[indexPath.row];
+        return [cellModel cellHeightWithContentWidth:kViewWidth];
+    }
     return 44.f;
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -75,7 +81,12 @@ MKTextButtonCellDelegate>
     if (section == 1) {
         return self.section1List.count;
     }
-    return self.section2List.count;
+    if (section == 2) {
+        return self.section2List.count;
+    }
+    if (section == 3) {
+        return ([MKBGConnectModel shared].deviceType == 2 ? self.section3List.count : 0);
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -91,8 +102,14 @@ MKTextButtonCellDelegate>
         cell.delegate = self;
         return cell;
     }
-    MKTextButtonCell *cell = [MKTextButtonCell initCellWithTableView:tableView];
-    cell.dataModel = self.section2List[indexPath.row];
+    if (indexPath.section == 2) {
+        MKTextButtonCell *cell = [MKTextButtonCell initCellWithTableView:tableView];
+        cell.dataModel = self.section2List[indexPath.row];
+        cell.delegate = self;
+        return cell;
+    }
+    MKTextSwitchCell *cell = [MKTextSwitchCell initCellWithTableView:tableView];
+    cell.dataModel = self.section3List[indexPath.row];
     cell.delegate = self;
     return cell;
 }
@@ -105,6 +122,11 @@ MKTextButtonCellDelegate>
     if (index == 0) {
         //Off By Magnet
         [self configOffByMagnet:isOn];
+        return;
+    }
+    if (index == 1) {
+        //Auto Power On
+        [self configAutoPowerOn:isOn];
         return;
     }
 }
@@ -185,11 +207,26 @@ MKTextButtonCellDelegate>
     }];
 }
 
+- (void)configAutoPowerOn:(BOOL)isOn {
+    [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    [MKBGInterface bg_configAutoPowerOnAfterCharging:isOn sucBlock:^{
+        [[MKHudManager share] hide];
+        MKTextSwitchCellModel *cellModel = self.section3List[0];
+        cellModel.isOn = isOn;
+        self.dataModel.autoPowerOn = isOn;
+    } failedBlock:^(NSError * _Nonnull error) {
+        [[MKHudManager share] hide];
+        [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+        [self.tableView mk_reloadRow:0 inSection:0 withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+
 #pragma mark - loadSectionDatas
 - (void)loadSectionDatas {
     [self loadSection0Datas];
     [self loadSection1Datas];
     [self loadSection2Datas];
+    [self loadSection3Datas];
     
     [self.tableView reloadData];
 }
@@ -222,6 +259,15 @@ MKTextButtonCellDelegate>
     cellModel.noteMsg = @"*Default Operating mode after the device is repowered.";
     cellModel.noteMsgColor = RGBCOLOR(102, 102, 102);
     [self.section2List addObject:cellModel];
+}
+
+- (void)loadSection3Datas {
+    MKTextSwitchCellModel *cellModel = [[MKTextSwitchCellModel alloc] init];
+    cellModel.index = 1;
+    cellModel.msg = @"Auto Power On";
+    cellModel.isOn = self.dataModel.autoPowerOn;
+    cellModel.noteMsg = @"*When the battery run out, the device will be turned on when the device is in charged.";
+    [self.section3List addObject:cellModel];
 }
 
 #pragma mark - UI
@@ -266,6 +312,13 @@ MKTextButtonCellDelegate>
         _section2List = [NSMutableArray array];
     }
     return _section2List;
+}
+
+- (NSMutableArray *)section3List {
+    if (!_section3List) {
+        _section3List = [NSMutableArray array];
+    }
+    return _section3List;
 }
 
 - (MKBGOnOffDataModel *)dataModel {

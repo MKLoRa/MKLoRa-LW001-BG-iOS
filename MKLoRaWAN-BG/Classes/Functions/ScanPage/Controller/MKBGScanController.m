@@ -91,6 +91,7 @@ MKBGTabBarControllerDelegate>
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [MKBGConnectModel shared].proType = self.proType;
     [self loadSubViews];
     self.searchButton.dataModel = self.buttonModel;
     [self runloopObserver];
@@ -225,7 +226,7 @@ MKBGTabBarControllerDelegate>
     if (self.scanTimer) {
         dispatch_cancel(self.scanTimer);
     }
-    [[MKBGCentralManager shared] startScan];
+    [[MKBGCentralManager shared] startScan:self.needCharging];
     self.scanTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,dispatch_get_global_queue(0, 0));
     //开始时间
     dispatch_time_t start = dispatch_time(DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC);
@@ -397,6 +398,13 @@ MKBGTabBarControllerDelegate>
         return;
     }
     [[MKHudManager share] showHUDWithTitle:@"Connecting..." inView:self.view isPenetration:NO];
+    [MKBGConnectModel shared].deviceType = 0;
+    if ([trackerModel.deviceType isEqualToString:@"20"]) {
+        [MKBGConnectModel shared].deviceType = 1;
+    }else if ([trackerModel.deviceType isEqualToString:@"21"]) {
+        [MKBGConnectModel shared].deviceType = 2;
+    }
+    
     [[MKBGConnectModel shared] connectDevice:trackerModel.peripheral password:password sucBlock:^{
         [[NSUserDefaults standardUserDefaults] setObject:password forKey:localPasswordKey];
         [[MKHudManager share] hide];

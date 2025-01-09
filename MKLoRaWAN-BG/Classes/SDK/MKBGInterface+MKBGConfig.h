@@ -122,6 +122,36 @@ NS_ASSUME_NONNULL_BEGIN
                     sucBlock:(void (^)(void))sucBlock
                  failedBlock:(void (^)(NSError *error))failedBlock;
 
+/// Battery Reset.
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_batteryResetWithSucBlock:(void (^)(void))sucBlock
+                        failedBlock:(void (^)(NSError *error))failedBlock;
+
+///  Whether to trigger a heartbeat when the device is low on battery.
+/// @param isOn isOn
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configLowPowerPayloadStatus:(BOOL)isOn
+                              sucBlock:(void (^)(void))sucBlock
+                           failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// When the power of the device is lower than how much, it is judged as a low power state.
+/// @param prompt prompt
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configLowPowerPrompt:(mk_bg_v2LowPowerPrompt)prompt
+                       sucBlock:(void (^)(void))sucBlock
+                    failedBlock:(void (^)(NSError *error))failedBlock;
+
+/// Automatically power on after charging.
+/// @param isOn isOn
+/// @param sucBlock Success callback
+/// @param failedBlock Failure callback
++ (void)bg_configAutoPowerOnAfterCharging:(BOOL)isOn
+                                 sucBlock:(void (^)(void))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock;
+
 #pragma mark ****************************************模式相关参数************************************************
 
 /// Configure Periodic Mode positioning strategy.

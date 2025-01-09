@@ -23,6 +23,9 @@
 
 /// 扫描页面
 - (UIViewController *)Action_LoRaWANBG_Module_ScanController:(NSDictionary *)params {
+    MKBGScanController *vc = [[MKBGScanController alloc] init];
+    vc.needCharging = [params[@"needCharging"] boolValue];
+    vc.proType = [params[@"proType"] integerValue];
     return [[MKBGScanController alloc] init];
 }
 

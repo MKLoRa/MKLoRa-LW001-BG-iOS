@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIViewController *)Action_LoRaWANBG_Module_OptionsController:(NSDictionary *)params;
 
 /// 扫描页面
+/// @param @{@"proType":@"0",@"needCharging"}       //0:LW001-BG PRO -A   1:LW001-BG PRO -B
 - (UIViewController *)Action_LoRaWANBG_Module_ScanController:(NSDictionary *)params;
 
 /// 关于页面

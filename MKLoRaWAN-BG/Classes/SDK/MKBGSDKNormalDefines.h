@@ -41,6 +41,15 @@ typedef NS_ENUM(NSInteger, mk_bg_lowPowerPrompt) {
     mk_bg_lowPowerPrompt_tenPercent
 };
 
+typedef NS_ENUM(NSInteger, mk_bg_v2LowPowerPrompt) {
+    mk_bg_v2LowPowerPrompt_tenPercent,
+    mk_bg_v2LowPowerPrompt_twentyPercent,
+    mk_bg_v2LowPowerPrompt_thirtyPercent,
+    mk_bg_v2LowPowerPrompt_fortyPercent,
+    mk_bg_v2LowPowerPrompt_fiftyPercent,
+    mk_bg_v2LowPowerPrompt_sixtyPercent,
+};
+
 typedef NS_ENUM(NSInteger, mk_bg_positioningStrategy) {
     mk_bg_positioningStrategy_wifi,
     mk_bg_positioningStrategy_ble,

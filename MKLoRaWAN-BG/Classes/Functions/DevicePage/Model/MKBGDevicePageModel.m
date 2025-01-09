@@ -10,6 +10,8 @@
 
 #import "MKMacroDefines.h"
 
+#import "MKBGConnectModel.h"
+
 #import "MKBGInterface.h"
 #import "MKBGInterface+MKBGConfig.h"
 
@@ -33,24 +35,30 @@
             [self operationFailedBlockWithMsg:@"Read Shutdown Payload Error" block:failedBlock];
             return;
         }
-        if (![self readLowPowerParams]) {
-            [self operationFailedBlockWithMsg:@"Read Low Power Params Error" block:failedBlock];
-            return;
+        if ([MKBGConnectModel shared].deviceType == 2) {
+            //V2充电版
+            if (![self readLowPowerPayload]) {
+                [self operationFailedBlockWithMsg:@"Read Low Power Payload Error" block:failedBlock];
+                return;
+            }
+            if (![self readLowPowerPrompt]) {
+                [self operationFailedBlockWithMsg:@"Read Low Power Prompt Error" block:failedBlock];
+                return;
+            }
+        }else {
+            //V1+V2非充电版
+            if (![self readLowPowerParams]) {
+                [self operationFailedBlockWithMsg:@"Read Low Power Params Error" block:failedBlock];
+                return;
+            }
         }
+        
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();
             }
         });
     });
-}
-
-- (void)configLowPowerParamsWithSucBlock:(void (^)(void))sucBlock
-                             failedBlock:(void (^)(NSError *error))failedBlock {
-    [MKBGInterface bg_configLowPowerPayload:self.lowPowerPayload
-                                     prompt:self.prompt
-                                   sucBlock:sucBlock
-                                failedBlock:failedBlock];
 }
 
 #pragma mark - interface
@@ -98,6 +106,56 @@
 - (BOOL)configLowPowerParams {
     __block BOOL success = NO;
     [MKBGInterface bg_configLowPowerPayload:self.lowPowerPayload prompt:self.prompt sucBlock:^{
+        success = YES;
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)readLowPowerPayload {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readLowPowerPayloadStatusWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.lowPowerPayload = [returnData[@"result"][@"isOn"] boolValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configLowPowerPayload {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configLowPowerPayloadStatus:self.lowPowerPayload sucBlock:^{
+        success = YES;
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)readLowPowerPrompt {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readLowPowerPromptWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.prompt = [returnData[@"result"][@"prompt"] integerValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)configLowPowerPrompt {
+    __block BOOL success = NO;
+    [MKBGInterface bg_configLowPowerPrompt:self.prompt sucBlock:^{
         success = YES;
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {

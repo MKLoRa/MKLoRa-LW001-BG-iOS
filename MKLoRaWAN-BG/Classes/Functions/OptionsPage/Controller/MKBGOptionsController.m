@@ -48,6 +48,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [MKBGConnectModel shared].proType = indexPath.row;
     MKBGScanController *vc = [[MKBGScanController alloc] init];
+    vc.needCharging = (indexPath.row == 1);
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -69,12 +70,12 @@
 - (void)loadSectionDatas {
     MKNormalTextCellModel *cellModel1 = [[MKNormalTextCellModel alloc] init];
     cellModel1.showRightIcon = YES;
-    cellModel1.leftMsg = @"LW001-BG PRO-B";
+    cellModel1.leftMsg = @"LW001-BG PRO-A";
     [self.dataList addObject:cellModel1];
     
     MKNormalTextCellModel *cellModel2 = [[MKNormalTextCellModel alloc] init];
     cellModel2.showRightIcon = YES;
-    cellModel2.leftMsg = @"LW001-BG PRO-A";
+    cellModel2.leftMsg = @"LW001-BG PRO-B";
     [self.dataList addObject:cellModel2];
     
     [self.tableView reloadData];

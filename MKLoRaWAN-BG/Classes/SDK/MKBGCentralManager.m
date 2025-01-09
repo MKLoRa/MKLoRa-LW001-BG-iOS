@@ -49,6 +49,8 @@ static dispatch_once_t onceToken;
 
 @property (nonatomic, assign)mk_bg_centralConnectStatus connectStatus;
 
+@property (nonatomic, assign)BOOL needCharging;
+
 @end
 
 @implementation MKBGCentralManager
@@ -94,7 +96,7 @@ static dispatch_once_t onceToken;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSLog(@"%@",advertisementData);
         NSDictionary *dataModel = [self parseModelWithRssi:RSSI advDic:advertisementData peripheral:peripheral];
-        if (!dataModel) {
+        if (!MKValidDict(dataModel)) {
             return ;
         }
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -212,7 +214,8 @@ static dispatch_once_t onceToken;
     : mk_bg_centralManagerStatusUnable;
 }
 
-- (void)startScan {
+- (void)startScan:(BOOL)needCharging {
+    self.needCharging = needCharging;
     [[MKBLEBaseCentralManager shared] scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:@"AA02"]] options:nil];
 }
 
@@ -453,7 +456,12 @@ static dispatch_once_t onceToken;
     
     NSString *content = [MKBLEBaseSDKAdopter hexStringFromData:manufacturerData];
     
-    NSString *deviceType = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 2)];
+    NSString *deviceType = [content substringWithRange:NSMakeRange(0, 2)];
+    
+    if (!self.needCharging && [deviceType isEqualToString:@"21"]) {
+        return @{};
+    }
+    
     NSNumber *txPower = [MKBLEBaseSDKAdopter signedHexTurnString:[content substringWithRange:NSMakeRange(2, 2)]];
     
     NSString *binaryHex = [MKBLEBaseSDKAdopter binaryByhex:[content substringWithRange:NSMakeRange(4, 2)]];

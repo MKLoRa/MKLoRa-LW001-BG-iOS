@@ -27,13 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign)BOOL lowPowerPayload;
 
+/// 对于V1+V2非充电版 5%和10%              V2充电版10%/20%/30%/40%/50%
 @property (nonatomic, assign)NSInteger prompt;
 
-- (void)readWithSucBlock:(void (^)(void))sucBlock
-             failedBlock:(void (^)(NSError *error))failedBlock;
-
-- (void)configLowPowerParamsWithSucBlock:(void (^)(void))sucBlock
-                             failedBlock:(void (^)(NSError *error))failedBlock;
+- (void)readWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
 
 @end
 

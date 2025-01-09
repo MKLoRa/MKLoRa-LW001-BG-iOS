@@ -86,7 +86,7 @@ mk_textSwitchCellDelegate>
         return;
     }
     if (indexPath.section == 0 && indexPath.row == 2) {
-        if ([MKBGConnectModel shared].proType == 0) {
+        if ([MKBGConnectModel shared].proType == 1) {
             //LW001-BG PRO L
             MKBGLGpsFixController *vc = [[MKBGLGpsFixController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];

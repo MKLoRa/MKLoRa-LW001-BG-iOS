@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class CBPeripheral;
 @interface MKBGScanPageModel : NSObject
 
-/// 设备类型
+/// 设备类型    00: V1版本    20:V2非充电版   21:V2充电版
 @property (nonatomic, copy)NSString *deviceType;
 
 @property (nonatomic, strong)CBPeripheral *peripheral;

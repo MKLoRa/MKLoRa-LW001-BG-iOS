@@ -206,6 +206,54 @@
                  failedBlock:failedBlock];
 }
 
++ (void)bg_readBatteryInformationWithSucBlock:(void (^)(id returnData))sucBlock
+                                  failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadBatteryInformationOperation
+                     cmdFlag:@"17"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readLastCycleBatteryInformationWithSucBlock:(void (^)(id returnData))sucBlock
+                                           failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadLastCycleBatteryInformationOperation
+                     cmdFlag:@"18"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readAllCycleBatteryInformationWithSucBlock:(void (^)(id returnData))sucBlock
+                                          failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadAllCycleBatteryInformationOperation
+                     cmdFlag:@"19"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readLowPowerPayloadStatusWithSucBlock:(void (^)(id returnData))sucBlock
+                                     failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadLowPowerPayloadStatusOperation
+                     cmdFlag:@"1a"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readLowPowerPromptWithSucBlock:(void (^)(id returnData))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadLowPowerPromptOperation
+                     cmdFlag:@"1b"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
++ (void)bg_readAutoPowerOnAfterChargingWithSucBlock:(void (^)(id returnData))sucBlock
+                                        failedBlock:(void (^)(NSError *error))failedBlock {
+    [self readDataWithTaskID:mk_bg_taskReadAutoPowerOnAfterChargingOperation
+                     cmdFlag:@"1d"
+                    sucBlock:sucBlock
+                 failedBlock:failedBlock];
+}
+
 #pragma mark ****************************************模式相关参数************************************************
 
 + (void)bg_readPeriodicModePositioningStrategyWithSucBlock:(void (^)(id returnData))sucBlock

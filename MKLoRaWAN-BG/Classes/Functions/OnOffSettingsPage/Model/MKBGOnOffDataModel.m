@@ -42,6 +42,12 @@
                 return;
             }
         }
+        if ([MKBGConnectModel shared].deviceType == 2) {
+            if (![self readAutoPowerOn]) {
+                [self operationFailedBlockWithMsg:@"Read Auto Power On Error" block:failedBlock];
+                return;
+            }
+        }
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();
@@ -81,6 +87,19 @@
     [MKBGInterface bg_readRepoweredDefaultModeWithSucBlock:^(id  _Nonnull returnData) {
         success = YES;
         self.mode = [returnData[@"result"][@"mode"] integerValue];
+        dispatch_semaphore_signal(self.semaphore);
+    } failedBlock:^(NSError * _Nonnull error) {
+        dispatch_semaphore_signal(self.semaphore);
+    }];
+    dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
+- (BOOL)readAutoPowerOn {
+    __block BOOL success = NO;
+    [MKBGInterface bg_readAutoPowerOnAfterChargingWithSucBlock:^(id  _Nonnull returnData) {
+        success = YES;
+        self.autoPowerOn = [returnData[@"result"][@"isOn"] boolValue];
         dispatch_semaphore_signal(self.semaphore);
     } failedBlock:^(NSError * _Nonnull error) {
         dispatch_semaphore_signal(self.semaphore);

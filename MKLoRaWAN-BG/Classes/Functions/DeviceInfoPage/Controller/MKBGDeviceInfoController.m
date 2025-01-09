@@ -30,6 +30,7 @@
 #import "MKBGUpdateController.h"
 #import "MKBGSelftestController.h"
 #import "MKBGDebuggerController.h"
+#import "MKBGBatteryConsumptionController.h"
 
 @interface MKBGDeviceInfoController ()<UITableViewDelegate,
 UITableViewDataSource,
@@ -48,6 +49,8 @@ MKBGTextButtonCellDelegate>
 @property (nonatomic, strong)NSMutableArray *section4List;
 
 @property (nonatomic, strong)NSMutableArray *section5List;
+
+@property (nonatomic, strong)NSMutableArray *section6List;
 
 @property (nonatomic, strong)NSMutableArray *headerList;
 
@@ -91,7 +94,7 @@ MKBGTextButtonCellDelegate>
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0 || section == 3 || section == 4 || section == 5) {
+    if (section == 0 || section == 3 || section == 4 || section == 5 || section == 6) {
         return 10.f;
     }
     return 0.f;
@@ -105,6 +108,12 @@ MKBGTextButtonCellDelegate>
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 5 && indexPath.row == 0) {
+        //Battery Consumption Information
+        MKBGBatteryConsumptionController *vc = [[MKBGBatteryConsumptionController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    if (indexPath.section == 6 && indexPath.row == 0) {
         //Debugger Mode
         MKBGDebuggerController *vc = [[MKBGDebuggerController alloc] init];
         vc.macAddress = self.dataModel.macAddress;
@@ -115,7 +124,7 @@ MKBGTextButtonCellDelegate>
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 6;
+    return self.headerList.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -134,7 +143,13 @@ MKBGTextButtonCellDelegate>
     if (section == 4) {
         return self.section4List.count;
     }
-    return ([[MKBGConnectModel shared] firmwareVersion107] ? self.section5List.count : 0);
+    if (section == 5) {
+        return ([MKBGConnectModel shared].deviceType > 0 ? self.section5List.count : 0);
+    }
+    if (section == 6) {
+        return ([[MKBGConnectModel shared] firmwareVersion107] ? self.section6List.count : 0);
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -164,8 +179,13 @@ MKBGTextButtonCellDelegate>
         cell.dataModel =  self.section4List[indexPath.row];
         return cell;
     }
+    if (indexPath.section == 5) {
+        MKNormalTextCell *cell = [MKNormalTextCell initCellWithTableView:tableView];
+        cell.dataModel =  self.section5List[indexPath.row];
+        return cell;
+    }
     MKNormalTextCell *cell = [MKNormalTextCell initCellWithTableView:tableView];
-    cell.dataModel =  self.section5List[indexPath.row];
+    cell.dataModel =  self.section6List[indexPath.row];
     return cell;
 }
 
@@ -254,6 +274,12 @@ MKBGTextButtonCellDelegate>
     [self loadSection3Datas];
     [self loadSection4Datas];
     [self loadSection5Datas];
+    [self loadSection6Datas];
+    
+    for (NSInteger i = 0; i < 5; i ++) {
+        MKTableSectionLineHeaderModel *headerModel = [[MKTableSectionLineHeaderModel alloc] init];
+        [self.headerList addObject:headerModel];
+    }
         
     [self.tableView reloadData];
 }
@@ -301,8 +327,15 @@ MKBGTextButtonCellDelegate>
 - (void)loadSection5Datas {
     MKNormalTextCellModel *cellModel = [[MKNormalTextCellModel alloc] init];
     cellModel.showRightIcon = YES;
-    cellModel.leftMsg = @"Debugger Mode";
+    cellModel.leftMsg = @"Battery Consumption Information";
     [self.section5List addObject:cellModel];
+}
+
+- (void)loadSection6Datas {
+    MKNormalTextCellModel *cellModel = [[MKNormalTextCellModel alloc] init];
+    cellModel.showRightIcon = YES;
+    cellModel.leftMsg = @"Debugger Mode";
+    [self.section6List addObject:cellModel];
 }
 
 #pragma mark - UI
@@ -374,6 +407,13 @@ MKBGTextButtonCellDelegate>
         _section5List = [NSMutableArray array];
     }
     return _section5List;
+}
+
+- (NSMutableArray *)section6List {
+    if (!_section6List) {
+        _section6List = [NSMutableArray array];
+    }
+    return _section6List;
 }
 
 - (NSMutableArray *)headerList {

@@ -20,8 +20,9 @@
 #import "MKTextSwitchCell.h"
 #import "MKTextButtonCell.h"
 #import "MKAlertController.h"
-
 #import "MKTableSectionLineHeader.h"
+
+#import "MKBGConnectModel.h"
 
 #import "MKBGNormalAdopter.h"
 
@@ -323,6 +324,24 @@ mk_textSwitchCellDelegate>
 
 - (void)configLowPowerPrompt:(NSInteger)prompt {
     [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    
+    if ([MKBGConnectModel shared].deviceType == 2) {
+        //V2充电版
+        [MKBGInterface bg_configLowPowerPrompt:prompt sucBlock:^{
+            [[MKHudManager share] hide];
+            MKTextButtonCellModel *cellModel = self.section5List[0];
+            cellModel.dataListIndex = prompt;
+            cellModel.noteMsg = [NSString stringWithFormat:@"*When the battery is less than or equal to %@, the green LED will flashe once every 10 seconds.",cellModel.dataList[prompt]];
+            self.dataModel.prompt = prompt;
+            [self.tableView mk_reloadRow:0 inSection:5 withRowAnimation:UITableViewRowAnimationNone];
+        } failedBlock:^(NSError * _Nonnull error) {
+            [[MKHudManager share] hide];
+            [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+            [self.tableView mk_reloadRow:0 inSection:5 withRowAnimation:UITableViewRowAnimationNone];
+        }];
+        return;
+    }
+    
     [MKBGInterface bg_configLowPowerPayload:self.dataModel.lowPowerPayload prompt:prompt sucBlock:^{
         [[MKHudManager share] hide];
         MKTextButtonCellModel *cellModel = self.section5List[0];
@@ -339,6 +358,21 @@ mk_textSwitchCellDelegate>
 
 - (void)configLowPowerPayload:(BOOL)isOn {
     [[MKHudManager share] showHUDWithTitle:@"Config..." inView:self.view isPenetration:NO];
+    
+    if ([MKBGConnectModel shared].deviceType == 2) {
+        //V2充电版
+        [MKBGInterface bg_configLowPowerPayloadStatus:isOn sucBlock:^{
+            [[MKHudManager share] hide];
+            MKTextSwitchCellModel *cellModel = self.section3List[1];
+            cellModel.isOn = isOn;
+            self.dataModel.lowPowerPayload = isOn;
+        } failedBlock:^(NSError * _Nonnull error) {
+            [[MKHudManager share] hide];
+            [self.view showCentralToast:error.userInfo[@"errorInfo"]];
+            [self.tableView mk_reloadRow:1 inSection:3 withRowAnimation:UITableViewRowAnimationNone];
+        }];
+    }
+    
     [MKBGInterface bg_configLowPowerPayload:isOn prompt:self.dataModel.prompt sucBlock:^{
         [[MKHudManager share] hide];
         MKTextSwitchCellModel *cellModel = self.section3List[1];
@@ -605,7 +639,14 @@ mk_textSwitchCellDelegate>
     MKTextButtonCellModel *cellModel = [[MKTextButtonCellModel alloc] init];
     cellModel.index = 1;
     cellModel.msg = @"Low Power Prompt";
-    cellModel.dataList = @[@"5%",@"10%"];
+    if ([MKBGConnectModel shared].deviceType == 2) {
+        //V2充电版
+        cellModel.dataList = @[@"10%",@"20%",@"30%",@"40%",@"50%"];
+    }else {
+        //V1+V2非充电版
+        cellModel.dataList = @[@"5%",@"10%"];
+    }
+    
     cellModel.noteMsg = @"*When the battery is less than or equal to 10%, the green LED will flashe once every 10 seconds.";
     cellModel.noteMsgColor = RGBCOLOR(102, 102, 102);
     cellModel.dataListIndex = 1;

@@ -247,6 +247,92 @@
             @"method":method,
         };
         operationID = mk_bg_taskReadOnOffMethodOperation;
+    }else if ([cmd isEqualToString:@"17"]) {
+        //读取电池信息
+        NSString *workTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 8)];
+        NSString *advCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(8, 8)];
+        NSString *axisWakeupTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(16, 8)];
+        NSString *blePostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(24, 8)];
+        NSString *gpsPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(32, 8)];
+        NSString *loraSendCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(40, 8)];
+        NSString *loraPowerConsumption = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(48, 8)];
+        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(56, 8)];
+        
+        resultDic = @{
+            @"workTimes":workTimes,
+            @"advCount":advCount,
+            @"axisWakeupTimes":axisWakeupTimes,
+            @"blePostionTimes":blePostionTimes,
+            @"gpsPostionTimes":gpsPostionTimes,
+            @"loraSendCount":loraSendCount,
+            @"loraPowerConsumption":loraPowerConsumption,
+            @"batteryPower":batteryPower
+        };
+        operationID = mk_bg_taskReadBatteryInformationOperation;
+    }else if ([cmd isEqualToString:@"18"]) {
+        //读取上一周期电池电量消耗
+        NSString *workTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 8)];
+        NSString *advCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(8, 8)];
+        NSString *axisWakeupTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(16, 8)];
+        NSString *blePostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(24, 8)];
+        NSString *gpsPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(32, 8)];
+        NSString *loraSendCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(40, 8)];
+        NSString *loraPowerConsumption = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(48, 8)];
+        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(56, 8)];
+        
+        resultDic = @{
+            @"workTimes":workTimes,
+            @"advCount":advCount,
+            @"axisWakeupTimes":axisWakeupTimes,
+            @"blePostionTimes":blePostionTimes,
+            @"gpsPostionTimes":gpsPostionTimes,
+            @"loraSendCount":loraSendCount,
+            @"loraPowerConsumption":loraPowerConsumption,
+            @"batteryPower":batteryPower
+        };
+        operationID = mk_bg_taskReadLastCycleBatteryInformationOperation;
+    }else if ([cmd isEqualToString:@"19"]) {
+        //读取所有周期电池电量消耗
+        NSString *workTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, 8)];
+        NSString *advCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(8, 8)];
+        NSString *axisWakeupTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(16, 8)];
+        NSString *blePostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(24, 8)];
+        NSString *gpsPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(32, 8)];
+        NSString *loraSendCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(40, 8)];
+        NSString *loraPowerConsumption = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(48, 8)];
+        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(56, 8)];
+        
+        resultDic = @{
+            @"workTimes":workTimes,
+            @"advCount":advCount,
+            @"axisWakeupTimes":axisWakeupTimes,
+            @"blePostionTimes":blePostionTimes,
+            @"gpsPostionTimes":gpsPostionTimes,
+            @"loraSendCount":loraSendCount,
+            @"loraPowerConsumption":loraPowerConsumption,
+            @"batteryPower":batteryPower
+        };
+        operationID = mk_bg_taskReadAllCycleBatteryInformationOperation;
+    }else if ([cmd isEqualToString:@"1a"]) {
+        //读取低电触发心跳开关状态
+        BOOL isOn = [content isEqualToString:@"01"];
+        resultDic = @{
+            @"isOn":@(isOn),
+        };
+        operationID = mk_bg_taskReadLowPowerPayloadStatusOperation;
+    }else if ([cmd isEqualToString:@"1b"]) {
+        //读取低电百分比
+        resultDic = @{
+            @"prompt":[MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)],
+        };
+        operationID = mk_bg_taskReadLowPowerPromptOperation;
+    }else if ([cmd isEqualToString:@"1d"]) {
+        //读取充电自动开机功能
+        BOOL isOn = ([content isEqualToString:@"01"]);
+        resultDic = @{
+            @"isOn":@(isOn)
+        };
+        operationID = mk_bg_taskReadAutoPowerOnAfterChargingOperation;
     }else if ([cmd isEqualToString:@"20"]) {
         //读取定期模式定位策略
         NSString *strategy = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(0, content.length)];
@@ -1008,6 +1094,18 @@
     }else if ([cmd isEqualToString:@"15"]) {
         //设置磁簧开关机方式
         operationID = mk_bg_taskConfigOnOffMethodOperation;
+    }else if ([cmd isEqualToString:@"16"]) {
+        //清除电池电量数据
+        operationID = mk_bg_taskBatteryResetOperation;
+    }else if ([cmd isEqualToString:@"1a"]) {
+        //配置低电触发心跳开关状态
+        operationID = mk_bg_taskConfigLowPowerPayloadStatusOperation;
+    }else if ([cmd isEqualToString:@"1b"]) {
+        //配置低电百分比
+        operationID = mk_bg_taskConfigLowPowerPromptOperation;
+    }else if ([cmd isEqualToString:@"1d"]) {
+        //配置充电自动开机功能
+        operationID = mk_bg_taskConfigAutoPowerOnAfterChargingOperation;
     }else if ([cmd isEqualToString:@"20"]) {
         //设置定期模式定位策略
         operationID = mk_bg_taskConfigPeriodicModePositioningStrategyOperation;

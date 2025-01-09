@@ -32,7 +32,12 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskReadPCBAStatusOperation,                  //读取产测标志
     mk_bg_taskReadSelftestStatusOperation,              //读取自检故障
     mk_bg_taskReadOnOffMethodOperation,                 //读取磁簧开关机方式
-    
+    mk_bg_taskReadBatteryInformationOperation,      //读取电池电量消耗
+    mk_bg_taskReadLastCycleBatteryInformationOperation, //读取上一周期电池电量消耗
+    mk_bg_taskReadAllCycleBatteryInformationOperation,  //读取所有周期电池电量消耗
+    mk_bg_taskReadLowPowerPayloadStatusOperation,   //读取低电触发心跳开关状态
+    mk_bg_taskReadLowPowerPromptOperation,          //读取低电百分比
+    mk_bg_taskReadAutoPowerOnAfterChargingOperation,    //读取充电自动开机功能
     
 #pragma mark - 模式相关参数
     mk_bg_taskReadPeriodicModePositioningStrategyOperation,         //读取定期模式定位策略
@@ -152,6 +157,10 @@ typedef NS_ENUM(NSInteger, mk_bg_taskOperationID) {
     mk_bg_taskConfigLowPowerPayloadOperation,           //配置低电参数
     mk_bg_taskConfigIndicatorSettingsOperation,         //配置指示灯功能
     mk_bg_taskConfigOnOffMethodOperation,               //配置磁簧开关机方式
+    mk_bg_taskBatteryResetOperation,                    //清除电池电量数据
+    mk_bg_taskConfigLowPowerPayloadStatusOperation,     //配置低电触发心跳开关状态
+    mk_bg_taskConfigLowPowerPromptOperation,            //配置低电百分比
+    mk_bg_taskConfigAutoPowerOnAfterChargingOperation,  //配置充电自动开机功能
     
 #pragma mark - 配置模式相关参数
     mk_bg_taskConfigPeriodicModePositioningStrategyOperation,       //配置定期模式定位策略

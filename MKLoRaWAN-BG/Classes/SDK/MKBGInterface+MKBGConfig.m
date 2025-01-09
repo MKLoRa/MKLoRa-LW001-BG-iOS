@@ -209,6 +209,46 @@
                    failedBlock:failedBlock];
 }
 
++ (void)bg_batteryResetWithSucBlock:(void (^)(void))sucBlock
+                        failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *commandString = @"ed011600";
+    [self configDataWithTaskID:mk_bg_taskBatteryResetOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configLowPowerPayloadStatus:(BOOL)isOn
+                              sucBlock:(void (^)(void))sucBlock
+                           failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *commandString = (isOn ? @"ed011a0101" : @"ed011a0100");
+    [self configDataWithTaskID:mk_bg_taskConfigLowPowerPayloadStatusOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configLowPowerPrompt:(mk_bg_v2LowPowerPrompt)prompt
+                       sucBlock:(void (^)(void))sucBlock
+                    failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *promptValue = [MKBLEBaseSDKAdopter fetchHexValue:prompt byteLen:1];
+    NSString *commandString = [@"ed011b01" stringByAppendingString:promptValue];
+    [self configDataWithTaskID:mk_bg_taskConfigLowPowerPromptOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
++ (void)bg_configAutoPowerOnAfterCharging:(BOOL)isOn
+                                 sucBlock:(void (^)(void))sucBlock
+                              failedBlock:(void (^)(NSError *error))failedBlock {
+    NSString *commandString = (isOn ? @"ed011d0101" : @"ed011d0100");
+    [self configDataWithTaskID:mk_bg_taskConfigAutoPowerOnAfterChargingOperation
+                          data:commandString
+                      sucBlock:sucBlock
+                   failedBlock:failedBlock];
+}
+
 #pragma mark ****************************************模式相关参数************************************************
 
 + (void)bg_configPeriodicModePositioningStrategy:(mk_bg_positioningStrategy)strategy

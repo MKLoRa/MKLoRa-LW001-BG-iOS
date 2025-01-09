@@ -12,6 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MKBGScanController : MKBaseViewController
 
+/// 0:LW001-BG PRO -A     1:LW001-BG PRO -B
+@property (nonatomic, assign)NSInteger proType;
+
+/// YES: V2充电版本     NO:V1 + V2非充电版
+@property (nonatomic, assign)BOOL needCharging;
+
 @end
 
 NS_ASSUME_NONNULL_END
