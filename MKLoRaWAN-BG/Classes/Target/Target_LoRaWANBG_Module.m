@@ -26,7 +26,7 @@
     MKBGScanController *vc = [[MKBGScanController alloc] init];
     vc.needCharging = [params[@"needCharging"] boolValue];
     vc.proType = [params[@"proType"] integerValue];
-    return [[MKBGScanController alloc] init];
+    return vc;
 }
 
 /// 关于页面
