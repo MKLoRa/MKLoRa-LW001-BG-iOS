@@ -16,6 +16,8 @@
 
 #import "MKNormalTextCell.h"
 
+#import "CTMediator+MKBGAdd.h"
+
 #import "MKBGConnectModel.h"
 
 #import "MKBGScanController.h"
@@ -46,9 +48,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [MKBGConnectModel shared].proType = indexPath.row;
-    MKBGScanController *vc = [[MKBGScanController alloc] init];
-    vc.needCharging = (indexPath.row == 1);
+    UIViewController *vc = [[CTMediator sharedInstance] CTMediator_LORAWAN_BG_ScanPage:(indexPath.row == 1)];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

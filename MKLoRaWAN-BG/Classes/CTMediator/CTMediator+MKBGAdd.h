@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 关于页面
 - (UIViewController *)CTMediator_LORAWAN_BG_AboutPage;
 
+/// 扫描页面
+- (UIViewController *)CTMediator_LORAWAN_BG_ScanPage:(BOOL)needCharging;
+
 @end
 
 NS_ASSUME_NONNULL_END

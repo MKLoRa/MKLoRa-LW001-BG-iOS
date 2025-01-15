@@ -28,6 +28,14 @@
              shouldCacheTarget:NO];
 }
 
+- (UIViewController *)CTMediator_LORAWAN_BG_ScanPage:(BOOL)needCharging {
+    return [self performTarget:kTarget_loRaApp_bg_module
+                        action:kAction_loRaApp_bg_scanPage
+                        params:@{@"needCharging":@(needCharging),
+                                 @"proType":(needCharging ? @"1" : @"0")}
+             shouldCacheTarget:NO];
+}
+
 #pragma mark - private method
 - (UIViewController *)Action_LoRaApp_ViewControllerWithTarget:(NSString *)targetName
                                                        action:(NSString *)actionName

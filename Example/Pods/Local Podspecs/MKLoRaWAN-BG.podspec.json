@@ -366,6 +366,9 @@
                 ],
                 "MKLoRaWAN-BG/Functions/DebuggerPage/Controller": [
 
+                ],
+                "MKLoRaWAN-BG/Functions/BatteryConsumptionPage/Controller": [
+
                 ]
               }
             },
@@ -415,9 +418,6 @@
 
                 ],
                 "MKLoRaWAN-BG/Functions/DeviceInfoPage/Controller": [
-
-                ],
-                "MKLoRaWAN-BG/Functions/BatteryConsumptionPage/Controller": [
 
                 ]
               }
