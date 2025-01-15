@@ -400,6 +400,11 @@ mk_textSwitchCellDelegate>
     promptModel.noteMsg = [NSString stringWithFormat:@"*When the battery is less than or equal to %@, the green LED will flashe once every 10 seconds.",promptModel.dataList[self.dataModel.prompt]];
     
     [self.tableView reloadData];
+    
+    //让MKPickView消失
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"mk_customUIModule_dismissPickView"
+                                                        object:nil
+                                                      userInfo:nil];
 }
 
 #pragma mark - 恢复出厂设置
