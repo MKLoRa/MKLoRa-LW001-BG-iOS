@@ -253,20 +253,26 @@
         NSString *advCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(8, 8)];
         NSString *axisWakeupTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(16, 8)];
         NSString *blePostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(24, 8)];
-        NSString *gpsPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(32, 8)];
-        NSString *loraSendCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(40, 8)];
-        NSString *loraPowerConsumption = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(48, 8)];
-        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(56, 8)];
+        NSString *wifiPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(32, 8)];
+        NSString *gpsPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(40, 8)];
+        NSString *loraSendCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(48, 8)];
+        NSString *loraPowerConsumption = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(56, 8)];
+        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(64, 8)];
+        NSString *staticReportCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(72, 8)];
+        NSString *moveReportCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(80, 8)];
         
         resultDic = @{
             @"workTimes":workTimes,
             @"advCount":advCount,
             @"axisWakeupTimes":axisWakeupTimes,
             @"blePostionTimes":blePostionTimes,
+            @"wifiPostionTimes":wifiPostionTimes,
             @"gpsPostionTimes":gpsPostionTimes,
             @"loraSendCount":loraSendCount,
             @"loraPowerConsumption":loraPowerConsumption,
-            @"batteryPower":batteryPower
+            @"batteryPower":batteryPower,
+            @"staticReportCount":staticReportCount,
+            @"moveReportCount":moveReportCount,
         };
         operationID = mk_bg_taskReadBatteryInformationOperation;
     }else if ([cmd isEqualToString:@"18"]) {
@@ -275,20 +281,26 @@
         NSString *advCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(8, 8)];
         NSString *axisWakeupTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(16, 8)];
         NSString *blePostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(24, 8)];
-        NSString *gpsPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(32, 8)];
-        NSString *loraSendCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(40, 8)];
-        NSString *loraPowerConsumption = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(48, 8)];
-        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(56, 8)];
+        NSString *wifiPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(32, 8)];
+        NSString *gpsPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(40, 8)];
+        NSString *loraSendCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(48, 8)];
+        NSString *loraPowerConsumption = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(56, 8)];
+        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(64, 8)];
+        NSString *staticReportCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(72, 8)];
+        NSString *moveReportCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(80, 8)];
         
         resultDic = @{
             @"workTimes":workTimes,
             @"advCount":advCount,
             @"axisWakeupTimes":axisWakeupTimes,
             @"blePostionTimes":blePostionTimes,
+            @"wifiPostionTimes":wifiPostionTimes,
             @"gpsPostionTimes":gpsPostionTimes,
             @"loraSendCount":loraSendCount,
             @"loraPowerConsumption":loraPowerConsumption,
-            @"batteryPower":batteryPower
+            @"batteryPower":batteryPower,
+            @"staticReportCount":staticReportCount,
+            @"moveReportCount":moveReportCount,
         };
         operationID = mk_bg_taskReadLastCycleBatteryInformationOperation;
     }else if ([cmd isEqualToString:@"19"]) {
@@ -297,20 +309,26 @@
         NSString *advCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(8, 8)];
         NSString *axisWakeupTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(16, 8)];
         NSString *blePostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(24, 8)];
-        NSString *gpsPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(32, 8)];
-        NSString *loraSendCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(40, 8)];
-        NSString *loraPowerConsumption = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(48, 8)];
-        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(56, 8)];
+        NSString *wifiPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(32, 8)];
+        NSString *gpsPostionTimes = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(40, 8)];
+        NSString *loraSendCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(48, 8)];
+        NSString *loraPowerConsumption = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(56, 8)];
+        NSString *batteryPower = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(64, 8)];
+        NSString *staticReportCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(72, 8)];
+        NSString *moveReportCount = [MKBLEBaseSDKAdopter getDecimalStringWithHex:content range:NSMakeRange(80, 8)];
         
         resultDic = @{
             @"workTimes":workTimes,
             @"advCount":advCount,
             @"axisWakeupTimes":axisWakeupTimes,
             @"blePostionTimes":blePostionTimes,
+            @"wifiPostionTimes":wifiPostionTimes,
             @"gpsPostionTimes":gpsPostionTimes,
             @"loraSendCount":loraSendCount,
             @"loraPowerConsumption":loraPowerConsumption,
-            @"batteryPower":batteryPower
+            @"batteryPower":batteryPower,
+            @"staticReportCount":staticReportCount,
+            @"moveReportCount":moveReportCount,
         };
         operationID = mk_bg_taskReadAllCycleBatteryInformationOperation;
     }else if ([cmd isEqualToString:@"1a"]) {

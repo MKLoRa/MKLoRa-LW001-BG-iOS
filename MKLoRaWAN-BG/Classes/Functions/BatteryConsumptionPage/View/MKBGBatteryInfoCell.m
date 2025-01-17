@@ -30,6 +30,8 @@
 
 @property (nonatomic, strong)UILabel *blePostionLabel;
 
+@property (nonatomic, strong)UILabel *wifiPostionLabel;
+
 @property (nonatomic, strong)UILabel *gpsPostionLabel;
 
 @property (nonatomic, strong)UILabel *loraSendCountLabel;
@@ -37,6 +39,10 @@
 @property (nonatomic, strong)UILabel *loraPowerLabel;
 
 @property (nonatomic, strong)UILabel *batteryPowerLabel;
+
+@property (nonatomic, strong)UILabel *staticReportLabel;
+
+@property (nonatomic, strong)UILabel *moveReportLabel;
 
 @end
 
@@ -57,10 +63,13 @@
         [self.contentView addSubview:self.advCountLabel];
         [self.contentView addSubview:self.axisPostionLabel];
         [self.contentView addSubview:self.blePostionLabel];
+        [self.contentView addSubview:self.wifiPostionLabel];
         [self.contentView addSubview:self.gpsPostionLabel];
         [self.contentView addSubview:self.loraPowerLabel];
         [self.contentView addSubview:self.loraSendCountLabel];
         [self.contentView addSubview:self.batteryPowerLabel];
+        [self.contentView addSubview:self.staticReportLabel];
+        [self.contentView addSubview:self.moveReportLabel];
     }
     return self;
 }
@@ -97,10 +106,16 @@
         make.top.mas_equalTo(self.axisPostionLabel.mas_bottom).mas_offset(10.f);
         make.height.mas_equalTo(MKFont(13.f).lineHeight);
     }];
-    [self.gpsPostionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.wifiPostionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(15.f);
         make.right.mas_equalTo(-15.f);
         make.top.mas_equalTo(self.blePostionLabel.mas_bottom).mas_offset(10.f);
+        make.height.mas_equalTo(MKFont(13.f).lineHeight);
+    }];
+    [self.gpsPostionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(15.f);
+        make.right.mas_equalTo(-15.f);
+        make.top.mas_equalTo(self.wifiPostionLabel.mas_bottom).mas_offset(10.f);
         make.height.mas_equalTo(MKFont(13.f).lineHeight);
     }];
     [self.loraSendCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -121,6 +136,18 @@
         make.top.mas_equalTo(self.loraPowerLabel.mas_bottom).mas_offset(10.f);
         make.height.mas_equalTo(MKFont(13.f).lineHeight);
     }];
+    [self.staticReportLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(15.f);
+        make.right.mas_equalTo(-15.f);
+        make.top.mas_equalTo(self.batteryPowerLabel.mas_bottom).mas_offset(10.f);
+        make.height.mas_equalTo(MKFont(13.f).lineHeight);
+    }];
+    [self.moveReportLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(15.f);
+        make.right.mas_equalTo(-15.f);
+        make.top.mas_equalTo(self.staticReportLabel.mas_bottom).mas_offset(10.f);
+        make.height.mas_equalTo(MKFont(13.f).lineHeight);
+    }];
 }
 
 #pragma mark - setter
@@ -135,10 +162,13 @@
     self.advCountLabel.text = [SafeStr(_dataModel.advCount) stringByAppendingString:@" times"];
     self.axisPostionLabel.text = [SafeStr(_dataModel.axisWakeupTimes) stringByAppendingString:@"s"];
     self.blePostionLabel.text = [SafeStr(_dataModel.blePostionTimes) stringByAppendingString:@"s"];
+    self.wifiPostionLabel.text = [SafeStr(_dataModel.wifiPostionTimes) stringByAppendingString:@"s"];
     self.gpsPostionLabel.text = [SafeStr(_dataModel.gpsPostionTimes) stringByAppendingString:@"s"];
     self.loraPowerLabel.text = [SafeStr(_dataModel.loraPowerConsumption) stringByAppendingString:@" mAS"];
     self.loraSendCountLabel.text = [SafeStr(_dataModel.loraSendCount) stringByAppendingString:@" times"];
     self.batteryPowerLabel.text = [NSString stringWithFormat:@"%.3f %@",([_dataModel.batteryPower integerValue] * 0.001),@"mAH"];
+    self.staticReportLabel.text = [SafeStr(_dataModel.staticReportCount) stringByAppendingString:@" peices of payload 1"];
+    self.moveReportLabel.text = [SafeStr(_dataModel.moveReportCount) stringByAppendingString:@" peices of payload 2"];
 }
 
 #pragma mark - getter
@@ -180,6 +210,13 @@
     return _blePostionLabel;
 }
 
+- (UILabel *)wifiPostionLabel {
+    if (!_wifiPostionLabel) {
+        _wifiPostionLabel = [self fetchValueLabel];
+    }
+    return _wifiPostionLabel;
+}
+
 - (UILabel *)gpsPostionLabel {
     if (!_gpsPostionLabel) {
         _gpsPostionLabel = [self fetchValueLabel];
@@ -206,6 +243,20 @@
         _batteryPowerLabel = [self fetchValueLabel];
     }
     return _batteryPowerLabel;
+}
+
+- (UILabel *)staticReportLabel {
+    if (!_staticReportLabel) {
+        _staticReportLabel = [self fetchValueLabel];
+    }
+    return _staticReportLabel;
+}
+
+- (UILabel *)moveReportLabel {
+    if (!_moveReportLabel) {
+        _moveReportLabel = [self fetchValueLabel];
+    }
+    return _moveReportLabel;
 }
 
 - (UILabel *)fetchValueLabel {

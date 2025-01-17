@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy)NSString *blePostionTimes;
 
+@property (nonatomic, copy)NSString *wifiPostionTimes;
+
 @property (nonatomic, copy)NSString *gpsPostionTimes;
 
 @property (nonatomic, copy)NSString *loraSendCount;
@@ -29,6 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy)NSString *loraPowerConsumption;
 
 @property (nonatomic, copy)NSString *batteryPower;
+
+@property (nonatomic, copy)NSString *staticReportCount;
+
+@property (nonatomic, copy)NSString *moveReportCount;
 
 @end
 
