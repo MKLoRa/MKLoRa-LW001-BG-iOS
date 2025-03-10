@@ -184,7 +184,7 @@ MKBGLoRaSettingAccountCellDelegate>
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0 && (self.dataModel.configModel.supportServerPlatform && self.dataModel.platform == 1)) {
+    if (section == 0 && (self.dataModel.configModel.supportServerPlatform && self.dataModel.platform == 0)) {
         //LoRaWAN Mode
         return 10.f;
     }
@@ -236,7 +236,7 @@ MKBGLoRaSettingAccountCellDelegate>
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return ((self.dataModel.configModel.supportServerPlatform && self.dataModel.platform == 1) ? 0 : self.section0List.count);
+        return ((self.dataModel.configModel.supportServerPlatform && self.dataModel.platform == 0) ? self.section0List.count : 0);
     }
     if (section == 1) {
         if ((self.dataModel.configModel.supportServerPlatform && self.dataModel.platform == 1)) {
