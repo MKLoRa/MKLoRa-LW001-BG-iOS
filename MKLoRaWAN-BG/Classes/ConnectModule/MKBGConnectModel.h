@@ -28,15 +28,19 @@ typedef NS_ENUM(NSInteger, bg_connectDeviceType) {
 /// 0:V1  1:V2非充电版  2:V2充电版
 @property (nonatomic, assign)bg_connectDeviceType deviceType;
 
+@property (nonatomic, copy, readonly)NSString *macAddress;
+
 + (MKBGConnectModel *)shared;
 
 /// 连接设备
 /// @param peripheral 设备
 /// @param password 密码
+/// @param macAddress macAddress
 /// @param sucBlock 成功回调
 /// @param failedBlock 失败回调
 - (void)connectDevice:(CBPeripheral *)peripheral
              password:(NSString *)password
+           macAddress:(NSString *)macAddress
              sucBlock:(void (^)(void))sucBlock
           failedBlock:(void (^)(NSError *error))failedBlock;
 

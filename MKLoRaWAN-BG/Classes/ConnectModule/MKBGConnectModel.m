@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong)dispatch_semaphore_t semaphore;
 
+@property (nonatomic, copy)NSString *macAddress;
+
 @end
 
 @implementation MKBGConnectModel
@@ -39,6 +41,7 @@
 
 - (void)connectDevice:(CBPeripheral *)peripheral
              password:(NSString *)password
+           macAddress:(NSString *)macAddress
              sucBlock:(void (^)(void))sucBlock
           failedBlock:(void (^)(NSError *error))failedBlock {
     dispatch_async(self.connectQueue, ^{
@@ -55,6 +58,7 @@
             [self operationFailedMsg:@"Read Firmware Error" completeBlock:failedBlock];
             return;
         }
+        self.macAddress = macAddress;
         moko_dispatch_main_safe(^{
             if (sucBlock) {
                 sucBlock();

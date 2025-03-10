@@ -405,7 +405,7 @@ MKBGTabBarControllerDelegate>
         [MKBGConnectModel shared].deviceType = 2;
     }
     
-    [[MKBGConnectModel shared] connectDevice:trackerModel.peripheral password:password sucBlock:^{
+    [[MKBGConnectModel shared] connectDevice:trackerModel.peripheral password:password macAddress:trackerModel.macAddress sucBlock:^{
         [[NSUserDefaults standardUserDefaults] setObject:password forKey:localPasswordKey];
         [[MKHudManager share] hide];
         [self.view showCentralToast:@"Time sync completed!"];

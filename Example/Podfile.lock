@@ -1,4 +1,19 @@
 PODS:
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
+    - AFNetworking/NSURLSession
   - CircleProgressBar (0.32)
   - CTMediator (48)
   - FMDB (2.7.12):
@@ -472,12 +487,39 @@ PODS:
     - MJRefresh
     - MKBaseModuleLibrary
     - MKCustomUIModule/View/MKTextField
+  - MKIotCloudManager (0.0.5):
+    - MKIotCloudManager/SDK (= 0.0.5)
+    - MKIotCloudManager/View (= 0.0.5)
+  - MKIotCloudManager/SDK (0.0.5):
+    - MKIotCloudManager/SDK/Config (= 0.0.5)
+    - MKIotCloudManager/SDK/MKNetwork (= 0.0.5)
+    - MKIotCloudManager/SDK/NetworkService (= 0.0.5)
+  - MKIotCloudManager/SDK/Config (0.0.5)
+  - MKIotCloudManager/SDK/MKNetwork (0.0.5):
+    - AFNetworking
+    - MKBaseModuleLibrary
+    - MKIotCloudManager/SDK/Config
+  - MKIotCloudManager/SDK/NetworkService (0.0.5):
+    - AFNetworking
+    - MKBaseModuleLibrary
+    - MKIotCloudManager/SDK/Config
+    - MKIotCloudManager/SDK/MKNetwork
+  - MKIotCloudManager/View (0.0.5):
+    - MKIotCloudManager/View/AccountLoginAlertView (= 0.0.5)
+    - MKIotCloudManager/View/ExitAccountAlertView (= 0.0.5)
+  - MKIotCloudManager/View/AccountLoginAlertView (0.0.5):
+    - MKBaseModuleLibrary
+    - MKCustomUIModule
+  - MKIotCloudManager/View/ExitAccountAlertView (0.0.5):
+    - MKBaseModuleLibrary
+    - MKCustomUIModule
   - MKLoRaWAN-BG (1.1.4):
     - MKLoRaWAN-BG/ConnectModule (= 1.1.4)
     - MKLoRaWAN-BG/CTMediator (= 1.1.4)
     - MKLoRaWAN-BG/DatabaseManager (= 1.1.4)
     - MKLoRaWAN-BG/Expand (= 1.1.4)
     - MKLoRaWAN-BG/Functions (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager (= 1.1.4)
     - MKLoRaWAN-BG/SDK (= 1.1.4)
     - MKLoRaWAN-BG/Target (= 1.1.4)
   - MKLoRaWAN-BG/ConnectModule (1.1.4):
@@ -552,6 +594,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/UpdatePage (= 1.1.4)
     - MKLoRaWAN-BG/Functions/VibrationPage (= 1.1.4)
     - MKLoRaWAN-BG/Functions/WifiPositionPage (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/AboutPage (1.1.4):
@@ -564,6 +607,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/AboutPage/Controller (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/AboutPage/Controller (1.1.4):
@@ -575,6 +619,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ActiveStatePage (1.1.4):
@@ -588,6 +633,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/ActiveStatePage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/ActiveStatePage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ActiveStatePage/Controller (1.1.4):
@@ -600,6 +646,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/ActiveStatePage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ActiveStatePage/Model (1.1.4):
@@ -611,6 +658,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/AuxoliaryPage (1.1.4):
@@ -623,6 +671,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/AuxoliaryPage/Controller (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/AuxoliaryPage/Controller (1.1.4):
@@ -638,6 +687,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/DownlinkPage/Controller
     - MKLoRaWAN-BG/Functions/ManDownPage/Controller
     - MKLoRaWAN-BG/Functions/VibrationPage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/AxisSettingPage (1.1.4):
@@ -651,6 +701,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/AxisSettingPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/AxisSettingPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/AxisSettingPage/Controller (1.1.4):
@@ -663,6 +714,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/AxisSettingPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/AxisSettingPage/Model (1.1.4):
@@ -674,6 +726,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BatteryConsumptionPage (1.1.4):
@@ -688,6 +741,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/BatteryConsumptionPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/BatteryConsumptionPage/Model (= 1.1.4)
     - MKLoRaWAN-BG/Functions/BatteryConsumptionPage/View (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BatteryConsumptionPage/Controller (1.1.4):
@@ -701,6 +755,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/BatteryConsumptionPage/Model
     - MKLoRaWAN-BG/Functions/BatteryConsumptionPage/View
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BatteryConsumptionPage/Model (1.1.4):
@@ -712,6 +767,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BatteryConsumptionPage/View (1.1.4):
@@ -723,6 +779,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BlePositionPage (1.1.4):
@@ -736,6 +793,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/BlePositionPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/BlePositionPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BlePositionPage/Controller (1.1.4):
@@ -749,6 +807,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/BlePositionPage/Model
     - MKLoRaWAN-BG/Functions/FilterCondition/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BlePositionPage/Model (1.1.4):
@@ -760,6 +819,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BleSettingsPage (1.1.4):
@@ -773,6 +833,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/BleSettingsPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/BleSettingsPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BleSettingsPage/Controller (1.1.4):
@@ -786,6 +847,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/BleSettingsPage/Model
     - MKLoRaWAN-BG/Functions/BroadcastSettingsPage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BleSettingsPage/Model (1.1.4):
@@ -797,6 +859,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BroadcastSettingsPage (1.1.4):
@@ -811,6 +874,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/BroadcastSettingsPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/BroadcastSettingsPage/Model (= 1.1.4)
     - MKLoRaWAN-BG/Functions/BroadcastSettingsPage/View (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BroadcastSettingsPage/Controller (1.1.4):
@@ -824,6 +888,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/BroadcastSettingsPage/Model
     - MKLoRaWAN-BG/Functions/BroadcastSettingsPage/View
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BroadcastSettingsPage/Model (1.1.4):
@@ -835,6 +900,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/BroadcastSettingsPage/View (1.1.4):
@@ -846,6 +912,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DebuggerPage (1.1.4):
@@ -859,6 +926,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/DebuggerPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/DebuggerPage/View (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DebuggerPage/Controller (1.1.4):
@@ -871,6 +939,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/DebuggerPage/View
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DebuggerPage/View (1.1.4):
@@ -882,6 +951,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DeviceInfoPage (1.1.4):
@@ -895,6 +965,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/DeviceInfoPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/DeviceInfoPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DeviceInfoPage/Controller (1.1.4):
@@ -911,6 +982,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/DeviceInfoPage/Model
     - MKLoRaWAN-BG/Functions/SelftestPage/Controller
     - MKLoRaWAN-BG/Functions/UpdatePage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DeviceInfoPage/Model (1.1.4):
@@ -922,6 +994,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DeviceModePage (1.1.4):
@@ -934,6 +1007,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/DeviceModePage/Controller (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DeviceModePage/Controller (1.1.4):
@@ -948,6 +1022,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/MotionModePage/Controller
     - MKLoRaWAN-BG/Functions/PeriodicModePage/Controller
     - MKLoRaWAN-BG/Functions/TimingModePage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DevicePage (1.1.4):
@@ -961,6 +1036,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/DevicePage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/DevicePage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DevicePage/Controller (1.1.4):
@@ -977,6 +1053,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/IndicatorSettingsPage/Controller
     - MKLoRaWAN-BG/Functions/OnOffSettingsPage/Controller
     - MKLoRaWAN-BG/Functions/SynDataPage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DevicePage/Model (1.1.4):
@@ -988,6 +1065,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DownlinkPage (1.1.4):
@@ -1000,6 +1078,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/DownlinkPage/Controller (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/DownlinkPage/Controller (1.1.4):
@@ -1011,6 +1090,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/FilterCondition (1.1.4):
@@ -1024,6 +1104,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/FilterCondition/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/FilterCondition/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/FilterCondition/Controller (1.1.4):
@@ -1036,6 +1117,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/FilterCondition/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/FilterCondition/Model (1.1.4):
@@ -1047,6 +1129,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/GeneralPage (1.1.4):
@@ -1060,6 +1143,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/GeneralPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/GeneralPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/GeneralPage/Controller (1.1.4):
@@ -1076,6 +1160,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/BleSettingsPage/Controller
     - MKLoRaWAN-BG/Functions/DeviceModePage/Controller
     - MKLoRaWAN-BG/Functions/GeneralPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/GeneralPage/Model (1.1.4):
@@ -1087,6 +1172,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/GPSPositionPage (1.1.4):
@@ -1100,6 +1186,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/GPSPositionPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/GPSPositionPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/GPSPositionPage/Controller (1.1.4):
@@ -1112,6 +1199,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/GPSPositionPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/GPSPositionPage/Model (1.1.4):
@@ -1123,6 +1211,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/IndicatorSettingsPage (1.1.4):
@@ -1136,6 +1225,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/IndicatorSettingsPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/IndicatorSettingsPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/IndicatorSettingsPage/Controller (1.1.4):
@@ -1148,6 +1238,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/IndicatorSettingsPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/IndicatorSettingsPage/Model (1.1.4):
@@ -1159,6 +1250,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LGpsFixPage (1.1.4):
@@ -1172,6 +1264,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/LGpsFixPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/LGpsFixPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LGpsFixPage/Controller (1.1.4):
@@ -1184,6 +1277,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/LGpsFixPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LGpsFixPage/Model (1.1.4):
@@ -1195,6 +1289,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LoRaApplicationPage (1.1.4):
@@ -1208,6 +1303,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/LoRaApplicationPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/LoRaApplicationPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LoRaApplicationPage/Controller (1.1.4):
@@ -1220,6 +1316,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/LoRaApplicationPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LoRaApplicationPage/Model (1.1.4):
@@ -1231,6 +1328,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LoRaPage (1.1.4):
@@ -1244,6 +1342,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/LoRaPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/LoRaPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LoRaPage/Controller (1.1.4):
@@ -1258,6 +1357,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/LoRaApplicationPage/Controller
     - MKLoRaWAN-BG/Functions/LoRaPage/Model
     - MKLoRaWAN-BG/Functions/LoRaSettingPage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LoRaPage/Model (1.1.4):
@@ -1269,6 +1369,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LoRaSettingPage (1.1.4):
@@ -1282,6 +1383,8 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/LoRaSettingPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/LoRaSettingPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/Functions/LoRaSettingPage/View (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LoRaSettingPage/Controller (1.1.4):
@@ -1294,6 +1397,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/LoRaSettingPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/LoRaSettingPage/Model (1.1.4):
@@ -1305,6 +1409,19 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
+    - MKLoRaWAN-BG/SDK
+    - MLInputDodger
+  - MKLoRaWAN-BG/Functions/LoRaSettingPage/View (1.1.4):
+    - HHTransition
+    - iOSDFULibrary (= 4.13.0)
+    - MKBaseModuleLibrary
+    - MKCustomUIModule
+    - MKLoRaWAN-BG/ConnectModule
+    - MKLoRaWAN-BG/CTMediator
+    - MKLoRaWAN-BG/DatabaseManager
+    - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ManDownPage (1.1.4):
@@ -1318,6 +1435,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/ManDownPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/ManDownPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ManDownPage/Controller (1.1.4):
@@ -1330,6 +1448,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/ManDownPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ManDownPage/Model (1.1.4):
@@ -1341,6 +1460,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/MotionModePage (1.1.4):
@@ -1354,6 +1474,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/MotionModePage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/MotionModePage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/MotionModePage/Controller (1.1.4):
@@ -1366,6 +1487,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/MotionModePage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/MotionModePage/Model (1.1.4):
@@ -1377,6 +1499,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/OnOffSettingsPage (1.1.4):
@@ -1390,6 +1513,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/OnOffSettingsPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/OnOffSettingsPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/OnOffSettingsPage/Controller (1.1.4):
@@ -1402,6 +1526,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/OnOffSettingsPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/OnOffSettingsPage/Model (1.1.4):
@@ -1413,6 +1538,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/OptionsPage (1.1.4):
@@ -1425,6 +1551,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/OptionsPage/Controller (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/OptionsPage/Controller (1.1.4):
@@ -1437,6 +1564,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/ScanPage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/PeriodicModePage (1.1.4):
@@ -1450,6 +1578,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/PeriodicModePage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/PeriodicModePage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/PeriodicModePage/Controller (1.1.4):
@@ -1462,6 +1591,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/PeriodicModePage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/PeriodicModePage/Model (1.1.4):
@@ -1473,6 +1603,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/PositionPage (1.1.4):
@@ -1485,6 +1616,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/PositionPage/Controller (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/PositionPage/Controller (1.1.4):
@@ -1500,6 +1632,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/GPSPositionPage/Controller
     - MKLoRaWAN-BG/Functions/LGpsFixPage/Controller
     - MKLoRaWAN-BG/Functions/WifiPositionPage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ScanPage (1.1.4):
@@ -1514,6 +1647,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/ScanPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/ScanPage/Model (= 1.1.4)
     - MKLoRaWAN-BG/Functions/ScanPage/View (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ScanPage/Controller (1.1.4):
@@ -1528,6 +1662,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/ScanPage/Model
     - MKLoRaWAN-BG/Functions/ScanPage/View
     - MKLoRaWAN-BG/Functions/TabBarPage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ScanPage/Model (1.1.4):
@@ -1539,6 +1674,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/ScanPage/View (1.1.4):
@@ -1551,6 +1687,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/ScanPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/SelftestPage (1.1.4):
@@ -1565,6 +1702,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/SelftestPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/SelftestPage/Model (= 1.1.4)
     - MKLoRaWAN-BG/Functions/SelftestPage/View (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/SelftestPage/Controller (1.1.4):
@@ -1578,6 +1716,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/SelftestPage/Model
     - MKLoRaWAN-BG/Functions/SelftestPage/View
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/SelftestPage/Model (1.1.4):
@@ -1589,6 +1728,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/SelftestPage/View (1.1.4):
@@ -1600,6 +1740,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/SynDataPage (1.1.4):
@@ -1613,6 +1754,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/SynDataPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/SynDataPage/View (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/SynDataPage/Controller (1.1.4):
@@ -1625,6 +1767,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/SynDataPage/View
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/SynDataPage/View (1.1.4):
@@ -1636,6 +1779,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/TabBarPage (1.1.4):
@@ -1648,6 +1792,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/TabBarPage/Controller (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/TabBarPage/Controller (1.1.4):
@@ -1663,6 +1808,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/GeneralPage/Controller
     - MKLoRaWAN-BG/Functions/LoRaPage/Controller
     - MKLoRaWAN-BG/Functions/PositionPage/Controller
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/TimingModePage (1.1.4):
@@ -1677,6 +1823,7 @@ PODS:
     - MKLoRaWAN-BG/Functions/TimingModePage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/TimingModePage/Model (= 1.1.4)
     - MKLoRaWAN-BG/Functions/TimingModePage/View (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/TimingModePage/Controller (1.1.4):
@@ -1690,6 +1837,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/TimingModePage/Model
     - MKLoRaWAN-BG/Functions/TimingModePage/View
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/TimingModePage/Model (1.1.4):
@@ -1701,6 +1849,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/TimingModePage/View (1.1.4):
@@ -1712,6 +1861,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/UpdatePage (1.1.4):
@@ -1725,6 +1875,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/UpdatePage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/UpdatePage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/UpdatePage/Controller (1.1.4):
@@ -1737,6 +1888,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/UpdatePage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/UpdatePage/Model (1.1.4):
@@ -1748,6 +1900,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/VibrationPage (1.1.4):
@@ -1761,6 +1914,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/VibrationPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/VibrationPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/VibrationPage/Controller (1.1.4):
@@ -1773,6 +1927,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/VibrationPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/VibrationPage/Model (1.1.4):
@@ -1784,6 +1939,7 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/WifiPositionPage (1.1.4):
@@ -1797,6 +1953,7 @@ PODS:
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/WifiPositionPage/Controller (= 1.1.4)
     - MKLoRaWAN-BG/Functions/WifiPositionPage/Model (= 1.1.4)
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/WifiPositionPage/Controller (1.1.4):
@@ -1809,6 +1966,7 @@ PODS:
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
     - MKLoRaWAN-BG/Functions/WifiPositionPage/Model
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
   - MKLoRaWAN-BG/Functions/WifiPositionPage/Model (1.1.4):
@@ -1820,8 +1978,11 @@ PODS:
     - MKLoRaWAN-BG/CTMediator
     - MKLoRaWAN-BG/DatabaseManager
     - MKLoRaWAN-BG/Expand
+    - MKLoRaWAN-BG/LoginManager
     - MKLoRaWAN-BG/SDK
     - MLInputDodger
+  - MKLoRaWAN-BG/LoginManager (1.1.4):
+    - MKIotCloudManager
   - MKLoRaWAN-BG/SDK (1.1.4):
     - MKBaseBleModule
   - MKLoRaWAN-BG/Target (1.1.4):
@@ -1837,6 +1998,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - AFNetworking
     - CircleProgressBar
     - CTMediator
     - FMDB
@@ -1849,6 +2011,7 @@ SPEC REPOS:
     - MKBaseBleModule
     - MKBaseModuleLibrary
     - MKCustomUIModule
+    - MKIotCloudManager
     - MLInputDodger
     - SSZipArchive
     - Toast
@@ -1860,6 +2023,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
+  AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   CircleProgressBar: 3920079be5224b62b3d9ed6eeb23ac01c835b681
   CTMediator: 3f3578b525b3a46a7a2f92a99922ec40363f4269
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
@@ -1872,7 +2036,8 @@ SPEC CHECKSUMS:
   MKBaseBleModule: 15aa067c4e408a473e025b1a768ebce00a7e5949
   MKBaseModuleLibrary: 2b79bcae588c755588413fbb643b510253271b23
   MKCustomUIModule: bbc862397ad4ffad0a88de756265a29aad5ddaab
-  MKLoRaWAN-BG: 6c06f00c406e4d51e37e9ffdd8005d37f0c8fc80
+  MKIotCloudManager: 2d80758d19191e83977c12313842d0febb047dab
+  MKLoRaWAN-BG: ac825ae51362a65877ee7de5b9bf991b8181fb55
   MLInputDodger: 79a0e420a80d0d3bba122bf2639603cc76609ba8
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e

@@ -10,7 +10,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface MKBGLoRaSettingConfigModel : NSObject
+
+@property (nonatomic, assign)BOOL supportClassType;
+
+@property (nonatomic, assign)BOOL supportMessageType;
+
+@property (nonatomic, assign)BOOL supportServerPlatform;
+
+@property (nonatomic, assign)BOOL supportMaxRetransmissionTimes;
+
+@end
+
 @interface MKBGLoRaSettingModel : NSObject
+
+@property (nonatomic, strong, readonly)MKBGLoRaSettingConfigModel *configModel;
 
 //1:ABP,2:OTAA
 @property (nonatomic, assign)NSInteger modem;
@@ -50,6 +64,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// 0:非确认帧，1:确认帧
 @property (nonatomic, assign)NSInteger messageType;
 
+/// 0：classA,1:classC,      目前不支持
+@property (nonatomic, assign)NSInteger classType;
+
+/// 0:Third Party NS    1:MOKO IoT DM
+@property (nonatomic, assign)NSInteger platform;
+
+/// Gateway ID
+@property (nonatomic, copy)NSString *gatewayEUI;
+
 /// 底部是否需要高级选项
 @property (nonatomic, assign)BOOL needAdvanceSetting;
 
@@ -78,6 +101,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign)NSInteger DRH;
 
+/// 0~3             目前不支持
+@property (nonatomic, assign)NSInteger retransmission;
+
+/// 1~255            目前不支持
+@property (nonatomic, copy)NSString *ackLimit;
+
+/// 1~255            目前不支持
+@property (nonatomic, copy)NSString *ackDelay;
+
 - (void)readDataWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
 
 - (void)configDataWithSucBlock:(void (^)(void))sucBlock failedBlock:(void (^)(NSError *error))failedBlock;
@@ -85,6 +117,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 用户主动选择了region，底部高级设置需要按照需求设置为默认值
 - (void)configAdvanceSettingDefaultParams;
 
+- (NSInteger)currentRegion;
+
+- (NSArray <NSString *>*)RegionList;
 - (NSArray <NSString *>*)CHLValueList;
 - (NSArray <NSString *>*)CHHValueList;
 - (NSArray <NSString *>*)DRValueList;
