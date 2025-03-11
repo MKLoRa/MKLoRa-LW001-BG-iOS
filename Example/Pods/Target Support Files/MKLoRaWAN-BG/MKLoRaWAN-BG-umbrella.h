@@ -91,6 +91,7 @@
 #import "MKBGVibrationDataModel.h"
 #import "MKBGWifiPositionController.h"
 #import "MKBGWifiPositionDataModel.h"
+#import "MKBGNetworkService.h"
 #import "MKBGUserLoginManager.h"
 #import "CBPeripheral+MKBGAdd.h"
 #import "MKBGCentralManager.h"

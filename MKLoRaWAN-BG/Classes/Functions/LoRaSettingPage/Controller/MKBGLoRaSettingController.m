@@ -28,10 +28,11 @@
 
 #import "MKIoTCloudAccountLoginAlertView.h"
 #import "MKIoTCloudExitAccountAlert.h"
+#import "MKIoTLoginService.h"
 
 #import "MKBGConnectModel.h"
 #import "MKBGUserLoginManager.h"
-#import "MKNormalService.h"
+#import "MKBGNetworkService.h"
 
 #import "MKBGLoRaSettingModel.h"
 
@@ -739,7 +740,7 @@ MKBGLoRaSettingAccountCellDelegate>
 #pragma mark - interface
 - (void)login:(BOOL)isHome username:(NSString *)username password:(NSString *)password {
     [[MKHudManager share] showHUDWithTitle:@"Login..." inView:self.view isPenetration:NO];
-    [[MKNormalService share] loginWithUsername:username password:password isHome:isHome sucBlock:^(id returnData) {
+    [[MKIoTLoginService share] loginWithUsername:username password:password isHome:isHome sucBlock:^(id returnData) {
         [[MKHudManager share] hide];
         [[MKBGUserLoginManager shared] syncLoginDataWithHome:isHome username:username password:password];
         [self addDeviceToCloud:SafeStr(returnData[@"data"][@"access_token"])];
@@ -751,14 +752,13 @@ MKBGLoRaSettingAccountCellDelegate>
 
 - (void)addDeviceToCloud:(NSString *)token {
     [[MKHudManager share] showHUDWithTitle:@"Loading..." inView:self.view isPenetration:NO];
-    MKUserCreateLoRaDeviceModel *createModel = [[MKUserCreateLoRaDeviceModel alloc] init];
+    MKBGCreateLoRaDeviceModel *createModel = [[MKBGCreateLoRaDeviceModel alloc] init];
     createModel.macAddress = [MKBGConnectModel shared].macAddress;
     createModel.isHome = [MKBGUserLoginManager shared].isHome;
-    createModel.deviceType = 0;
     createModel.gwId = self.dataModel.gatewayEUI;
     createModel.region = self.dataModel.region;
     createModel.username = [MKBGUserLoginManager shared].username;
-    [[MKNormalService share] addLoRaDeviceToCloud:createModel token:token sucBlock:^(id returnData) {
+    [[MKBGNetworkService share] addLoRaDeviceToCloud:createModel token:token sucBlock:^(id returnData) {
         [[MKHudManager share] hide];
         [self saveDataToDevice];
     } failBlock:^(NSError *error) {
