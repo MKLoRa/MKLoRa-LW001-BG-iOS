@@ -389,6 +389,7 @@ TODO: Add long description of the pod here.
         ssss.source_files = 'MKLoRaWAN-BG/Classes/Functions/LoRaSettingPage/Controller/**'
         
         ssss.dependency 'MKLoRaWAN-BG/Functions/LoRaSettingPage/Model'
+        ssss.dependency 'MKLoRaWAN-BG/Functions/LoRaSettingPage/View'
       end
       
       sss.subspec 'Model' do |ssss|
