@@ -87,6 +87,7 @@ MKTextButtonCellDelegate>
     if (section == 3) {
         return ([MKBGConnectModel shared].deviceType == 2 ? self.section3List.count : 0);
     }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
